@@ -16,3 +16,12 @@
      ))
 
 (idle-require 'tabbar)
+
+;;*** color-theme
+(idle-require 'color-theme)
+
+(eval-after-load "color-theme"
+  `(progn
+     (require 'color-theme-sanityinc)
+     (require 'color-theme-tangotango)
+     ))

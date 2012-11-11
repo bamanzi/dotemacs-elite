@@ -16,13 +16,12 @@
     (add-to-list 'load-path this_dir)
     (normal-top-level-add-subdirs-to-load-path))
 
-  (when (require 'idle-require nil t)
-    (setq idle-require-idle-delay 15
-          idle-require-load-break 1))
+  (setq idle-require-idle-delay 15
+        idle-require-load-break 1)
 
-  (if (fboundp 'idle-require)
-      (defun idle-require (feature)
-	(require feature)))
+  (unless (load "idle-require" t)
+    (defun idle-require (feature)
+      (require feature)))
   
   (mapc #'(lambda (file)
 ;;	    (unless (ignore-errors          
