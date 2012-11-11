@@ -1,3 +1,6 @@
+(unless (fboundp 'idle-require)
+    (defalias 'idle-require 'require))
+
 ;;** key bindings
 
 ;;***  key modifiers and prefix keys
@@ -76,7 +79,7 @@
 (global-set-key (kbd "<f11> C-y") 'winner-redo)
 
 ;;*** windmove
-(require 'windmove)
+(idle-require 'windmove)
 (progn
   (global-set-key (kbd "<f11> <up>")    'windmove-up)
   (global-set-key (kbd "<f11> <down>")  'windmove-down)
@@ -158,7 +161,7 @@
      (add-to-list 'drag-stuff-except-modes 'org-mode)
      (drag-stuff-global-mode t)))
 
-(require 'drag-stuff nil t)
+(idle-require 'drag-stuff)
 
 
 ;;***  misc
@@ -207,8 +210,10 @@
        (define-key minibuffer-local-map (kbd "<f5> <f5>") 'anything-minibuffer-history)
       ))
 
-(unless (require 'anything-config nil t)
-  (message "%s: failed to load `anything'." load-file-name))
+
+;;(unless (require 'anything-config nil t)
+;;  (message "%s: failed to load `anything'." load-file-name))
+(idle-require 'anything-config)
 
 
 ;;** completion
@@ -270,7 +275,7 @@
 
 
 ;;***  outline
-(require 'outline)
+(idle-require 'outline)
 (eval-after-load "outline"
   `(progn
      (global-set-key (kbd "C-z")   outline-mode-prefix-map)
@@ -299,7 +304,7 @@
 ;;** some visual effect
 
 ;;***  highlight-symbol
-(require 'highlight-symbol nil t)
+(idle-require 'highlight-symbol)
 
 (define-key search-map (kbd "j")     'highlight-symbol-at-point)
 (define-key search-map (kbd "#")     'highlight-symbol-prev)
@@ -316,7 +321,7 @@
 (define-key search-map "O" 'occur-current-symbol)
 
 ;;***  bm
-(require 'bm nil t)
+(idle-require 'bm)
 
 (progn
   (global-set-key (kbd "<f2> <f2>") 'bm-toggle)
@@ -340,7 +345,7 @@
        (add-hook 'find-file-hook 'idle-highlight-mode))
      ))
 
-(require 'idle-highlight nil t)
+(idle-require 'idle-highlight)
 
 (define-key global-map (kbd "<f10> i h") 'idle-highlight)
 
@@ -426,8 +431,8 @@
      (define-key goto-map (kbd "V") 'find-variable)
      ))
 
-(require 'eldoc)
-(require 'eldoc-extension nil t)
+(idle-require 'eldoc)
+(idle-require 'eldoc-extension)
 (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
 
 
