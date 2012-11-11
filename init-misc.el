@@ -14,3 +14,5 @@
      (if (display-graphic-p)
          (require 'tabbar-ruler nil t))  
      ))
+
+(idle-require 'tabbar)

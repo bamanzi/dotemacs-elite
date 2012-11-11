@@ -16,13 +16,20 @@
     (add-to-list 'load-path this_dir)
     (normal-top-level-add-subdirs-to-load-path))
 
-  ;;(require 'idle-require nil t)
+  (when (require 'idle-require nil t)
+    (setq idle-require-idle-delay 15
+          idle-require-load-break 1))
 
   (if (fboundp 'idle-require)
       (defun idle-require (feature)
 	(require feature)))
+  
   (mapc #'(lambda (file)
-	    (unless (ignore-errors
+;;	    (unless (ignore-errors          
                   (load-file file))
-          (message "Failed %s" file)))
-	(directory-files this_dir 'full "^init-\.*.el$")))
+;;          (message "Failed %s" file)))
+	(directory-files this_dir 'full "^init-\.*.el$"))
+
+  (if (fboundp 'idle-require-mode)
+      (idle-require-mode 1)))
+      
