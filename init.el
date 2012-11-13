@@ -16,7 +16,7 @@
     (add-to-list 'load-path this_dir)
     (normal-top-level-add-subdirs-to-load-path))
 
-  (setq idle-require-idle-delay 15
+  (setq idle-require-idle-delay 10
         idle-require-load-break 1)
 
   (unless (load "idle-require" t)
