@@ -215,6 +215,34 @@
 ;;  (message "%s: failed to load `anything'." load-file-name))
 (idle-require 'anything-config)
 
+;;*** misc
+;;**** easily insert buffer name (useful for `shell-command', `compile' etc)
+(defun minibuffer-insert-buffer-filename (arg)
+  (interactive "P")
+  (let ((target-buffer (window-buffer (minibuffer-selected-window))))
+    (if (and target-buffer
+             (buffer-file-name target-buffer))
+      (insert-string (if arg
+                         (buffer-file-name target-buffer)
+                       (file-name-nondirectory (buffer-file-name target-buffer))))
+      (insert-string " "))))
+
+(define-key minibuffer-local-map (kbd "C-c %") 'minibuffer-insert-buffer-filename)
+
+;;**** insert current symbol to minibuffer
+(defun minibuffer-insert-current-symbol (arg)
+  (interactive "P")
+  (let ((target-buffer (window-buffer (minibuffer-selected-window))))
+    (if (and target-buffer
+             (buffer-file-name target-buffer))
+        (insert-string (with-current-buffer target-buffer
+                         (if arg
+                             (thing-at-point 'string) ;; thingatpt+.el needed
+                           (thing-at-point 'symbol))))
+      (insert-string " "))))
+
+(define-key minibuffer-local-map (kbd "C-c M-s") 'minibuffer-insert-current-symbol)
+
 
 ;;** completion
 ;;*** emacs built-in
@@ -314,11 +342,14 @@
 (global-set-key (kbd "<S-wheel-up>")      'highlight-symbol-prev)
 (global-set-key (kbd "<S-wheel-down>")    'highlight-symbol-next)
 
+;;*** occur
 (defun occur-current-symbol (arg)
   (interactive "P")
   (occur (thing-at-point 'symbol) arg))
 
 (define-key search-map "O" 'occur-current-symbol)
+
+;;TODO: moccur
 
 ;;***  bm
 (idle-require 'bm)
@@ -396,19 +427,19 @@
 (eval-after-load "flymake"
   '(require 'flymake-cursor nil t))
 
-(define-key goto-map "`" 'flymake-goto-next-error)
-(define-key goto-map "~" 'flymake-goto-prev-error)
+(define-key goto-map (kbd "M-n") 'flymake-goto-next-error)
+(define-key goto-map (kbd "M-p") 'flymake-goto-prev-error)
 
 
 ;;** buffer navigations
 ;;*** mark
-(global-set-key (kbd "C-`")   'set-mark)
+(global-set-key (kbd "M-`")   'set-mark)
 ;;(global-set-key (kbd "M-`") 'exchange-point-and-mark)
-(global-set-key (kbd "M-`")   'pop-mark)
+;;(global-set-key (kbd "ESC M-`")   'pop-mark)
 
-(global-set-key (kbd "C-`")   'set-mark-command)
-(global-set-key (kbd "M-`")   'cua-exchange-point-and-mark)
-(global-set-key (kbd "C-M-`") 'pop-to-mark-command)
+(global-set-key (kbd "M-`")   'set-mark-command)
+;;(global-set-key (kbd "M-`")   'cua-exchange-point-and-mark)
+(global-set-key (kbd "ESC M-`") 'pop-to-mark-command)
 
 
 ;;***  recent-jump
