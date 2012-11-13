@@ -25,3 +25,7 @@
      (require 'color-theme-sanityinc)
      (require 'color-theme-tangotango)
      ))
+
+;;*** misc
+(idle-require 'org-cua-dwim)
+(idle-require 'mark-copy-something)
