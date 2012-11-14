@@ -2,6 +2,7 @@
 
 ;; Maintainer: BaManzi <bamanzi@gmail.com>
 ;; Keywords: mark, copy
+;; Version: 0.6
 
 ;; This file is not part of GNU Emacs.
 
@@ -301,11 +302,22 @@ the PATTERN is included."
   (copy-region-as-kill (region-beginning) (region-end)))
 
 ;;;_. key bindings
+(defvar mark-sth-map-prefix-key "C-c m"
+  "Prefix key for `mark-sth-map'.")
+
+(defvar copy-sth-map-prefix-key "C-c c"
+  "Prefix key for `copy-sth-map'.")
+
+(defvar copy-sth-to-mark-map-prefix-key "C-c p"
+  "Prefix key for `copy-sth-to-mark-map'.")
+
+(defvar mark-sth-map (make-sparse-keymap "Mark something..."))
+(defvar copy-sth-map (make-sparse-keymap "Copy something..."))
+(defvar copy-sth-to-mark-map (make-sparse-keymap "Copy something to mark..."))
+ 
 
 (defun mark-copy-something--bind-keys ()
-  (unless (boundp 'mark-map)
-    (defvar mark-map (make-sparse-keymap "Mark...")))
-  (global-set-key (kbd "C-c m") mark-map)
+  (global-set-key (read-kbd-macro mark-sth-map-prefix-key) mark-map)
 
   (define-key mark-map "w" 'mark-whole-word)
   (define-key mark-map "W" 'mark-big-word)
@@ -324,9 +336,7 @@ the PATTERN is included."
   (define-key mark-map "-"  'mark-between-char)
   (define-key mark-map "P"  'mark-between-pattern)
 
-  (unless (boundp 'copy-map)
-    (defvar copy-map (make-sparse-keymap "Copy...")))
-  (global-set-key (kbd "C-c c") copy-map)
+  (global-set-key (read-kbd-macro copy-sth-map-prefix-key) copy-map)
 
   (define-key copy-map "w" 'copy-whole-word)
   (define-key copy-map "W" 'copy-big-word)
@@ -344,9 +354,8 @@ the PATTERN is included."
   (define-key copy-map "-"  'copy-between-char)
   (define-key copy-map "P"  'copy-between-pattern)
 
-  (unless (boundp 'copy-to-mark-map)
-    (defvar copy-to-mark-map (make-sparse-keymap "Copy to mark...")))
-  (global-set-key (kbd "C-c p") copy-to-mark-map)
+
+  (global-set-key (read-kbd-macro copy-sth-to-mark-prefix-key) copy-to-mark-map)
 
   ;;Hint: press C-SPC twice to set a mark without activate the region
   (define-key copy-to-mark-map "w" 'copy-whole-word-to-mark)
