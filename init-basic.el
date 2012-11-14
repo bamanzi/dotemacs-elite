@@ -1,3 +1,5 @@
+(fset 'yes-or-no-p 'y-or-n-p)
+
 (unless (fboundp 'idle-require)
     (defalias 'idle-require 'require))
 
@@ -70,6 +72,11 @@
 (unless (fboundp 'vc-svn-root)  ;;fix emacs-23's svn support
   (defun vc-svn-root (file)
     (vc-find-root file vc-svn-admin-directory)))
+
+;;*** nav
+(autoload 'nav "nav"
+  "Opens Nav in a new window to the left of the current one." t)
+
 
 ;;** windows
 ;;***  winner-mode
@@ -168,6 +175,7 @@
 
 (global-set-key (kbd "C-=") 'align-regexp)
 
+(global-set-key (kbd "C-c ;") 'comment-or-uncomment-region)
 
 ;;** minibuffer
 
@@ -329,6 +337,7 @@
 
 (define-key global-map (kbd "<f10> q o") 'qtmstr-outline-mode)
 
+
 ;;** some visual effect
 
 ;;***  highlight-symbol
@@ -381,54 +390,6 @@
 (define-key global-map (kbd "<f10> i h") 'idle-highlight)
 
 ;;** programming
-
-(global-set-key (kbd "C-c ;") 'comment-or-uncomment-region)
-
-
-(define-key global-map (kbd "<f10> w f") 'which-func-mode)
-
-(which-func-mode t)
-
-;; move which-func indicator to the start of mode line
-(setcar mode-line-format '(which-func-mode which-func-format))
-
-(eval-after-load "which-func"
-  `(progn
-     (define-key which-func-keymap (kbd "<mode-line> <C-mouse-1>") 'imenu)
-     ))
-
-;;***  imenu
-(define-key goto-map "i" 'imenu)
-
-(defun anything-goto-symbol ()
-  "Show anything list, using current symbol as input to narrow the choices."
-  (interactive)
-  (anything
-   :prompt "Go to:"
-   :candidate-number-limit 10
-   :input (thing-at-point 'symbol)
-   :sources
-      '( anything-c-source-imenu
-         anything-c-source-browse-code
-         anything-c-source-semantic
-;;         anything-c-source-etags-select
-         )))
-
-(define-key goto-map "s" 'anything-goto-symbol)
-
-;;*** tags
-(define-key goto-map "e" 'find-tag)
-
-;;***  compilation
-(setq compilation-error-regexp-alist '(gnu java))
-(global-set-key (kbd "<C-f9>") 'compile)
-
-;;*** flymake
-(eval-after-load "flymake"
-  '(require 'flymake-cursor nil t))
-
-(define-key goto-map (kbd "M-n") 'flymake-goto-next-error)
-(define-key goto-map (kbd "M-p") 'flymake-goto-prev-error)
 
 
 ;;** buffer navigations
@@ -486,28 +447,18 @@
 (global-set-key (kbd "C-c o c") 'org-capture)
 
 
-
 ;;** utils
 
 ;;*** eshell
 ;;FIXME:
 
+
 ;;** misc
 (column-number-mode t)
-
-;;*** color-theme
-;;FIXME:
 
 ;;*** iedit
 (autoload 'iedit-mode "iedit"
   "Edit multiple regions in the same way simultaneously." t)
 
-;;*** terminal
-;;FIXME:
-
-(autoload 'lacarte-execute-menu-command "lacarte"
-  "Execute a menu-bar menu command in an alternative way." t)
-
-(define-key global-map (kbd "ESC <f10>") 'lacarte-execute-menu-command)
 	 
   
