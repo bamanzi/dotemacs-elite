@@ -21,8 +21,15 @@
 (global-set-key (kbd "ESC ESC l l") 'load-library)
 (global-set-key (kbd "ESC ESC f l") 'find-library)
 
+;;*** help
+(define-key help-map "F" 'describe-face)
+(define-key help-map "i" nil)
+(define-key help-map "ii" 'info)
+(define-key help-map "ic" 'Info-goto-emacs-command-node)
+(define-key help-map "iF" 'Info-goto-emacs-command-node)
+(define-key help-map "ik" 'Info-goto-emacs-key-command-node)
+(define-key help-map "i " 'Info-goto-node)
 
-;;** emacs environment
 (defun describe-keymap (keymap)
     (interactive
      (list (intern (completing-read "Keymap: " obarray
@@ -61,6 +68,11 @@
 (global-set-key (kbd "<C-S-tab>") 'next-buffer)
 (global-set-key (kbd "<f12> <left>")    'previous-buffer)
 (global-set-key (kbd "<f12> <right>")   'next-buffer)
+
+;;*** desktop
+(require 'desktop)
+(setq desktop-restore-eager 5)
+(desktop-save-mode t)
 
 ;;***  recentf
 (require 'recentf)
@@ -195,6 +207,9 @@
 (ido-mode 'buffers)
 
 ;;***  anything
+(autoload anything-recentf "anything-config"
+  "Preconfigured `anything' for `recentf'." t)
+
 (progn
   (global-set-key (kbd "<f5> r") 'anything-recentf)
   (global-set-key (kbd "<f5> b") 'anything-buffers+)
@@ -312,7 +327,7 @@
 (define-key global-map (kbd "<f10> q o") 'qtmstr-outline-mode)
 
 
-;;** some visual effect
+
 
 ;;***  highlight-symbol
 (idle-require 'highlight-symbol)
@@ -334,20 +349,6 @@
 
 ;;TODO: moccur
 
-;;***  bm
-(idle-require 'bm)
-
-(progn
-  (global-set-key (kbd "<f2> <f2>") 'bm-toggle)
-  (global-set-key (kbd "<f2> n")    'bm-next)
-  (global-set-key (kbd "<f2> p")    'bm-previous)
-  (global-set-key (kbd "<f2> l")    'bm-show))
-
-(global-set-key (kbd "<left-fringe> <C-mouse-1>")     'bm-toggle-mouse)
-(global-set-key (kbd "<left-fringe> <C-wheel-up>")    'bm-previous-mouse)
-(global-set-key (kbd "<left-fringe> <C-wheel-down>")  'bm-next-mouse)
-(global-set-key (kbd "<left-fringe> <C-mouse-2>")     'bm-show)
-
 ;;*** idle-highlight
 (autoload 'idle-highlight "idle-highlight"
   "highlight the word the point is on" t)
@@ -362,6 +363,62 @@
 (idle-require 'idle-highlight)
 
 (define-key global-map (kbd "<f10> i h") 'idle-highlight)
+
+;;*** iedit
+(autoload 'iedit-mode "iedit"
+  "Edit multiple regions in the same way simultaneously." t)
+
+(global-set-key (kbd "C-;") 'iedit-mode)
+
+
+;;** some visual effect
+
+;;***  bm
+(idle-require 'bm)
+
+(progn
+  (global-set-key (kbd "<f2> <f2>") 'bm-toggle)
+  (global-set-key (kbd "<f2> n")    'bm-next)
+  (global-set-key (kbd "<f2> p")    'bm-previous)
+  (global-set-key (kbd "<f2> l")    'bm-show))
+
+(global-set-key (kbd "<left-fringe> <C-mouse-1>")     'bm-toggle-mouse)
+(global-set-key (kbd "<left-fringe> <C-wheel-up>")    'bm-previous-mouse)
+(global-set-key (kbd "<left-fringe> <C-wheel-down>")  'bm-next-mouse)
+(global-set-key (kbd "<left-fringe> <C-mouse-2>")     'bm-show)
+
+
+;;*** other highlighting
+;; highlight url
+(defun highlight-url/bmz ()
+  (interactive)
+  (require 'hi-lock)
+  (highlight-regexp "https?://[^]
+\n\|]+" 'link))
+
+(add-hook 'find-file-hook 'highlight-url/bmz)
+
+(global-set-key (kbd "M-s RET") 'browse-url)
+
+;; highlight todo
+(defun highlight-todo/bmz ()
+  (interactive)
+  (highlight-lines-matching-regexp "\\<FIXME\\>:" 'font-lock-warning-face)
+  (highlight-lines-matching-regexp "\\<TODO\\>:" 'font-lock-warning-face)
+  (highlight-lines-matching-regexp "\\<WARN" 'font-lock-warning-face)
+  )
+
+(add-hook 'find-file-hook 'highlight-todo/bmz)
+
+;; highlight header
+(defun highlight-outline-header/bmz ()
+  (interactive)
+  (highlight-lines-matching-regexp "^;;; \\w" 'hi-black-hb)
+  (highlight-lines-matching-regexp "^;;\\*+ " 'hi-blue))
+
+(eval-after-load "lisp-mode"
+  `(add-hook 'emacs-lisp-mode-hook 'highlight-outline-header/bmz))
+
 
 ;;** programming
 
@@ -402,38 +459,16 @@
 (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
 
 
-;;***  org-mode
-
-(setq org-CUA-compatible t)
-
-(setq org-completion-use-ido t
-      ;; org-hide-leading-stars t
-      org-use-sub-superscripts nil ;;don't use `_' for subscript
-
-      org-export-with-section-numbers nil ;; no numbers in export headings
-      org-export-with-toc nil ;; no ToC in export
-      org-export-with-author-info nil ;; no author info in export
-      org-export-with-creator-info nil ;; no creator info
-      org-export-htmlize-output-type 'css ;; separate css
-      )
-
-(global-set-key (kbd "C-c o l") 'org-store-link)
-(global-set-key (kbd "C-c o c") 'org-capture)
-
-
 ;;** utils
 
 ;;*** eshell
-;;FIXME:
 
 
 ;;** misc
 (column-number-mode t)
 
 
-;;*** iedit
-(autoload 'iedit-mode "iedit"
-  "Edit multiple regions in the same way simultaneously." t)
+
 
 	 
   
