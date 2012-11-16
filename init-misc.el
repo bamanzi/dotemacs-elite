@@ -102,3 +102,8 @@
 
 (autoload 'copy-from-above-command "misc"
   "Copy characters from previous nonblank line, starting just above point." t)
+
+;;info+.el: more colors (and other enhancements) 
+(eval-after-load "info"
+  `(require 'info+)
+  )
