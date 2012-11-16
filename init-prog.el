@@ -16,9 +16,9 @@
 
 
 ;;**  imenu
-(autoload anything-imenu "anything-config"
+(autoload 'anything-imenu "anything-config"
   "Preconfigured `anything' for `imenu'." t)
-(autoload anything-browse-code "anythong-config"
+(autoload 'anything-browse-code "anythong-config"
   "Preconfigured anything to browse code. `imenu' + elisp/python improvements." t)
 
 (global-set-key (kbd "<f5> i") 'anything-imenu)

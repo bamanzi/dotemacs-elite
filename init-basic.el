@@ -207,7 +207,7 @@
 (ido-mode 'buffers)
 
 ;;***  anything
-(autoload anything-recentf "anything-config"
+(autoload 'anything-recentf "anything-config"
   "Preconfigured `anything' for `recentf'." t)
 
 (progn
