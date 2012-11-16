@@ -26,6 +26,33 @@
 
 (define-key minibuffer-local-map (kbd "C-c M-s") 'minibuffer-insert-current-symbol)
 
+;;*** multi-occur for buffers of same mod*;;;_.. multi-occur in same mode buffers
+;; stolen from http://www.masteringemacs.org/articles/2011/07/20/searching-buffers-occur-mode/
+(defun get-buffers-matching-mode (mode)
+  "Returns a list of buffers where their major-mode is equal to MODE"
+  (let ((buffer-mode-matches '()))
+   (dolist (buf (buffer-list))
+     (with-current-buffer buf
+       (if (eq mode major-mode)
+           (add-to-list 'buffer-mode-matches buf))))
+   buffer-mode-matches))
+ 
+(defun multi-occur-in-this-mode (symbol &optional arg)
+  "Show all lines matching REGEXP in buffers with this major mode."
+  (interactive
+   (list (read-string "Occur in same mode: " (thing-at-point 'symbol))
+         current-prefix-arg))
+  (multi-occur (get-buffers-matching-mode major-mode)
+               (format "%s" symbol)
+               arg))
+
+(define-key search-map (kbd "M-o") 'multi-occur-in-this-mode)
+
+;;*** grin
+(autoload 'grin "grin"
+  "Use `grin' command for grepping text across files." t)
+(autoload 'grind "grin"
+  "Use `grind' command for find files." t)
 
 ;;** tabbar
 (eval-after-load "tabbar"
