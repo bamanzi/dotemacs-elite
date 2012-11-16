@@ -16,6 +16,11 @@
 
 
 ;;**  imenu
+(autoload anything-imenu "anything-config"
+  "Preconfigured `anything' for `imenu'." t)
+(autoload anything-browse-code "anythong-config"
+  "Preconfigured anything to browse code. `imenu' + elisp/python improvements." t)
+
 (global-set-key (kbd "<f5> i") 'anything-imenu)
 (define-key goto-map "i" 'imenu)
 
@@ -68,7 +73,9 @@
          anything-c-source-imenu
          )))
 
-(add-to-list 'anything-c-ctags-modes 'ruby-mode)
+(eval-after-load "anything-config"
+  `(add-to-list 'anything-c-ctags-modes 'ruby-mode)
+  )
 
 (global-set-key (kbd "<f5> t") 'anything-ctags-current-file)
 
@@ -94,6 +101,9 @@
 (eval-after-load "projectile"
   `(progn
      (require 'anything-projectile)
+     
      (require 'projectile-ext)
+     (define-key projectile-mode-map "e" 'projectile-eshell-cd-current)
+     (define-key projectile-mode-map "E" 'projectile-eshell-cd-root)
      ))
 
