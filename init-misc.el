@@ -81,6 +81,22 @@
      (set-face-attribute 'org-level-2 nil :height 1.3 :bold t)
      (set-face-attribute 'org-level-3 nil :height 1.1)))
 
+;;** shell
+
+;;(idle-require 'esh-toggle)
+;;(idle-require 'sh-toggle)
+
+(autoload 'eshell-toggle "esh-toggle"
+  "Toggles between the *eshell* buffer and the current buffer." t)
+(autoload 'eshell-toggle-cd "esh-toggle"
+  "Calls `eshell-toggle' and let it cd to path of current buffer." t)
+
+(autoload 'shell-toggle "sh-toggle"
+  "Toggles between the *shell* buffer and the current buffer." t)
+(autoload 'shell-toggle-cd "sh-toggle"
+  "Calls `shell-toggle' and let it cd to path of current buffer." t)
+
+
 ;;** misc
 (idle-require 'mark-copy-something)
 
