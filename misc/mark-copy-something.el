@@ -312,60 +312,62 @@ the PATTERN is included."
   "Prefix key for `copy-sth-to-mark-map'.")
 
 (defvar mark-sth-map (make-sparse-keymap "Mark something..."))
+
 (defvar copy-sth-map (make-sparse-keymap "Copy something..."))
+
 (defvar copy-sth-to-mark-map (make-sparse-keymap "Copy something to mark..."))
  
 
 (defun mark-copy-something--bind-keys ()
-  (global-set-key (read-kbd-macro mark-sth-map-prefix-key) mark-map)
+  (global-set-key (read-kbd-macro mark-sth-map-prefix-key) mark-sth-map)
 
-  (define-key mark-map "w" 'mark-whole-word)
-  (define-key mark-map "W" 'mark-big-word)
-  (define-key mark-map "l" 'mark-line)
-  (define-key mark-map "p" 'mark-paragraph)  ;;Emacs built-in
-  (define-key mark-map "s" 'mark-string)
-  (define-key mark-map "(" 'mark-parenthesis)
-  (define-key mark-map "[" 'mark-parenthesis)
-  (define-key mark-map "{" 'mark-parenthesis)
-  (define-key mark-map "e" 'mark-sexp)       ;;Emacs built-in
-  (define-key mark-map "f" 'mark-defun)      ;;Emacs built-in
+  (define-key mark-sth-map "w" 'mark-whole-word)
+  (define-key mark-sth-map "W" 'mark-big-word)
+  (define-key mark-sth-map "l" 'mark-line)
+  (define-key mark-sth-map "p" 'mark-paragraph)  ;;Emacs built-in
+  (define-key mark-sth-map "s" 'mark-string)
+  (define-key mark-sth-map "(" 'mark-parenthesis)
+  (define-key mark-sth-map "[" 'mark-parenthesis)
+  (define-key mark-sth-map "{" 'mark-parenthesis)
+  (define-key mark-sth-map "e" 'mark-sexp)       ;;Emacs built-in
+  (define-key mark-sth-map "f" 'mark-defun)      ;;Emacs built-in
 
-  (define-key mark-map "\"" 'mark-between-char)
-  (define-key mark-map "'"  'mark-between-char)
-  (define-key mark-map " "  'mark-between-char)
-  (define-key mark-map "-"  'mark-between-char)
-  (define-key mark-map "P"  'mark-between-pattern)
+  (define-key mark-sth-map "\"" 'mark-between-char)
+  (define-key mark-sth-map "'"  'mark-between-char)
+  (define-key mark-sth-map " "  'mark-between-char)
+  (define-key mark-sth-map "-"  'mark-between-char)
+  (define-key mark-sth-map "P"  'mark-between-pattern)
 
-  (global-set-key (read-kbd-macro copy-sth-map-prefix-key) copy-map)
+  (global-set-key (read-kbd-macro copy-sth-map-prefix-key) copy-sth-map)
 
-  (define-key copy-map "w" 'copy-whole-word)
-  (define-key copy-map "W" 'copy-big-word)
-  (define-key copy-map "l" 'copy-line)
-  (define-key copy-map "p" 'copy-paragraph)
-  (define-key copy-map "s" 'copy-string)
-  (define-key copy-map "(" 'copy-parenthesis)
-  (define-key copy-map "[" 'copy-parenthesis)
-  (define-key copy-map "{" 'copy-parenthesis)
-  (define-key copy-map "e" 'copy-sexp)
+  (define-key copy-sth-map "w" 'copy-whole-word)
+  (define-key copy-sth-map "W" 'copy-big-word)
+  (define-key copy-sth-map "l" 'copy-line)
+  (define-key copy-sth-map "p" 'copy-paragraph)
+  (define-key copy-sth-map "s" 'copy-string)
+  (define-key copy-sth-map "(" 'copy-parenthesis)
+  (define-key copy-sth-map "[" 'copy-parenthesis)
+  (define-key copy-sth-map "{" 'copy-parenthesis)
+  (define-key copy-sth-map "e" 'copy-sexp)
 
-  (define-key copy-map "\"" 'copy-between-char)
-  (define-key copy-map "'"  'copy-between-char)
-  (define-key copy-map " "  'copy-between-char)
-  (define-key copy-map "-"  'copy-between-char)
-  (define-key copy-map "P"  'copy-between-pattern)
+  (define-key copy-sth-map "\"" 'copy-between-char)
+  (define-key copy-sth-map "'"  'copy-between-char)
+  (define-key copy-sth-map " "  'copy-between-char)
+  (define-key copy-sth-map "-"  'copy-between-char)
+  (define-key copy-sth-map "P"  'copy-between-pattern)
 
 
-  (global-set-key (read-kbd-macro copy-sth-to-mark-prefix-key) copy-to-mark-map)
+  (global-set-key (read-kbd-macro copy-sth-to-mark-prefix-key) copy-sth-to-mark-map)
 
   ;;Hint: press C-SPC twice to set a mark without activate the region
-  (define-key copy-to-mark-map "w" 'copy-whole-word-to-mark)
-  (define-key copy-to-mark-map "W" 'copy-big-word-to-mark)
-  (define-key copy-to-mark-map "l" 'copy-line-to-mark)
-  (define-key copy-to-mark-map "p" 'copy-paragraph-to-mark)
-  (define-key copy-to-mark-map "s" 'copy-string-to-mark)
-  (define-key copy-to-mark-map "(" 'copy-parenthesis-to-mark)
-  (define-key copy-to-mark-map "{" 'copy-parenthesis-to-mark)
-  (define-key copy-to-mark-map "e" 'copy-sexp-to-mark)
+  (define-key copy-sth-to-mark-map "w" 'copy-whole-word-to-mark)
+  (define-key copy-sth-to-mark-map "W" 'copy-big-word-to-mark)
+  (define-key copy-sth-to-mark-map "l" 'copy-line-to-mark)
+  (define-key copy-sth-to-mark-map "p" 'copy-paragraph-to-mark)
+  (define-key copy-sth-to-mark-map "s" 'copy-string-to-mark)
+  (define-key copy-sth-to-mark-map "(" 'copy-parenthesis-to-mark)
+  (define-key copy-sth-to-mark-map "{" 'copy-parenthesis-to-mark)
+  (define-key copy-sth-to-mark-map "e" 'copy-sexp-to-mark)
 
   t
   )
