@@ -1,3 +1,21 @@
+;;** files
+
+(defun ido-find-file-at-point ()
+  (interactive)
+  (let ((ido-use-filename-at-point t)
+        (ido-use-url-at-point t))
+     (call-interactively 'ido-find-file)))
+
+(define-key search-map (kbd "C-f") 'ido-find-file-at-point)
+
+;;** mark, copy & yank
+(idle-require 'mark-copy-something)
+
+(autoload 'copy-from-above-command "misc"
+  "Copy characters from previous nonblank line, starting just above point." t)
+
+
+
 ;;** minibuffer
 ;;*** easily insert buffer name (useful for `shell-command', `compile' etc)
 (defun minibuffer-insert-buffer-filename (arg)
@@ -26,7 +44,8 @@
 
 (define-key minibuffer-local-map (kbd "C-c M-s") 'minibuffer-insert-current-symbol)
 
-;;*** multi-occur for buffers of same mod*;;;_.. multi-occur in same mode buffers
+
+;;** multi-occur for buffers of same mods
 ;; stolen from http://www.masteringemacs.org/articles/2011/07/20/searching-buffers-occur-mode/
 (defun get-buffers-matching-mode (mode)
   "Returns a list of buffers where their major-mode is equal to MODE"
@@ -48,11 +67,13 @@
 
 (define-key search-map (kbd "M-o") 'multi-occur-in-this-mode)
 
-;;*** grin
+
+;;** grin: better grep replacement for source code project
 (autoload 'grin "grin"
   "Use `grin' command for grepping text across files." t)
 (autoload 'grind "grin"
   "Use `grind' command for find files." t)
+
 
 ;;** tabbar
 (eval-after-load "tabbar"
@@ -76,11 +97,16 @@
 ;;** color-theme
 (idle-require 'color-theme)
 
-(eval-after-load "color-theme"
-  `(progn
-     (require 'color-theme-sanityinc)
-     (require 'color-theme-tangotango)
-     ))
+(if (string< emacs-version "24")
+    (eval-after-load "color-theme"
+      `(progn
+         (require 'color-theme-sanityinc)
+
+         (if (require 'color-theme-tangotango)
+             (color-theme-tangotango))
+         
+         ))
+  )
 
 
 ;;** org-mdoe
@@ -108,6 +134,7 @@
      (set-face-attribute 'org-level-2 nil :height 1.3 :bold t)
      (set-face-attribute 'org-level-3 nil :height 1.1)))
 
+
 ;;** shell
 
 ;;(idle-require 'esh-toggle)
@@ -125,10 +152,6 @@
 
 
 ;;** misc
-(idle-require 'mark-copy-something)
-
-(autoload 'copy-from-above-command "misc"
-  "Copy characters from previous nonblank line, starting just above point." t)
 
 ;;info+.el: more colors (and other enhancements) 
 (eval-after-load "info"
