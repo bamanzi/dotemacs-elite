@@ -22,6 +22,8 @@
   "Preconfigured anything to browse code. `imenu' + elisp/python improvements." t)
 
 (global-set-key (kbd "<f5> i") 'anything-imenu)
+(global-set-key (kbd "<f5> c") 'anything-browse-code)
+
 (define-key goto-map "i" 'imenu)
 
 (defun anything-goto-symbol ()
@@ -80,11 +82,12 @@
 (global-set-key (kbd "<f5> t") 'anything-ctags-current-file)
 
 
-
-
 ;;**  compilation
 (setq compilation-error-regexp-alist '(gnu java))
 (global-set-key (kbd "<C-f9>") 'compile)
+
+(define-key global-map (kbd "<M-wheel-down>") 'next-error)
+(define-key global-map (kbd "<M-wheel-up>")   'previous-error)
 
 
 ;;** flymake
