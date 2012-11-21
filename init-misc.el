@@ -14,6 +14,24 @@
 (autoload 'copy-from-above-command "misc"
   "Copy characters from previous nonblank line, starting just above point." t)
 
+;; copy/cut current line if nothing selected
+;; http://ergoemacs.org/emacs/emacs_copy_cut_current_line.html
+(defadvice kill-ring-save (before slick-copy activate compile)
+  "When called interactively with no active region, copy the current line."
+  (interactive
+   (if mark-active
+       (list (region-beginning) (region-end))
+     (progn
+       (message "Current line is copied.")
+       (list (line-beginning-position) (line-beginning-position 2)) ) ) ))
+
+(defadvice kill-region (before slick-copy activate compile)
+  "When called interactively with no active region, cut the current line."
+  (interactive
+   (if mark-active
+       (list (region-beginning) (region-end))
+     (progn
+       (list (line-beginning-position) (line-beginning-position 2)) ) ) ))
 
 
 ;;** minibuffer
@@ -68,11 +86,14 @@
 (define-key search-map (kbd "M-o") 'multi-occur-in-this-mode)
 
 
-;;** grin: better grep replacement for source code project
+;;** grin & ack: better grep replacement for source code project
 (autoload 'grin "grin"
   "Use `grin' command for grepping text across files." t)
 (autoload 'grind "grin"
   "Use `grind' command for find files." t)
+
+(autoload 'ack "ack"
+  "ack.el provides a simple compilation mode for the perl grep-a-like ack program." t)
 
 
 ;;** tabbar
@@ -134,6 +155,7 @@
      (set-face-attribute 'org-level-2 nil :height 1.3 :bold t)
      (set-face-attribute 'org-level-3 nil :height 1.1)))
 
+(idle-require 'org-cua-dwim)
 
 ;;** shell
 
@@ -157,3 +179,20 @@
 (eval-after-load "info"
   `(require 'info+)
   )
+
+(defun load-and-execute (library)
+  "load a library 'foobar' and execute the command with same name
+(`foobar' or `foobar-mode')"
+  (interactive
+   (list (completing-read "Load library: "
+                          (apply-partially 'locate-file-completion-table
+                                           load-path
+                                           (get-load-suffixes)))))
+  (when (load library)
+    (let ( (command (if (fboundp (intern library))
+                        (intern library)
+                      (intern (concat library "-mode")))) )
+      (message "try to execute `%s'" command)
+      (call-interactively command))))
+
+(global-set-key (kbd "M-X") 'load-and-execute)
