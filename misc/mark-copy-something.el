@@ -357,7 +357,7 @@ the PATTERN is included."
   (define-key copy-sth-map "P"  'copy-between-pattern)
 
 
-  (global-set-key (read-kbd-macro copy-sth-to-mark-prefix-key) copy-sth-to-mark-map)
+  (global-set-key (read-kbd-macro copy-sth-to-mark-map-prefix-key) copy-sth-to-mark-map)
 
   ;;Hint: press C-SPC twice to set a mark without activate the region
   (define-key copy-sth-to-mark-map "w" 'copy-whole-word-to-mark)
