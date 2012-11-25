@@ -14,7 +14,9 @@
   (define-key key-translation-map  (kbd "ESC <down>")  (kbd "<M-down>"))
   (define-key key-translation-map  (kbd "ESC <left>")  (kbd "<M-left>"))
   (define-key key-translation-map  (kbd "ESC <right>") (kbd "<M-right>"))
-
+  (define-key key-translation-map  (kbd "ESC <insertchar>")  (kbd "<M-insert>"))
+  (define-key key-translation-map  (kbd "ESC <deletechar>")  (kbd "<M-delete>"))
+  
   (define-key key-translation-map  (kbd "<mouse-8>")   (kbd "<S-wheel-up>"))
   (define-key key-translation-map  (kbd "<mouse-9>")   (kbd "<S-wheel-down>"))
   (define-key key-translation-map  (kbd "<mouse-12>")  (kbd "<M-wheel-up>"))

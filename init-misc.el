@@ -14,7 +14,9 @@
 (autoload 'copy-from-above-command "misc"
   "Copy characters from previous nonblank line, starting just above point." t)
 
-;; copy/cut current line if nothing selected
+(global-set-key (kbd "<M-insert>") 'copy-from-above-command)
+
+;;*** copy/cut current line if nothing selected
 ;; http://ergoemacs.org/emacs/emacs_copy_cut_current_line.html
 (defadvice kill-ring-save (before slick-copy activate compile)
   "When called interactively with no active region, copy the current line."
@@ -119,14 +121,18 @@
 (idle-require 'color-theme)
 
 (if (string< emacs-version "24")
-    (eval-after-load "color-theme"
-      `(progn
-         (require 'color-theme-sanityinc)
+    (progn
+      (require 'color-theme nil t)
+      (eval-after-load "color-theme"
+        `(progn
+           (require 'color-theme-sanityinc-tomorrow)
 
-         (if (require 'color-theme-tangotango)
-             (color-theme-tangotango))
-         
-         ))
+           (if (require 'color-theme-tangotango)
+               (color-theme-tangotango))         
+           )))
+  (progn
+;;    (add-to-list 'custom-theme-directory
+    )
   )
 
 
