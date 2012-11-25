@@ -97,6 +97,15 @@
 (define-key goto-map (kbd "M-n") 'flymake-goto-next-error)
 (define-key goto-map (kbd "M-p") 'flymake-goto-prev-error)
 
+;;*** flycheck
+(autoload 'flycheck-mode "flycheck"
+  "Flymake reloaded with useful checkers. " t)
+
+;;load flycheck rather than flymake
+(idle-require 'flycheck)
+
+(global-set-key (kbd "<M-f9>") 'flycheck-mode)
+
 
 ;;** project
 (setq projectile-keymap-prefix (kbd "C-c C-p"))
