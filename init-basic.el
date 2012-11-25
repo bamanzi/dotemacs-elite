@@ -377,15 +377,18 @@
 (idle-require 'bm)
 
 (progn
+  (global-set-key (kbd "<C-f2")     'bm-toggle)
+  
   (global-set-key (kbd "<f2> <f2>") 'bm-toggle)
   (global-set-key (kbd "<f2> n")    'bm-next)
   (global-set-key (kbd "<f2> p")    'bm-previous)
-  (global-set-key (kbd "<f2> l")    'bm-show))
+  (global-set-key (kbd "<f2> l")    'bm-show)
 
-(global-set-key (kbd "<left-fringe> <C-mouse-1>")     'bm-toggle-mouse)
-(global-set-key (kbd "<left-fringe> <C-wheel-up>")    'bm-previous-mouse)
-(global-set-key (kbd "<left-fringe> <C-wheel-down>")  'bm-next-mouse)
-(global-set-key (kbd "<left-fringe> <C-mouse-2>")     'bm-show)
+  (global-set-key (kbd "<left-fringe> <C-mouse-1>")     'bm-toggle-mouse)
+  (global-set-key (kbd "<left-fringe> <C-wheel-up>")    'bm-previous-mouse)
+  (global-set-key (kbd "<left-fringe> <C-wheel-down>")  'bm-next-mouse)
+  (global-set-key (kbd "<left-fringe> <C-mouse-2>")     'bm-show)
+  )
 
 
 ;;*** other highlighting
