@@ -1,5 +1,7 @@
 ;;* programming
 
+;;TODO: prog-mode
+
 ;;** which-func-mode
 
 (define-key global-map (kbd "<f10> w f") 'which-func-mode)
@@ -89,6 +91,16 @@
 (define-key global-map (kbd "<M-wheel-down>") 'next-error)
 (define-key global-map (kbd "<M-wheel-up>")   'previous-error)
 
+(eval-after-load "eshell"
+  `(add-hook eshell-mode-hook
+             #'(lambda ()
+                 ;; `eshell-mode-map' is a local variable, damn!
+                 (define-key eshell-mode-map (kbd "C-c <f9>") 'compilation-shell-minor-mode)
+                 )))
+
+(eval-after-load "comint"
+  `(progn
+     (define-key comint-mode-map (kbd "C-c <f9>") 'compilation-shell-minor-mode)))
 
 ;;** flymake
 (eval-after-load "flymake"
