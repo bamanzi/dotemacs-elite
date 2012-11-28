@@ -5,7 +5,7 @@
 
 ;;** key bindings
 
-;;***  key modifiers and prefix keys
+;;***  key modifiers
 
 ;;***  <f1> .. <f12> as prefix key
 (global-unset-key (kbd "<f10>"))
@@ -14,6 +14,12 @@
 (global-unset-key (kbd "<f5>"))
 (global-unset-key (kbd "<f11>"))
 (global-unset-key (kbd "<f12>"))
+
+;;*** misc
+(define-key key-translation-map (kbd "<left-fringe> <mouse-4>")   (kbd "<left-fringe> <wheel-up>"))
+(define-key key-translation-map (kbd "<left-fringe> <mouse-5>")   (kbd "<left-fringe> <wheel-down>"))
+(define-key key-translation-map (kbd "<left-fringe> <C-mouse-4>") (kbd "<left-fringe> <C-wheel-up>"))
+(define-key key-translation-map (kbd "<left-fringe> <C-mouse-5>") (kbd "<left-fringe> <C-wheel-down>"))
 
 ;;** emacs enviroment
 (global-set-key (kbd "ESC ESC e r") 'eval-region)
@@ -64,7 +70,7 @@
 ;;** files & buffers
 (global-set-key (kbd "C-c C-b") 'ibuffer)
 
-(global-set-key (kbd "<C-tab>") 'previous-buffer)
+(global-set-key (kbd "<C-tab>")   'previous-buffer)
 (global-set-key (kbd "<C-S-tab>") 'next-buffer)
 (global-set-key (kbd "<f12> <left>")    'previous-buffer)
 (global-set-key (kbd "<f12> <right>")   'next-buffer)
@@ -151,7 +157,7 @@
 (setq-default fill-column 100)
 ;;(auto-fill-mode t)
 
-(global-set-key (kbd "C-c C-w") 'toggle-truncate-lines)
+(global-set-key (kbd "<f10> C-w") 'toggle-truncate-lines)
 
 (global-set-key (kbd "RET") 'newline-and-indent)
 (global-set-key (kbd "C-j") 'newline)
@@ -196,6 +202,7 @@
                                         ; commands (M-x)
                                         ; variables (C-h v, customize-variable)
                                         ; functions (C-h f)
+                                        ; customize-group
 
 ;;***  ido
 (require 'ido)
@@ -327,8 +334,6 @@
 (define-key global-map (kbd "<f10> q o") 'qtmstr-outline-mode)
 
 
-
-
 ;;***  highlight-symbol
 (idle-require 'highlight-symbol)
 
@@ -347,7 +352,6 @@
 
 (define-key search-map "O" 'occur-current-symbol)
 
-;;TODO: moccur
 
 ;;*** idle-highlight
 (autoload 'idle-highlight "idle-highlight"
@@ -376,8 +380,11 @@
 ;;***  bm
 (idle-require 'bm)
 
+(autoload 'bm-toggle "bm" "Toggle bookmark at point." t)
+(autoload 'bm-toggle-mouse "bm" "Toggle a bookmark with a mouse click." t)
+
 (progn
-  (global-set-key (kbd "<C-f2")     'bm-toggle)
+  (global-set-key (kbd "<C-f2>")     'bm-toggle)
   
   (global-set-key (kbd "<f2> <f2>") 'bm-toggle)
   (global-set-key (kbd "<f2> n")    'bm-next)
@@ -455,11 +462,11 @@
      (define-key goto-map (kbd "F") 'find-function)
      (define-key goto-map (kbd "v") 'find-variable-at-point)
      (define-key goto-map (kbd "V") 'find-variable)
-     ))
 
-(idle-require 'eldoc)
-(idle-require 'eldoc-extension)
-(add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
+     (require 'eldoc)
+     (require 'eldoc-extension nil t)
+     (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
+     ))
 
 
 ;;** utils
