@@ -150,13 +150,20 @@ found in DIRECTORY or any of its ancestors."
 
 ;;** projectile
 (setq projectile-keymap-prefix (kbd "C-c C-p"))
-(idle-require 'projectile)
+
+;;(idle-require 'projectile)
+(autoload 'projectile-global-mode "projectile"
+  "Toggle Projectile mode in every possible buffer." t)
+
 (eval-after-load "projectile"
   `(progn
      (require 'anything-projectile)
      
      (require 'projectile-ext)
-     (define-key projectile-mode-map "e" 'projectile-eshell-cd-current)
-     (define-key projectile-mode-map "E" 'projectile-eshell-cd-root)
+     (define-key projectile-mode-map (kbd "C-c C-p e") 'projectile-eshell-cd-current)
+     (define-key projectile-mode-map (kbd "C-c C-p E") 'projectile-eshell-cd-root)
+     (define-key projectile-mode-map (kbd "C-c C-p G") 'projectile-grin)
+     (define-key projectile-mode-map (kbd "C-c C-p a") 'projectile-ack)
+     (define-key projectile-mode-map (kbd "C-c C-p A") 'projectile-ack-find-file)  
      ))
 

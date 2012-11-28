@@ -37,4 +37,4 @@ Use this function as example and create your own list of anything sources.
   (interactive)
   (anything :sources '(anything-c-source-projectile-buffers)))
 
-(provide 'projectile-anything)
+(provide 'anything-projectile)
