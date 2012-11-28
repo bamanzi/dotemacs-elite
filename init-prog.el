@@ -102,7 +102,11 @@
   `(progn
      (define-key comint-mode-map (kbd "C-c <f9>") 'compilation-shell-minor-mode)))
 
+
 ;;** flymake
+(setq flymake-log-level 2)  ;; -1 = NONE, 0 = ERROR, 1 = WARNING, 2 = INFO, 3 = DEBUG
+(setq flymake-start-syntax-check-on-newline nil) ;;only syntax check when open/save
+
 (eval-after-load "flymake"
   '(require 'flymake-cursor nil t))
 
@@ -118,8 +122,33 @@
 
 (global-set-key (kbd "<M-f9>") 'flycheck-mode)
 
+;;fix endless loop bug of `flycheck-find-file-in-tree' on Windows
+(eval-after-load "flycheck"
+  `(progn
+     (defun flycheck-find-file-in-tree (filename directory)
+       "Find FILENAME in DIRECTORY and all of its ancestors.
 
-;;** project
+Start looking for a file named FILENAME in DIRECTORY and traverse
+upwards through all of its ancestors up to the file system root
+until the file is found or the root is reached.
+
+Return the absolute path of the file, or nil if the file was not
+found in DIRECTORY or any of its ancestors."
+       (let ((full-path (expand-file-name filename directory)))
+         (cond ((or (string= directory "/")
+                    (string= ":/" (substring directory 1 3)))
+                (when (file-exists-p full-path) full-path))
+               ((file-exists-p full-path)
+                full-path)
+               (t
+                (let ((parent-directory (file-name-directory
+                                         (directory-file-name
+                                          (file-name-directory full-path)))))
+                  (flycheck-find-file-in-tree filename parent-directory))))))
+     ))
+
+
+;;** projectile
 (setq projectile-keymap-prefix (kbd "C-c C-p"))
 (idle-require 'projectile)
 (eval-after-load "projectile"
