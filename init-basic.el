@@ -21,6 +21,7 @@
 (define-key key-translation-map (kbd "<left-fringe> <C-mouse-4>") (kbd "<left-fringe> <C-wheel-up>"))
 (define-key key-translation-map (kbd "<left-fringe> <C-mouse-5>") (kbd "<left-fringe> <C-wheel-down>"))
 
+
 ;;** emacs enviroment
 (global-set-key (kbd "ESC ESC e r") 'eval-region)
 (global-set-key (kbd "ESC ESC e b") 'eval-buffer)
@@ -116,6 +117,20 @@
 (autoload 'windresize "windresize" "Resize windows interactively." t)
 (setq windresize-default-increment 4)
 (global-set-key (kbd "<f11> RET") 'windresize)
+
+;;*** enlarge current window
+;;(I don't use 
+(autoload 'golden-ratio "golden-ratio"
+  "Resizes current window to the golden-ratio's size specs" t)
+
+(defun golden-ration+ ()
+  "Enlarge current window, more than command `golden-ratio'."
+  (interactive)
+  (let ((-golden-ratio-value 1.3))
+    (call-interactively 'golden-ratio)))
+
+(global-set-key (kbd "<f11> x") 'golden-ratio)
+(global-set-key (kbd "<f11> X") 'golden-ration+)
 
 
 ;;** editing
