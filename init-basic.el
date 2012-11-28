@@ -330,12 +330,14 @@
      (global-set-key (kbd "C-z <up>")     'outline-previous-visible-heading)
      (global-set-key (kbd "C-z <down>")   'outline-next-visible-heading)
      
+     (global-set-key (kbd "<C-wheel-up>")   'outline-previous-visible-heading)
+     (global-set-key (kbd "<C-wheel-down>") 'outline-next-visible-heading)
+     
+     ;;for folding, `outline-minor-mode' must be turnned on
+     (global-set-key (kbd "M-+")            'outline-toggle-children)
      (define-key outline-mode-prefix-map (kbd "<left>")  'hide-subtree)
      (define-key outline-mode-prefix-map (kbd "<right>") 'show-subtree)
 
-     (global-set-key (kbd "M-+")            'outline-toggle-children)
-     (global-set-key (kbd "<C-wheel-up>")   'outline-previous-visible-heading)
-     (global-set-key (kbd "<C-wheel-down>") 'outline-next-visible-heading)
      (global-set-key (kbd "<C-mouse-1>")    'outline-toggle-children)
      (global-set-key (kbd "<C-mouse-3>")    'show-subtree)
      (global-set-key (kbd "<C-mouse-2>")    'show-all)
