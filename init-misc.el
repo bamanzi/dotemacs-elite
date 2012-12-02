@@ -99,9 +99,25 @@
 
 
 ;;** tabbar
+(defun tabbar-buffer-groups/bmz ()
+  "Return the list of group names the current buffer belongs to.
+ Return a list of one element based on major mode."
+  (list
+   (cond
+    ((memq major-mode '(dired-mode ibuffer-mode grep-mode occur-mode
+                                   shell-mode eshell-mode lisp-interaction-mode))
+     "Utils")
+    ((= (aref (buffer-name) 0) ?*)
+     "*temp*")
+    (t
+     "User"
+     ))))
+
 (eval-after-load "tabbar"
   `(progn
      (tabbar-mode t)
+     (setq tabbar-buffer-groups-function 'tabbar-buffer-groups/bmz)
+     
      (define-key tabbar-mode-map (kbd "<C-tab>")     'tabbar-forward)
      (define-key tabbar-mode-map (kbd "<C-S-tab>")   'tabbar-backward)
      (define-key tabbar-mode-map (kbd "<C-M-tab>")   'tabbar-forward-group)
@@ -113,6 +129,12 @@
 
      (if (display-graphic-p)
          (require 'tabbar-ruler nil t))  
+     ))
+
+(eval-after-load "tabbar-ruler"
+  `(progn
+     ;;reset my grouping funciton
+     (setq tabbar-buffer-groups-function 'tabbar-buffer-groups/bmz)
      ))
 
 (idle-require 'tabbar)
@@ -131,10 +153,11 @@
                (color-theme-tangotango))         
            )))
   (progn
-;;    (add-to-list 'custom-theme-directory
+    (let ((theme-dir (locate-library "tangotango-theme")))
+      (if theme-dir
+          (add-to-list 'custom-theme-load-path (file-name-directory theme-dir))))
     )
   )
-
 
 ;;** org-mdoe
 (setq org-CUA-compatible t)
