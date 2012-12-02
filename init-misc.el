@@ -178,6 +178,11 @@
 (autoload 'shell-toggle-cd "sh-toggle"
   "Calls `shell-toggle' and let it cd to path of current buffer." t)
 
+(global-set-key (kbd "<f12> e") 'eshell-toggle-cd)
+(global-set-key (kbd "<f12> E") 'eshell-toggle)
+(global-set-key (kbd "<f12> s") 'shell-toggle-cd)
+(global-set-key (kbd "<f12> S") 'shell-toggle)
+
 
 ;;** misc
 
@@ -187,8 +192,8 @@
   )
 
 (defun load-and-execute (library)
-  "load a library 'foobar' and execute the command with same name
-(`foobar' or `foobar-mode')"
+  "load a library 'foobar' and execute the command with same name:
+`foobar' or `foobar-mode'"
   (interactive
    (list (completing-read "Load library: "
                           (apply-partially 'locate-file-completion-table
