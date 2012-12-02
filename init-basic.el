@@ -136,6 +136,24 @@
 (global-set-key (kbd "<f11> X") 'golden-ration+)
 
 
+(defun anything-enlarge-window ()
+  (interactive)
+  (with-anything-window
+      (call-interactively 'golden-ratio)))
+
+(defun anything-enlarge-window+ ()
+  (interactive)
+  (with-anything-window
+    (let ((-golden-ratio-value 1.3))
+      (call-interactively 'golden-ratio))))
+
+(eval-after-load "anything"
+  `(progn
+     (define-key anything-map (kbd "<f11> x") 'anything-enlarge-window)
+     (define-key anything-map (kbd "<f11> X") 'anything-enlarge-window+)
+     ))
+
+
 ;;** editing
 
 ;;***  CUA
@@ -150,7 +168,7 @@
 
 (global-set-key (kbd "C-x r RET") 'cua-set-rectangle-mark)
 
-(when (eq window-system 'x)
+(when window-system
     (setq x-select-enable-clipboard t)
 ;;  (setq x-select-enable-primary t)
 ;;    (set-scroll-bar-mode 'right)
