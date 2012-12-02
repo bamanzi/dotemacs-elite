@@ -2,6 +2,16 @@
 
 ;;TODO: prog-mode
 
+;;* automatically highlight current symbol
+(eval-after-load "idle-highlight"
+  `(progn
+     (if (fboundp 'idle-highlight)
+         (add-hook 'find-file-hook 'idle-highlight)
+       (add-hook 'find-file-hook 'idle-highlight-mode))
+     ))
+
+(idle-require 'idle-highlight)
+
 ;;** which-func-mode
 
 (define-key global-map (kbd "<f10> w f") 'which-func-mode)
