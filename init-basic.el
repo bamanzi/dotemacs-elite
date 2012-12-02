@@ -76,6 +76,9 @@
 (global-set-key (kbd "<f12> <left>")    'previous-buffer)
 (global-set-key (kbd "<f12> <right>")   'next-buffer)
 
+(global-set-key (kbd "<f12> *")  (kbd "C-x b *scratch* RET"))
+
+
 ;;*** desktop
 (require 'desktop)
 (setq desktop-restore-eager 5)
