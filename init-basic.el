@@ -226,7 +226,9 @@
 (setq ido-enable-flex-matching t)
 (setq ido-use-filename-at-point 'guess)
 (setq ido-use-url-at-point 'guess)
-(ido-mode 'buffers)
+;;disable the merging (the "looking in other directories" in ido vulgo) 
+(setq ido-auto-merge-work-directories-length -1)
+(ido-mode 1)
 
 ;;***  anything
 (autoload 'anything-recentf "anything-config"
@@ -308,13 +310,13 @@
 (defun bmz/turn-on-hideshow ()
   (interactive)
   (if (display-graphic-p)
-      (if (and (require 'hideshowvis nil t)
-              (require 'hideshow-fringe nil t))
+      (if (require 'hideshowvis nil t)
           (progn
+            (require 'hideshow-fringe nil t))
             (hs-minor-mode t)
             (hideshowvis-enable))
-        (hs-minor-mode t)        
-     )))
+        (hs-minor-mode t))
+     )
 
 (eval-after-load "hideshowvis"
   ` (define-key global-map (kbd "<f10> h s") 'hideshowvis-minor-mode)
@@ -374,14 +376,6 @@
 (autoload 'idle-highlight "idle-highlight"
   "highlight the word the point is on" t)
 
-(eval-after-load "idle-highlight"
-  `(progn
-     (if (fboundp 'idle-highlight)
-         (add-hook 'find-file-hook 'idle-highlight)
-       (add-hook 'find-file-hook 'idle-highlight-mode))
-     ))
-
-(idle-require 'idle-highlight)
 
 (define-key global-map (kbd "<f10> i h") 'idle-highlight)
 
