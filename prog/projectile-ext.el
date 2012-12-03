@@ -96,6 +96,7 @@
     ["Find file" (if (fboundp 'projectile-find-file)
                      (projectile-find-file)
                    (projectile-jump-to-project-file))]
+    ["Find file (ack)" projectile-ack]
     ["Find file (grind)" projectile-grind]
     ["Switch buffer" projectile-switch-to-buffer]
     "--"
@@ -103,7 +104,7 @@
                            (projectile-grep)
                          (projectile-grep-in-project))]
     ["Grep in project (ack)"  projectile-ack]
-    ["Grep in project (grin)"  'projectile-grin]
+    ["Grep in project (grin)"  projectile-grin]
     ["Replace in project" (if (fboundp 'projectile-replace)
                               (projectile-replace)
                             (projectile-replace-in-project))]
