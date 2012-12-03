@@ -101,6 +101,9 @@
 
 
 ;;** windows
+(setq split-width-threshold 120
+      split-height-threshold 40)
+
 ;;***  winner-mode
 (setq winner-dont-bind-my-keys t)
 (winner-mode t)
