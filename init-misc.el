@@ -48,7 +48,7 @@
                        (file-name-nondirectory (buffer-file-name target-buffer))))
       (insert-string " "))))
 
-(define-key minibuffer-local-map (kbd "C-c %") 'minibuffer-insert-buffer-filename)
+(define-key minibuffer-local-map (kbd "<M-insert> %") 'minibuffer-insert-buffer-filename)
 
 ;;*** insert current symbol to minibuffer
 (defun minibuffer-insert-current-symbol (arg)
@@ -62,7 +62,7 @@
                            (thing-at-point 'symbol))))
       (insert-string " "))))
 
-(define-key minibuffer-local-map (kbd "C-c M-s") 'minibuffer-insert-current-symbol)
+(define-key minibuffer-local-map (kbd "<M-insert> M-s") 'minibuffer-insert-current-symbol)
 
 
 ;;** multi-occur for buffers of same mods
