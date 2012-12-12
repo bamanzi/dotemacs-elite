@@ -8,6 +8,7 @@
 
 (define-key search-map (kbd "C-f") 'ido-find-file-at-point)
 
+
 ;;** mark, copy & yank
 (idle-require 'mark-copy-something)
 
@@ -15,6 +16,20 @@
   "Copy characters from previous nonblank line, starting just above point." t)
 
 (global-set-key (kbd "<M-insert>") 'copy-from-above-command)
+
+
+;;*** back-button: Visual navigation through mark rings
+;;https://github.com/rolandwalker/back-button
+(idle-require 'back-button)
+(eval-after-load "back-button"
+  `(progn
+     (back-button-mode 1)
+     (define-key goto-map (kbd "<left>")    'back-button-local-backward)
+     (define-key goto-map (kbd "<right>")   'back-button-local-backward)
+     (define-key goto-map (kbd "<M-left>")  'back-button-global-backward)
+     (define-key goto-map (kbd "<M-right>") 'back-button-global-backward)
+     ))
+
 
 ;;*** copy/cut current line if nothing selected
 ;; http://ergoemacs.org/emacs/emacs_copy_cut_current_line.html
@@ -139,6 +154,7 @@
 
 (idle-require 'tabbar)
 
+
 ;;** color-theme
 (idle-require 'color-theme)
 
@@ -158,6 +174,7 @@
           (add-to-list 'custom-theme-load-path (file-name-directory theme-dir))))
     )
   )
+
 
 ;;** org-mdoe
 (setq org-CUA-compatible t)
@@ -186,6 +203,7 @@
 
 (idle-require 'org-cua-dwim)
 
+
 ;;** shell
 
 ;;(idle-require 'esh-toggle)
@@ -206,11 +224,11 @@
 (global-set-key (kbd "<f12> s") 'shell-toggle-cd)
 (global-set-key (kbd "<f12> S") 'shell-toggle)
 
+
 ;;** sdcv
 (autoload 'sdcv-search-detail "sdcv"
   "Search WORD through the `command-line' tool sdcv." t)
 (define-key search-map "D"  'sdcv-search-detail)
-
 
 (defun sdcv-search-word-at-pt-mouse (event)
   (interactive "e")
@@ -221,6 +239,7 @@
 
 (global-set-key (kbd "<C-down-mouse-1>") 'sdcv-search-word-at-pt-mouse)
 (define-key search-map "d"  'sdcv-search-word-at-pt-mouse)
+
 
 ;;** dict protocol
 (setq dictem-server "localhost")
@@ -238,6 +257,7 @@
   `(progn
      (dictem-initialize)
      ))
+
 
 ;;** misc
 
