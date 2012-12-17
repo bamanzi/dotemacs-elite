@@ -8,6 +8,7 @@
     )    ;;<- put cursor here, press C-x C-e
   )
 
+(add-to-list 'load-path "~/.emacs.d/lisp")
 
 (setq dotemacs-elite-dir (if load-file-name
                     (file-name-directory load-file-name)
@@ -21,9 +22,9 @@
               (add-to-list 'load-path file)
               (let ((default-directory file))
                 (normal-top-level-add-subdirs-to-load-path))))
-        (directory-files dotemacs-elite-dir 'full "[^\\.]+"))
+        (directory-files dotemacs-elite-dir 'full "^[a-z][^\\.]+"))
 
-  (setq idle-require-idle-delay 10
+  (setq idle-require-idle-delay 5
         idle-require-load-break 1)
 
   (unless (load "idle-require" t)
