@@ -24,22 +24,22 @@
       (add-hook 'emacs-lisp-mode-hook 'prog-mode-run-hook)
       
       (eval-after-load "python"
-        (add-hook 'python-mode-hook 'prog-mode-run-hook))
+        `(add-hook 'python-mode-hook 'prog-mode-run-hook))
       (eval-after-load "js"
-        (add-hook 'js-mode-hook     'prog-mode-run-hook))
+        `(add-hook 'js-mode-hook     'prog-mode-run-hook))
       (eval-after-load "js2"
-        (add-hook 'js2-mode-hook    'prog-mode-run-hook))
+        `(add-hook 'js2-mode-hook    'prog-mode-run-hook))
       )
   )
 
 ;;TODO: test and enable this
-(when nil
-  (add-hook 'prog-mode-hook 'whitespace-mode)
-  (add-hook 'prog-mode-hook 'flyspell-prog-mode)
+(progn
+  ;; (add-hook 'prog-mode-hook 'whitespace-mode)
+  ;; (add-hook 'prog-mode-hook 'flyspell-prog-mode)
   (if (fboundp 'bmz/turn-on-hideshow)
       (add-hook 'prog-mode-hook 'bmz/turn-on-hideshow))
-  (if (fboundp 'qtmstr-outline-mode)
-      (add-hook 'prog-mode-hook 'qtmstr-outline-mode))
+  ;; (if (fboundp 'qtmstr-outline-mode)
+  ;;     (add-hook 'prog-mode-hook 'qtmstr-outline-mode))
   )
 
 ;;* automatically highlight current symbol
@@ -66,6 +66,7 @@
 (eval-after-load "which-func"
   `(progn
      (define-key which-func-keymap (kbd "<mode-line> <C-mouse-1>") 'imenu)
+     (define-key which-func-keymap (kbd "<mode-line> <C-mouse-3>") 'imenu)
      ))
 
 
