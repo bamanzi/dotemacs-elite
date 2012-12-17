@@ -172,6 +172,9 @@
     (let ((theme-dir (locate-library "tangotango-theme")))
       (if theme-dir
           (add-to-list 'custom-theme-load-path (file-name-directory theme-dir))))
+    (unless custom-enabled-themes
+      (custom-set-variables
+       '(custom-enabled-themes (quote (tango-dark)))))
     )
   )
 
