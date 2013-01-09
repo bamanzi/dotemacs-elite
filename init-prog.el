@@ -192,7 +192,7 @@ found in DIRECTORY or any of its ancestors."
 
 
 ;;** projectile
-(setq projectile-keymap-prefix (kbd "C-c C-p"))
+(setq projectile-keymap-prefix (kbd "<M-f12>"))
 
 ;;(idle-require 'projectile)
 (autoload 'projectile-global-mode "projectile"
@@ -203,10 +203,10 @@ found in DIRECTORY or any of its ancestors."
      (require 'anything-projectile)
      
      (require 'projectile-ext)
-     (define-key projectile-mode-map (kbd "C-c C-p e") 'projectile-eshell-cd-current)
-     (define-key projectile-mode-map (kbd "C-c C-p E") 'projectile-eshell-cd-root)
-     (define-key projectile-mode-map (kbd "C-c C-p G") 'projectile-grin)
-     (define-key projectile-mode-map (kbd "C-c C-p a") 'projectile-ack)
-     (define-key projectile-mode-map (kbd "C-c C-p A") 'projectile-ack-find-file)  
+     (define-key projectile-mode-map (kbd "<M-f12> E") 'projectile-eshell-cd-current)
+     (define-key projectile-mode-map (kbd "<M-f12> E") 'projectile-eshell-cd-root)
+     (define-key projectile-mode-map (kbd "<M-f12> G") 'projectile-grin)
+     (define-key projectile-mode-map (kbd "<M-f12> a") 'projectile-ack)
+     (define-key projectile-mode-map (kbd "<M-f12> A") 'projectile-ack-find-file)  
      ))
 
