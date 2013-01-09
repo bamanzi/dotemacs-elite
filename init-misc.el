@@ -8,6 +8,22 @@
 
 (define-key search-map (kbd "C-f") 'ido-find-file-at-point)
 
+;;*** dired-single
+(autoload 'joc-dired-single-buffer "dired-single"
+"Visits the selected directory in the current buffer, replacing the" t)
+
+(autoload 'joc-dired-single-buffer-mouse "dired-single"
+"Visits the selected directory in the current buffer, replacing the" t)
+
+(eval-after-load "dired"
+  `(progn
+     (define-key dired-mode-map [return] 'joc-dired-single-buffer)
+     (define-key dired-mode-map [mouse-1] 'joc-dired-single-buffer-mouse)
+     (define-key dired-mode-map "^"
+       (function
+        (lambda nil (interactive) (joc-dired-single-buffer ".."))))
+     )) 
+
 
 ;;** mark, copy & yank
 (idle-require 'mark-copy-something)
