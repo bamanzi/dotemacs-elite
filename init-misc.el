@@ -287,15 +287,19 @@
   "Search WORD through the `command-line' tool sdcv." t)
 (define-key search-map "D"  'sdcv-search-detail)
 
+
+;;(setq sdcv-dictionary-simple-list '("XDICT英汉辞典" "XDICT汉英辞典"))
+(autoload 'sdcv-search-pointer+ "sdcv"
+  "Translate current point word with command-line tool `sdcv'." t)
+(define-key search-map "d"  'sdcv-search-pointer+)
+
 (defun sdcv-search-word-at-pt-mouse (event)
   (interactive "e")
   (mouse-set-point event)
   (require 'sdcv)
-  ;;(setq sdcv-dictionary-simple-list '("XDICT英汉辞典" "XDICT汉英辞典"))
   (call-interactively 'sdcv-search-pointer+))
 
 (global-set-key (kbd "<C-down-mouse-1>") 'sdcv-search-word-at-pt-mouse)
-(define-key search-map "d"  'sdcv-search-word-at-pt-mouse)
 
 
 ;;** dict protocol
