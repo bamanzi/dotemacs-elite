@@ -24,12 +24,14 @@
   "Show project info of current project."
   (interactive)
   (if projectile-mode
-      (message "Project: %s. Root dir: %s. Type: %s"
-               (propertize (projectile-get-project-name) :bold t)
-               (projectile-get-project-root)
-               (loop for file in projectile-project-root-files
-                     when (locate-dominating-file default-directory file)
-                     do (return file)))
+      (if (projectile-get-project-root)
+          (message "Project: %s. Root dir: %s. Type: %s"
+                   (propertize (projectile-get-project-name) :bold t)
+                   (projectile-get-project-root)
+                   (loop for file in projectile-project-root-files
+                         when (locate-dominating-file default-directory file)
+                         do (return file)))
+        (message "No project found along the path of current file."))
     (message "projectile-mode not turned on.")))
 
 
