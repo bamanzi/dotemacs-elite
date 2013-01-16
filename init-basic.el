@@ -69,6 +69,7 @@
 
 
 ;;** files & buffers
+(global-set-key (kbd "C-x C-b") 'electric-buffer-list)
 (global-set-key (kbd "C-c C-b") 'ibuffer)
 
 (global-set-key (kbd "<C-tab>")   'previous-buffer)
@@ -99,6 +100,8 @@
 (autoload 'nav "nav"
   "Opens Nav in a new window to the left of the current one." t)
 
+(autoload 'nav-toggle "nav"
+  "Toggles the nav panel." t)
 
 ;;** windows
 (setq split-width-threshold 120
@@ -125,7 +128,7 @@
 (global-set-key (kbd "<f11> RET") 'windresize)
 
 ;;*** enlarge current window
-;;(I don't use 
+;;(I don't use `golden-ratio-enable')
 (autoload 'golden-ratio "golden-ratio"
   "Resizes current window to the golden-ratio's size specs" t)
 
@@ -408,7 +411,7 @@
   "Edit multiple regions in the same way simultaneously." t)
 
 (global-set-key (kbd "C-;") 'iedit-mode)
-
+(global-set-key (kbd "C-c ;") 'iedit-mode)  ;;for terminal
 
 ;;** some visual effect
 
@@ -441,9 +444,12 @@
   (highlight-regexp "https?://[^]
 \n\|]+" 'link))
 
-(add-hook 'find-file-hook 'highlight-url/bmz)
+;;(add-hook 'find-file-hook 'highlight-url/bmz)
+(add-hook 'find-file-hook 'goto-address-mode) ;;this one is better
+(define-key goto-map "u" 'goto-address)
 
 (global-set-key (kbd "M-s RET") 'browse-url)
+
 
 ;; highlight todo
 (defun highlight-todo/bmz ()
@@ -454,6 +460,7 @@
   )
 
 (add-hook 'find-file-hook 'highlight-todo/bmz)
+
 
 ;; highlight header
 (defun highlight-outline-header/bmz ()
