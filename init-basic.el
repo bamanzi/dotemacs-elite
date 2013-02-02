@@ -3,6 +3,8 @@
 (unless (fboundp 'idle-require)
     (defalias 'idle-require 'require))
 
+(server-start)
+
 ;;** key bindings
 
 ;;***  key modifiers
@@ -69,6 +71,8 @@
 
 
 ;;** files & buffers
+(define-key search-map (kbd "C-f") 'ffap)
+
 (global-set-key (kbd "C-x C-b") 'electric-buffer-list)
 (global-set-key (kbd "C-c C-b") 'ibuffer)
 
@@ -255,7 +259,7 @@
 (setq ido-use-url-at-point 'guess)
 ;;disable the merging (the "looking in other directories" in ido vulgo) 
 (setq ido-auto-merge-work-directories-length -1)
-(ido-mode 1)
+(ido-mode 'buffers)
 
 ;;***  anything
 (autoload 'anything-recentf "anything-config"
@@ -352,6 +356,7 @@
 
 ;;***  outline
 (idle-require 'outline)
+(global-unset-key (kbd "C-z"))
 (eval-after-load "outline"
   `(progn
      (global-set-key (kbd "C-z")   outline-mode-prefix-map)
