@@ -283,9 +283,9 @@
 
 
 ;;** sdcv
-(autoload 'sdcv-search-detail "sdcv"
+(autoload 'sdcv-search-input "sdcv"
   "Search WORD through the `command-line' tool sdcv." t)
-(define-key search-map "D"  'sdcv-search-detail)
+(define-key search-map "D"  'sdcv-search-input)
 
 
 ;;(setq sdcv-dictionary-simple-list '("XDICT英汉辞典" "XDICT汉英辞典"))
