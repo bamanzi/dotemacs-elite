@@ -229,7 +229,7 @@
 (add-to-list 'auto-mode-alist '("\\.mk?d" . markdown-mode))
 (add-to-list 'auto-mode-alist '("\\.markdown" . markdown-mode))
 
-;;** faces
+;;*** faces
 (eval-after-load "markdown-mode"
   `(progn
      (set-face-attribute 'markdown-header-face-1 nil :inherit 'org-level-1)
@@ -242,7 +242,7 @@
      (add-hook 'markdown-mode-hook 'buffer-face-mode) 
      ))
 
-;;** imenu
+;;*** imenu
 ;;stolen from http://tychoish.com/rhizome/imenu-for-markdown-and-writing/
 (setq markdown-imenu-generic-expression
      '(("title"  "^\\(.*\\)[\n]=+$" 1)
@@ -320,6 +320,18 @@
      ))
 
 
+;;** highlight changes
+(autoload 'diff-hl-mode  "diff-hl"
+  "Toggle VC diff fringe highlighting." t)
+(autoload 'global-diff-hl-mode "diff-hl"
+  "Toggle Diff-Hl mode in every possible buffer." t)
+
+;;(add-hook 'prog-mode-hook 'diff-hl-mode)
+
+(global-highlight-changes-mode 1)
+(global-set-key (kbd "<f10> h c") 'highlight-changes-visible-mode)
+
+
 ;;** misc
 
 ;;info+.el: more colors (and other enhancements) 
@@ -343,4 +355,5 @@
       (call-interactively command))))
 
 (global-set-key (kbd "M-X") 'load-and-execute)
+
 
