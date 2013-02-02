@@ -12,15 +12,11 @@
     (set (make-local-variable 'require-final-newline) mode-require-final-newline)
     (set (make-local-variable 'parse-sexp-ignore-comments) t)
     ;; Any programming language is always written left to right.
-    (setq bidi-paragraph-direction 'left-to-right))
-  
-  (defun prog-mode-run-hook ()
-    (interactive)  ;;allows manually invoke
-    (run-hooks 'prog-mode-hook))
+    (setq bidi-paragraph-direction 'left-to-right))  
 
   ;;as in older Emacs, js-mode, python-mode is not derived from `prog-mode'
   ;;we had to call the hook manually
-  (progn
+  (when nil    ;;FIXME: not work well
       (add-hook 'emacs-lisp-mode-hook 'prog-mode-run-hook)
       
       (eval-after-load "python"
@@ -32,6 +28,13 @@
       )
   )
 
+(defun prog-mode-run-hook ()
+  (interactive)  ;;allows manually invoke
+  (run-hooks 'prog-mode-hook))
+
+(global-set-key (kbd "<f10> P") 'prog-mode-run-hook)
+
+
 ;;TODO: test and enable this
 (progn
   ;; (add-hook 'prog-mode-hook 'whitespace-mode)
@@ -42,7 +45,7 @@
   ;;     (add-hook 'prog-mode-hook 'qtmstr-outline-mode))
   )
 
-;;* automatically highlight current symbol
+;;** automatically highlight current symbol
 (eval-after-load "idle-highlight"
   `(progn
      (if (fboundp 'idle-highlight)
@@ -67,6 +70,8 @@
   `(progn
      (define-key which-func-keymap (kbd "<mode-line> <C-mouse-1>") 'imenu)
      (define-key which-func-keymap (kbd "<mode-line> <C-mouse-3>") 'imenu)
+
+     (add-to-list 'which-func-modes 'js-mode)
      ))
 
 
@@ -80,6 +85,10 @@
 (global-set-key (kbd "<f5> c") 'anything-browse-code)
 
 (define-key goto-map "i" 'imenu)
+
+(if (boundp 'prog-mode-hook)
+    (add-hook 'prog-mode-hook 'imenu-add-menubar-index))
+
 
 (defun anything-goto-symbol ()
   "Show anything list, using current symbol as input to narrow the choices."
