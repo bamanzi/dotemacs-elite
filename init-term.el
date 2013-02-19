@@ -8,12 +8,12 @@
 (defun xterm-map-function-keys-csi ()
   "Map xterm control sequences for F1..F4 keys.
 
-Only for CSI sequences (\e[1;;..)"
+Only for CSI sequences (\e[.., used by putty/mingtty)"
   (interactive)
-  (define-key input-decode-map "\e[1;2A" [S-f1])
-  (define-key input-decode-map "\e[1;2B" [S-f2])
-  (define-key input-decode-map "\e[1;2C" [S-f3])
-  (define-key input-decode-map "\e[1;2D" [S-f4])
+  (define-key input-decode-map "\e[1;2P" [S-f1])
+  (define-key input-decode-map "\e[1;2Q" [S-f2])
+  (define-key input-decode-map "\e[1;2R" [S-f3])
+  (define-key input-decode-map "\e[1;2S" [S-f4])
 
   (define-key input-decode-map "\e[1;3P" [M-f1])
   (define-key input-decode-map "\e[1;3Q" [M-f2])
@@ -25,20 +25,20 @@ Only for CSI sequences (\e[1;;..)"
   (define-key input-decode-map "\e[1;4R" [S-M-f3])
   (define-key input-decode-map "\e[1;4S" [S-M-f4])
 
-  (define-key input-decode-map "\e[1;5R" [C-f1])
+  (define-key input-decode-map "\e[1;5P" [C-f1])
   (define-key input-decode-map "\e[1;5Q" [C-f2])
   (define-key input-decode-map "\e[1;5R" [C-f3])
-  (define-key input-decode-map "\e[1;5Q" [C-f4])
+  (define-key input-decode-map "\e[1;5S" [C-f4])
 
-  (define-key input-decode-map "\e[1;6R" [C-S-f1])
+  (define-key input-decode-map "\e[1;6P" [C-S-f1])
   (define-key input-decode-map "\e[1;6Q" [C-S-f2])
   (define-key input-decode-map "\e[1;6R" [C-S-f3])
-  (define-key input-decode-map "\e[1;6Q" [C-S-f4])  
+  (define-key input-decode-map "\e[1;6S" [C-S-f4])  
   
-  (define-key input-decode-map "\e[1;7R" [C-M-f1])
+  (define-key input-decode-map "\e[1;7P" [C-M-f1])
   (define-key input-decode-map "\e[1;7Q" [C-M-f2])
   (define-key input-decode-map "\e[1;7R" [C-M-f3])
-  (define-key input-decode-map "\e[1;7Q" [C-M-f4])  
+  (define-key input-decode-map "\e[1;7S" [C-M-f4])  
   )
 
 (unless (display-graphic-p)
@@ -59,8 +59,8 @@ Only for CSI sequences (\e[1;;..)"
   (define-key key-translation-map  (kbd "<mouse-20>")  (kbd "<C-wheel-up>"))
   (define-key key-translation-map  (kbd "<mouse-21>")  (kbd "<C-wheel-down>"))
 
-  (when (require 'xterm-extras nil t)
-      (xterm-map-function-keys-csi))
+  (require 'xterm-extras nil t)
+  (xterm-map-function-keys-csi)
   )
 
    
