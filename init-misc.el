@@ -332,6 +332,12 @@
 (global-set-key (kbd "<f10> h c") 'highlight-changes-visible-mode)
 
 
+;;** yasnippet
+(autoload 'anything-yasnippet-2  "anything-yasnippet-2"
+  "Find yasnippets." t)
+
+(global-set-key (kbd "<f5> s")  'anything-yasnippet-2)
+
 ;;** misc
 
 ;;info+.el: more colors (and other enhancements) 
