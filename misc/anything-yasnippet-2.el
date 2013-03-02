@@ -27,7 +27,8 @@
 ;; http://www.emacswiki.org/emacs/Anything
 
 (require 'anything)
-(require 'yasnippet)
+(or (require 'yasnippet nil t)
+    (require 'yasnippet-bundle))
 
 (defvar *anything-yasnippet-2-buffer-name*
   "*Anything yasnippet2*")
@@ -35,10 +36,17 @@
 (defun ays:candidates ()
   (with-current-buffer anything-current-buffer
     (yas/all-templates (yas/get-snippet-tables))))
+
 (defun ays:real-to-display (template)
-  (format "%s: %s"
-          (file-name-nondirectory (yas/template-file template))
-          (yas/template-name template)))
+    (format "%s: %s"
+            (cond
+                ((fboundp 'yas/template-key) ; yasnippet 0.7+
+                 (yas/template-key template))
+                ((yas/template-file template) ; yasnipet-bundle return nil for this
+                 (file-name-nondirectory (yas/template-file template)))
+                "(unknown)")            ;FIXME: maybe we need to get snippet name from `yas/table-hash'
+            (yas/template-name template)))
+
 (defun ays:candidate-transformer (templates)
   (mapcar (lambda (template) (cons (ays:real-to-display template) template))
           templates))
