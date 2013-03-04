@@ -59,7 +59,9 @@ Only for CSI sequences (\e[.., used by putty/mingtty)"
   (define-key key-translation-map  (kbd "<mouse-20>")  (kbd "<C-wheel-up>"))
   (define-key key-translation-map  (kbd "<mouse-21>")  (kbd "<C-wheel-down>"))
 
-  (require 'xterm-extras nil t)
+  (when (require 'xterm-extras nil t)
+    (xterm-extra-keys))
+   
   (xterm-map-function-keys-csi)
   )
 
