@@ -1,8 +1,8 @@
 ;;; zenburn-theme.el --- A low contrast color theme for Emacs.
 
-;; Copyright (C) 2011 Bozhidar Batsov
+;; Copyright (C) 2011-2013 Bozhidar Batsov
 
-;; Author: Bozhidar Batsov <bozhidar.batsov@gmail.com>
+;; Author: Bozhidar Batsov <bozhidar@batsov.com>
 ;; URL: http://github.com/bbatsov/zenburn-emacs
 ;; Version: 1.7
 
@@ -22,22 +22,7 @@
 ;;; Commentary:
 ;;
 ;; A port of the popular Vim theme Zenburn for Emacs 24, built on top
-;; of the new built-in theme support in Emacs 24. There exists one
-;; other version of the theme by Daniel Brockman. My version was
-;; originally based on it, but it was in such a disarray, that I
-;; decided to rewrite it from scratch in a more maintainable manner
-;; (hopefully).
-;;
-;;; Installation:
-;;
-;; Drop the theme in a folder that is on `custom-theme-load-path' and
-;; enjoy!
-;;
-;; Don't forget that the theme requires Emacs 24.
-;;
-;;; Bugs:
-;;
-;; None that I'm aware of.
+;; of the new built-in theme support in Emacs 24.
 ;;
 ;;; Credits:
 ;;
@@ -92,7 +77,7 @@
    ;;; basic coloring
    `(default ((t (:foreground ,zenburn-fg :background ,zenburn-bg))))
    `(cursor ((t (:foreground ,zenburn-fg :background "white"))))
-   `(escape-glyph-face ((t (:foreground ,zenburn-red))))
+   `(escape-glyph ((t (:foreground ,zenburn-yellow :bold t))))
    `(fringe ((t (:foreground ,zenburn-fg :background ,zenburn-bg+1))))
    `(header-line ((t (:foreground ,zenburn-yellow
                                   :background ,zenburn-bg-1
@@ -156,7 +141,7 @@
    `(font-lock-string-face ((t (:foreground ,zenburn-red))))
    `(font-lock-type-face ((t (:foreground ,zenburn-blue-1))))
    `(font-lock-variable-name-face ((t (:foreground ,zenburn-orange))))
-   `(font-lock-warning-face ((t (:foreground ,zenburn-orange :weight bold :underline t))))
+   `(font-lock-warning-face ((t (:foreground ,zenburn-yellow-2 :weight bold))))
 
    `(c-annotation-face ((t (:inherit font-lock-constant-face))))
 
@@ -201,6 +186,11 @@
    `(popup-scroll-bar-background-face ((t (:background ,zenburn-bg-1))))
    `(popup-isearch-match ((t (:background ,zenburn-bg :foreground ,zenburn-fg))))
 
+   ;; clojure-test-mode
+   `(clojure-test-failure-face ((t (:foreground ,zenburn-orange :weight bold :underline t))))
+   `(clojure-test-error-face ((t (:foreground ,zenburn-red :weight bold :underline t))))
+   `(clojure-test-success-face ((t (:foreground ,zenburn-green+1 :weight bold :underline t))))
+
    ;; diff
    `(diff-added ((,class (:foreground ,zenburn-green+4))
                  (t (:foreground ,zenburn-green-1))))
@@ -230,6 +220,10 @@
    `(eshell-ls-special ((t (:foreground ,zenburn-yellow :weight bold))))
    `(eshell-ls-symlink ((t (:foreground ,zenburn-cyan :weight bold))))
 
+   ;; flycheck
+   `(flycheck-error-face ((t (:foreground ,zenburn-red-1 :weight bold :underline t))))
+   `(flycheck-warning-face ((t (:foreground ,zenburn-orange :weight bold :underline t))))
+
    ;; flymake
    `(flymake-errline ((t (:foreground ,zenburn-red-1 :weight bold :underline t))))
    `(flymake-warnline ((t (:foreground ,zenburn-orange :weight bold :underline t))))
@@ -258,6 +252,11 @@
    `(erc-prompt-face ((t (:foreground ,zenburn-orange :background ,zenburn-bg :weight bold))))
    `(erc-timestamp-face ((t (:foreground ,zenburn-green+1))))
    `(erc-underline-face ((t (:underline t))))
+
+   ;; git-gutter
+   `(git-gutter:added ((,class (:foreground ,zenburn-green :weight bold :inverse-video t))))
+   `(git-gutter:deleted ((,class (:foreground ,zenburn-red :weight bold :inverse-video t))))
+   `(git-gutter:modified ((,class (:foreground ,zenburn-magenta :weight bold :inverse-video t))))
 
    ;; gnus
    `(gnus-group-mail-1 ((t (:bold t :inherit gnus-group-mail-1-empty))))
@@ -437,6 +436,17 @@
    `(nav-face-file ((t (:foreground ,zenburn-fg))))
    `(nav-face-hfile ((t (:foreground ,zenburn-red-4))))
 
+   ;; mu4e
+   `(mu4e-cited-1-face ((t (:foreground ,zenburn-blue    :slant italic))))
+   `(mu4e-cited-2-face ((t (:foreground ,zenburn-green+2 :slant italic))))
+   `(mu4e-cited-3-face ((t (:foreground ,zenburn-blue-2  :slant italic))))
+   `(mu4e-cited-4-face ((t (:foreground ,zenburn-green   :slant italic))))
+   `(mu4e-cited-5-face ((t (:foreground ,zenburn-blue-4  :slant italic))))
+   `(mu4e-cited-6-face ((t (:foreground ,zenburn-green-1 :slant italic))))
+   `(mu4e-cited-7-face ((t (:foreground ,zenburn-blue    :slant italic))))
+   `(mu4e-replied-face ((t (:foreground ,zenburn-bg+3))))
+   `(mu4e-trashed-face ((t (:foreground ,zenburn-bg+3 :strike-through t))))
+
    ;; mumamo
    `(mumamo-background-chunk-major ((t (:background nil))))
    `(mumamo-background-chunk-submode1 ((t (:background ,zenburn-bg-1))))
@@ -504,6 +514,22 @@
    `(rainbow-delimiters-depth-11-face ((t (:foreground ,zenburn-green))))
    `( rainbow-delimiters-depth-12-face ((t (:foreground ,zenburn-blue-5))))
 
+   ;;rcirc
+   `(rcirc-my-nick ((t (:foreground ,zenburn-blue))))
+   `(rcirc-other-nick ((t (:foreground ,zenburn-orange))))
+   `(rcirc-bright-nick ((t (:foreground ,zenburn-blue+1))))
+   `(rcirc-dim-nick ((t (:foreground ,zenburn-blue-2))))
+   `(rcirc-server ((t (:foreground ,zenburn-green))))
+   `(rcirc-server-prefix ((t (:foreground ,zenburn-green+1))))
+   `(rcirc-timestamp ((t (:foreground ,zenburn-green+2))))
+   `(rcirc-nick-in-message ((t (:foreground ,zenburn-yellow))))
+   `(rcirc-nick-in-message-full-line ((t (:bold t))))
+   `(rcirc-prompt ((t (:foreground ,zenburn-yellow :bold t))))
+   `(rcirc-track-nick ((t (:inverse-video t))))
+   `(rcirc-track-keyword ((t (:bold t))))
+   `(rcirc-url ((t (:bold t))))
+   `(rcirc-keyword ((t (:foreground ,zenburn-yellow :bold t))))
+
    ;; rpm-mode
    `(rpm-spec-dir-face ((t (:foreground ,zenburn-green))))
    `(rpm-spec-doc-face ((t (:foreground ,zenburn-green))))
@@ -562,15 +588,15 @@
    `(w3m-lnum-minibuffer-prompt ((t (:foreground ,zenburn-yellow))))
 
    ;; whitespace-mode
-   `(whitespace-space ((t (:background ,zenburn-bg :foreground ,zenburn-bg+1))))
-   `(whitespace-hspace ((t (:background ,zenburn-bg :foreground ,zenburn-bg+1))))
-   `(whitespace-tab ((t (:background ,zenburn-bg :foreground ,zenburn-red))))
+   `(whitespace-space ((t (:background ,zenburn-bg+1 :foreground ,zenburn-bg+1))))
+   `(whitespace-hspace ((t (:background ,zenburn-bg+1 :foreground ,zenburn-bg+1))))
+   `(whitespace-tab ((t (:background ,zenburn-red-1))))
    `(whitespace-newline ((t (:foreground ,zenburn-bg+1))))
-   `(whitespace-trailing ((t (:foreground ,zenburn-red :background ,zenburn-bg))))
-   `(whitespace-line ((t (:background ,zenburn-bg-05 :foreground ,zenburn-magenta))))
+   `(whitespace-trailing ((t (:background ,zenburn-red))))
+   `(whitespace-line ((t (:background ,zenburn-bg :foreground ,zenburn-magenta))))
    `(whitespace-space-before-tab ((t (:background ,zenburn-orange :foreground ,zenburn-orange))))
    `(whitespace-indentation ((t (:background ,zenburn-yellow :foreground ,zenburn-red))))
-   `(whitespace-empty ((t (:background ,zenburn-yellow :foreground ,zenburn-red))))
+   `(whitespace-empty ((t (:background ,zenburn-yellow))))
    `(whitespace-space-after-tab ((t (:background ,zenburn-yellow :foreground ,zenburn-red))))
 
    ;; wanderlust
@@ -615,15 +641,11 @@
    'zenburn
    `(ansi-color-names-vector [,zenburn-bg ,zenburn-red ,zenburn-green ,zenburn-yellow
                                           ,zenburn-blue ,zenburn-magenta ,zenburn-cyan ,zenburn-fg])
+   `(ansi-term-color-vector [,zenburn-bg ,zenburn-red ,zenburn-green ,zenburn-yellow
+                                         ,zenburn-blue ,zenburn-magenta ,zenburn-cyan ,zenburn-fg])
 
    ;; fill-column-indicator
-   `(fci-rule-color ,zenburn-bg-05))
-
-  ;;; colors for the ansi-term
-  (eval-after-load 'term
-    `(setq ansi-term-color-vector
-           (vector 'unspecified ,zenburn-bg ,zenburn-red ,zenburn-green ,zenburn-yellow
-                   ,zenburn-blue ,zenburn-magenta ,zenburn-cyan ,zenburn-fg))))
+   `(fci-rule-color ,zenburn-bg-05)))
 
 ;;;###autoload
 (and load-file-name
@@ -640,4 +662,4 @@
 ;; eval: (when (fboundp 'rainbow-mode) (rainbow-mode +1))
 ;; End:
 
-;;; zenburn-theme.el ends here.
+;;; zenburn-theme.el ends here
