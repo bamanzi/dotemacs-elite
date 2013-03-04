@@ -162,6 +162,7 @@ names to which it refers are bound."
      (success ((,class (:foreground ,green))))
      (error ((,class (:foreground ,red))))
      (warning ((,class (:foreground ,orange))))
+     (outline-4 ((,class (:slant normal :foreground ,comment))))
 
      ;; Flymake
      (flymake-warnline ((,class (:underline ,orange :background ,background))))
@@ -210,6 +211,9 @@ names to which it refers are bound."
      (ido-only-match ((,class (:foreground ,green))))
      (ido-indicator ((,class (:foreground ,red :background ,background))))
      (ido-virtual ((,class (:foreground ,comment))))
+
+     ;; which-function
+     (which-func ((,class (:foreground ,blue :background nil :weight bold))))
 
      ;; Emacs interface
      (cursor ((,class (:background ,red))))
@@ -280,6 +284,8 @@ names to which it refers are bound."
      (ediff-odd-diff-A  ((,class (:foreground ,comment :background nil :inverse-video t))))
      (ediff-odd-diff-B  ((,class (:foreground ,comment :background nil :inverse-video t))))
 
+     (eldoc-highlight-function-argument ((,class (:foreground ,green :weight bold))))
+
      ;; undo-tree
      (undo-tree-visualizer-default-face ((,class (:foreground ,foreground))))
      (undo-tree-visualizer-current-face ((,class (:foreground ,green :weight bold))))
@@ -287,15 +293,18 @@ names to which it refers are bound."
      (undo-tree-visualizer-register-face ((,class (:foreground ,yellow))))
 
      ;; dired+
+     (diredp-compressed-file-suffix ((,class (:foreground ,blue))))
      (diredp-dir-heading ((,class (:foreground nil :background nil :inherit heading))))
      (diredp-dir-priv ((,class (:foreground ,aqua :background nil))))
      (diredp-exec-priv ((,class (:foreground ,blue :background nil))))
+     (diredp-executable-tag ((,class (:foreground ,red :background nil))))
      (diredp-file-name ((,class (:foreground ,yellow))))
      (diredp-file-suffix ((,class (:foreground ,green))))
      (diredp-flag-mark-line ((,class (:background nil :inherit highlight))))
      (diredp-ignored-file-name ((,class (:foreground ,comment))))
      (diredp-link-priv ((,class (:background nil :foreground ,purple))))
      (diredp-mode-line-flagged ((,class (:foreground ,red))))
+     (diredp-mode-line-marked ((,class (:foreground ,green))))
      (diredp-no-priv ((,class (:background nil))))
      (diredp-number ((,class (:foreground ,yellow))))
      (diredp-other-priv ((,class (:background nil :foreground ,purple))))
@@ -326,6 +335,9 @@ names to which it refers are bound."
      (compilation-column-number ((,class (:foreground ,yellow))))
      (compilation-line-number ((,class (:foreground ,yellow))))
      (compilation-message-face ((,class (:foreground ,blue))))
+     (compilation-mode-line-exit ((,class (:foreground ,green))))
+     (compilation-mode-line-fail ((,class (:foreground ,red))))
+     (compilation-mode-line-run ((,class (:foreground ,blue))))
 
      ;; Grep
      (grep-context-face ((,class (:foreground ,comment))))
@@ -366,7 +378,6 @@ names to which it refers are bound."
      (org-upcoming-deadline ((,class (:foreground ,orange))))
      (org-warning ((,class (:weight bold :foreground ,red))))
 
-     (markdown-header-face ((,class (:inherit header-line))))
      (markdown-url-face ((,class (:inherit link))))
      (markdown-link-face ((,class (:foreground ,blue :underline t))))
 
@@ -415,11 +426,11 @@ names to which it refers are bound."
      (erb-comment-delim-face ((,class (:background ,current-line))))
 
      ;; Message-mode
-     (message-header-other ((,class (:inherit header-line :foreground nil :background nil :weight normal))))
+     (message-header-other ((,class (:foreground nil :background nil :weight normal))))
      (message-header-subject ((,class (:inherit message-header-other :weight bold :foreground ,yellow))))
      (message-header-to ((,class (:inherit message-header-other :weight bold :foreground ,orange))))
      (message-header-cc ((,class (:inherit message-header-to :foreground nil))))
-     (message-header-name ((,class (:inherit header-line :foreground ,green :background nil))))
+     (message-header-name ((,class (:foreground ,blue :background nil))))
      (message-header-newsgroups ((,class (:foreground ,aqua :background nil :slant normal))))
      (message-separator ((,class (:foreground ,purple))))
 
@@ -453,10 +464,10 @@ names to which it refers are bound."
      (gnus-cite-7 ((,class (:inherit outline-7 :foreground nil))))
      (gnus-cite-8 ((,class (:inherit outline-8 :foreground nil))))
      ;; there are several more -cite- faces...
-     (gnus-header-content ((,class (:inherit header-line :foreground nil :background nil :weight normal))))
-     (gnus-header-subject ((,class (:inherit gnus-header-content :weight bold :foreground ,yellow))))
-     (gnus-header-from ((,class (:inherit gnus-header-content :weight bold :foreground ,orange))))
-     (gnus-header-name ((,class (:inherit header-line :foreground ,green :background nil))))
+     (gnus-header-content ((,class (:inherit message-header-other))))
+     (gnus-header-subject ((,class (:inherit message-header-subject))))
+     (gnus-header-from ((,class (:inherit message-header-other-face :weight bold :foreground ,orange))))
+     (gnus-header-name ((,class (:inherit message-header-name))))
      (gnus-button ((,class (:inherit link :foreground nil))))
      (gnus-signature ((,class (:inherit font-lock-comment-face))))
 
@@ -487,6 +498,18 @@ names to which it refers are bound."
      (gnus-group-mail-4-empty ((,class (:inherit gnus-group-mail-4 :foreground ,comment))))
      (gnus-group-mail-5-empty ((,class (:inherit gnus-group-mail-5 :foreground ,comment))))
      (gnus-group-mail-6-empty ((,class (:inherit gnus-group-mail-6 :foreground ,comment))))
+     (gnus-group-news-1 ((,class (:foreground nil :weight normal :inherit outline-5))))
+     (gnus-group-news-2 ((,class (:foreground nil :weight normal :inherit outline-6))))
+     (gnus-group-news-3 ((,class (:foreground nil :weight normal :inherit outline-7))))
+     (gnus-group-news-4 ((,class (:foreground nil :weight normal :inherit outline-8))))
+     (gnus-group-news-5 ((,class (:foreground nil :weight normal :inherit outline-1))))
+     (gnus-group-news-6 ((,class (:foreground nil :weight normal :inherit outline-2))))
+     (gnus-group-news-1-empty ((,class (:inherit gnus-group-news-1 :foreground ,comment))))
+     (gnus-group-news-2-empty ((,class (:inherit gnus-group-news-2 :foreground ,comment))))
+     (gnus-group-news-3-empty ((,class (:inherit gnus-group-news-3 :foreground ,comment))))
+     (gnus-group-news-4-empty ((,class (:inherit gnus-group-news-4 :foreground ,comment))))
+     (gnus-group-news-5-empty ((,class (:inherit gnus-group-news-5 :foreground ,comment))))
+     (gnus-group-news-6-empty ((,class (:inherit gnus-group-news-6 :foreground ,comment))))
 
      (erc-direct-msg-face ((,class (:foreground ,orange))))
      (erc-error-face ((,class (:foreground ,red))))
@@ -501,6 +524,7 @@ names to which it refers are bound."
      (erc-pal-face ((,class (:foreground ,orange))))
      (erc-prompt-face ((,class (:foreground ,blue))))
      (erc-timestamp-face ((,class (:foreground ,aqua))))
+     (erc-keyword-face ((,class (:foreground ,green))))
 
      (custom-variable-tag ((,class (:foreground ,blue))))
      (custom-group-tag ((,class (:foreground ,blue))))
