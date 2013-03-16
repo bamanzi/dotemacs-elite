@@ -336,6 +336,26 @@ On Windows, baskslashes is substituted with slashes."
 (define-key global-map (kbd "C-. p") 'ac-complete-pcomplete)
 
 
+;;** spell
+(define-key global-map (kbd "ESC M-$") 'ispell-complete-word)
+
+(defun ac-ispell-get-candidates ()
+  (let ((word (car (ispell-get-word nil "\\*")))
+        (interior-frag nil))
+    (lookup-words (concat (and interior-frag "*") word
+                    (if (or interior-frag (null ispell-look-p))
+                    "*"))
+                  ispell-complete-word-dict)))
+
+(eval-after-load "auto-complete"
+  `(progn
+     (ac-define-source ispell
+       '((symbol . "i")
+         (candidates . ac-ispell-get-candidates)))
+     ))
+
+(define-key global-map (kbd "C-. $") 'ac-complete-ispell-word)
+
 ;;** sdcv
 (autoload 'sdcv-search-input "sdcv"
   "Search WORD through the `command-line' tool sdcv." t)
