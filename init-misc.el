@@ -281,6 +281,60 @@
 (global-set-key (kbd "<f12> s") 'shell-toggle-cd)
 (global-set-key (kbd "<f12> S") 'shell-toggle)
 
+(defun eshell-maybe-bol ()
+  (interactive)
+  (let ((p (point)))
+    (eshell-bol)
+    (if (= p (point))
+        (beginning-of-line))))
+
+(defun bmz/eshell-mode-init ()
+  ;; swap <home> and C-a
+  (define-key eshell-mode-map (kbd "C-a") 'eshell-maybe-bol)
+  (define-key eshell-mode-map (kbd "<home>") 'eshell-maybe-bol)
+
+  (setq outline-regexp "^.* $")
+  (outline-minor-mode t)
+  )
+
+;;*** some eshell command
+          (find-file file)
+          (goto-line line))
+      (find-file (pop args)))))
+
+(defalias 'eshell/vi 'eshell/vim)
+
+(defun eshell/start (file)
+    "Invoke system's associated application for FILE.
+On Windows, baskslashes is substituted with slashes."
+    (if (eq system-type 'gnu/linux)
+        (shell-command (concat "gnome-open "
+                               (shell-quote-argument (file))))
+      (w32-shell-execute "Open"
+                       (subst-char-in-string ?\\ ?/ (expand-file-name file))
+		       nil)))
+
+(defun eshell/clear()
+  "to clear the eshell buffer."
+  (interactive)  
+  (let ((inhibit-read-only t))
+    (erase-buffer)))
+
+(defalias 'eshell/cls 'eshell/clear)
+
+;;*** pcomplete for shell commands & args
+;;stolen from http://linuxtoy.org/archives/emacs-eshell.html
+(eval-after-load "auto-complete"
+  `(progn
+     (ac-define-source pcomplete
+       '((candidates . pcomplete-completions)))
+
+     (add-to-list 'ac-modes 'eshell-mode)
+     (add-to-list 'ac-modes 'shell-mode)
+     ))
+
+(define-key global-map (kbd "C-. p") 'ac-complete-pcomplete)
+
 
 ;;** sdcv
 (autoload 'sdcv-search-input "sdcv"
