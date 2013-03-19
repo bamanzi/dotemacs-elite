@@ -136,15 +136,17 @@
 ;;(I don't use `golden-ratio-enable')
 (autoload 'golden-ratio "golden-ratio"
   "Resizes current window to the golden-ratio's size specs" t)
+(autoload 'golden-ratio-enable "golden-ratio"
+  "Enables golden-ratio's automatic window resizing" t)
 
-(defun golden-ration+ ()
+(defun golden-ratio+ ()
   "Enlarge current window, more than command `golden-ratio'."
   (interactive)
   (let ((-golden-ratio-value 1.3))
     (call-interactively 'golden-ratio)))
 
 (global-set-key (kbd "<f11> x") 'golden-ratio)
-(global-set-key (kbd "<f11> X") 'golden-ration+)
+(global-set-key (kbd "<f11> X") 'golden-ratio+)
 
 
 (defun anything-enlarge-window ()
@@ -391,6 +393,9 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
 ;;***  outline
 (idle-require 'outline)
 (global-unset-key (kbd "C-z"))
+(global-set-key (kbd "<C-up>")   'outline-previous-visible-heading)
+(global-set-key (kbd "<C-down>") 'outline-next-visible-heading)
+
 (eval-after-load "outline"
   `(progn
      (global-set-key (kbd "C-z")   outline-mode-prefix-map)

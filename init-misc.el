@@ -8,6 +8,13 @@
 
 (define-key search-map (kbd "C-f") 'ido-find-file-at-point)
 
+(defun revert-buffer-with-sudo ()
+  (interactive)
+  (if (or (not buffer-file-name)
+          (string-match "^/sudo:" buffer-file-name))
+      (call-interactively 'find-alternate-file)
+    (find-alternate-file (concat "/sudo::" buffer-file-name))))
+
 ;;*** dired-single
 (autoload 'joc-dired-single-buffer "dired-single"
 "Visits the selected directory in the current buffer, replacing the" t)
@@ -127,6 +134,13 @@
 
 (autoload 'ack "ack"
   "ack.el provides a simple compilation mode for the perl grep-a-like ack program." t)
+
+
+(define-key search-map "g " 'grep)
+(define-key search-map "G" (kbd "C-u M-x grep"))
+(define-key search-map "gg" 'grin)
+(define-key search-map "gd" 'grind)
+(define-key search-map "ga" 'ack)
 
 
 ;;** tabbar
@@ -290,14 +304,31 @@
 
 (defun bmz/eshell-mode-init ()
   ;; swap <home> and C-a
-  (define-key eshell-mode-map (kbd "C-a") 'eshell-maybe-bol)
+  (define-key eshell-mode-map (kbd "C-a")    'eshell-maybe-bol)
   (define-key eshell-mode-map (kbd "<home>") 'eshell-maybe-bol)
+  
+  (define-key eshell-mode-map (kbd "<up>")   'eshell-previous-input)
+  (define-key eshell-mode-map (kbd "<down>") 'eshell-next-input)
+  
+  (if (fboundp 'drag-stuff-mode)
+      (drag-stuff-mode -1))
+  (define-key eshell-mode-map (kbd "<M-up>")   'previous-line)
+  (define-key eshell-mode-map (kbd "<M-down>") 'next-line)    
 
   (setq outline-regexp "^.* $")
   (outline-minor-mode t)
   )
 
+(add-hook 'eshell-mode-hook 'bmz/eshell-mode-init)
+
 ;;*** some eshell command
+(defun eshell/vim (&rest args)
+  "Invoke find-file' on the file.
+\"vi +42 foo\" also goes to line 42 in the buffer."
+  (while args
+    (if (string-match "\\\+\([0-9]+\)\'" (car args))
+        (let* ((line (string-to-number (match-string 1 (pop args))))
+               (file (pop args)))
           (find-file file)
           (goto-line line))
       (find-file (pop args)))))
@@ -349,7 +380,7 @@ On Windows, baskslashes is substituted with slashes."
 
 (eval-after-load "auto-complete"
   `(progn
-     (ac-define-source ispell
+     (ac-define-source ispell-word
        '((symbol . "i")
          (candidates . ac-ispell-get-candidates)))
      ))
