@@ -240,6 +240,14 @@
      (rpm-spec-section-face ((t (:foreground "#8ae234" :underline t :weight bold))))
      (rpm-spec-tag-face ((t (:foreground "dodger blue" :weight bold))))
      (rpm-spec-var-face ((t (:foreground "tomato"))))
+
+     (which-func  ((t (:forground "cornflower blue"))))
+     ;hideshowvis
+     (hs-face ((t (:background "brown4"))))
+
++     ;;info+
+     (info-string ((t (:foreground "#6ac214"))))
+     (info-quoted-name ((t (:foreground "#edd400"))))     
 )))
 
 (provide 'color-theme-tangotango)
