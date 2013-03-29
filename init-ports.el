@@ -1,10 +1,24 @@
 
-
+;;** menu bar
 (autoload 'lacarte-execute-menu-command "lacarte"
   "Execute a menu-bar menu command in an alternative way." t)
 
 (define-key global-map (kbd "ESC <f10>") 'lacarte-execute-menu-command)
 
+
+;;** x11 mouse
+(progn
+  (define-key key-translation-map (kbd "<S-mouse-4>") (kbd "<S-wheel-up>"))
+  (define-key key-translation-map (kbd "<S-mouse-5>") (kbd "<S-wheel-down>"))
+  (define-key key-translation-map (kbd "<M-mouse-4>") (kbd "<M-wheel-up>"))
+  (define-key key-translation-map (kbd "<M-mouse-5>") (kbd "<M-wheel-down>"))
+  (define-key key-translation-map (kbd "<C-mouse-4>") (kbd "<C-wheel-up>"))
+  (define-key key-translation-map (kbd "<C-mouse-5>") (kbd "<C-wheel-down>"))
+  (define-key key-translation-map (kbd "<C-M-mouse-4>") (kbd "<C-M-wheel-up>"))
+  (define-key key-translation-map (kbd "<C-M-mouse-5>") (kbd "<C-M-wheel-down>"))
+  )
+
+;;** xterm
 (defun xterm-map-function-keys-csi ()
   "Map xterm control sequences for F1..F4 keys.
 
