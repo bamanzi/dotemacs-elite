@@ -245,7 +245,7 @@
      ;hideshowvis
      (hs-face ((t (:background "brown4"))))
 
-+     ;;info+
+     ;;info+
      (info-string ((t (:foreground "#6ac214"))))
      (info-quoted-name ((t (:foreground "#edd400"))))     
 )))
