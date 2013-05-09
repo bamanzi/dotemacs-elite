@@ -149,9 +149,9 @@
  Return a list of one element based on major mode."
   (list
    (cond
-    (or (memq major-mode '(dired-mode ibuffer-mode grep-mode occur-mode
-                                   shell-mode eshell-mode lisp-interaction-mode))
-        (get-buffer-process (current-buffer)))
+    ((or (memq major-mode '(dired-mode ibuffer-mode grep-mode occur-mode
+                                       shell-mode eshell-mode lisp-interaction-mode))
+         (get-buffer-process (current-buffer)))
      "Utils")
     ((= (aref (buffer-name) 0) ?*)
      "*temp*")
