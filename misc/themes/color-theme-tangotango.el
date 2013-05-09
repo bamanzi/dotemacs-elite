@@ -241,13 +241,18 @@
      (rpm-spec-tag-face ((t (:foreground "dodger blue" :weight bold))))
      (rpm-spec-var-face ((t (:foreground "tomato"))))
 
+     (help-argument-name ((t (:italic t :slant italic :foreground "blanched almond" :background "black" ))))
      (which-func  ((t (:forground "cornflower blue"))))
      ;hideshowvis
      (hs-face ((t (:background "brown4"))))
 
      ;;info+
      (info-string ((t (:foreground "#6ac214"))))
-     (info-quoted-name ((t (:foreground "#edd400"))))     
+     (info-quoted-name ((t (:foreground "#edd400"))))
+
+     (rst-level-1-face ((t (:bold t :foreground "dodger blue" :height 1.5))))
+     (rst-level-2-face ((t (:bold nil :foreground "#edd400" :height 1.2))))
+     (rst-level-3-face ((t (:bold t :foreground "#6ac214" :height 1.0))))     
 )))
 
 (provide 'color-theme-tangotango)
