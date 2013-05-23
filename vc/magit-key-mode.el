@@ -26,7 +26,7 @@
 
 (require 'magit)
 
-(eval-when-compile (require 'cl-lib))
+(eval-when-compile (require 'cl))
 
 (defvar magit-key-mode-key-maps '()
   "This will be filled lazily with proper `define-key' built
@@ -300,7 +300,7 @@ The user is prompted for the key."
     (goto-char (point-min))
     (let* ((exec (get-text-property (point) 'key-group-executor))
            (exec-alist (if exec `((,exec . ,(point))) nil)))
-      (cl-do nil ((eobp) (nreverse exec-alist))
+      (do nil ((eobp) (nreverse exec-alist))
         (when (not (eq exec (get-text-property (point) 'key-group-executor)))
           (setq exec (get-text-property (point) 'key-group-executor))
           (when exec (push (cons exec (point)) exec-alist)))
