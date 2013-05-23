@@ -10,10 +10,13 @@
 
 (defun revert-buffer-with-sudo ()
   (interactive)
-  (if (or (not buffer-file-name)
-          (string-match "^/sudo:" buffer-file-name))
-      (call-interactively 'find-alternate-file)
-    (find-alternate-file (concat "/sudo::" buffer-file-name))))
+  (let ((pt        (point)))
+    (if (or (not buffer-file-name)
+            (string-match "^/sudo:" buffer-file-name))
+        (call-interactively 'find-alternate-file)
+      (find-alternate-file (concat "/sudo::" buffer-file-name))
+      (goto-char pt))))
+
 
 ;;*** dired-single
 (autoload 'joc-dired-single-buffer "dired-single"
@@ -25,6 +28,8 @@
 (eval-after-load "dired"
   `(progn
      (define-key dired-mode-map [return] 'joc-dired-single-buffer)
+     (define-key dired-mode-map (kbd "RET") 'joc-dired-single-buffer)
+     
      (define-key dired-mode-map [mouse-1] 'joc-dired-single-buffer-mouse)
      (define-key dired-mode-map "^"
        (function
