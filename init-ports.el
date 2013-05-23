@@ -18,7 +18,15 @@
   (define-key key-translation-map (kbd "<C-M-mouse-5>") (kbd "<C-M-wheel-down>"))
   )
 
-;;** xterm
+;;** xterm mouse
+(defun enable-xterm-mouse-for-frame (frame)
+  (if (not (display-graphic-p))
+      (xterm-mouse-mode 1)))
+
+(add-hook 'after-make-frame-functions 'enable-xterm-mouse-for-frame)
+
+
+;;** xterm keys
 (defun xterm-map-function-keys-csi ()
   "Map xterm control sequences for F1..F4 keys.
 
@@ -55,8 +63,8 @@ Only for CSI sequences (\e[.., used by putty/mingtty)"
   (define-key input-decode-map "\e[1;7S" [C-M-f4])  
   )
 
-(unless (display-graphic-p)
-  (xterm-mouse-mode 1)
+
+(progn
   (define-key key-translation-map (kbd "<select>") (kbd "<end>"))
 
   (define-key key-translation-map  (kbd "ESC <up>")    (kbd "<M-up>"))
@@ -73,9 +81,6 @@ Only for CSI sequences (\e[.., used by putty/mingtty)"
   (define-key key-translation-map  (kbd "<mouse-20>")  (kbd "<C-wheel-up>"))
   (define-key key-translation-map  (kbd "<mouse-21>")  (kbd "<C-wheel-down>"))
 
-  (when (require 'xterm-extras nil t)
-    (xterm-extra-keys))
-   
   (xterm-map-function-keys-csi)
   )
 
