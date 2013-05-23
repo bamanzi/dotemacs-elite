@@ -19,11 +19,11 @@
   )
 
 ;;** xterm mouse
-(defun enable-xterm-mouse-for-frame (frame)
+(defun bmz/xterm-init-mouse (&optional frame)
   (if (not (display-graphic-p))
       (xterm-mouse-mode 1)))
 
-(add-hook 'after-make-frame-functions 'enable-xterm-mouse-for-frame)
+(add-hook 'after-make-frame-functions 'bmz/xterm-init-mouse)
 
 
 ;;** xterm keys
@@ -83,5 +83,13 @@ Only for CSI sequences (\e[.., used by putty/mingtty)"
 
   (xterm-map-function-keys-csi)
   )
+
+(defun bmz/xterm-init-keys (&optional frame)
+  (interactive)
+  (ignore-errors
+    (load-library "term/xterm")
+    (terminal-init-xterm)))
+      
+(add-hook 'after-make-frame-functions 'bmz/xterm-init-keys)
 
    
