@@ -30,7 +30,8 @@
 (defun xterm-map-function-keys-csi ()
   "Map xterm control sequences for F1..F4 keys.
 
-Only for CSI sequences (\e[.., used by putty/mingtty)"
+Only for CSI sequences, which are used by xterm-r6/gnome-terminal/mintty 
+but not mapped by term/xterm.el"
   (interactive)
   (define-key input-decode-map "\e[1;2P" [S-f1])
   (define-key input-decode-map "\e[1;2Q" [S-f2])
@@ -74,21 +75,15 @@ Only for CSI sequences (\e[.., used by putty/mingtty)"
   (define-key key-translation-map  (kbd "ESC <insertchar>")  (kbd "<M-insert>"))
   (define-key key-translation-map  (kbd "ESC <deletechar>")  (kbd "<M-delete>"))
   
-  (define-key key-translation-map  (kbd "<mouse-8>")   (kbd "<S-wheel-up>"))
-  (define-key key-translation-map  (kbd "<mouse-9>")   (kbd "<S-wheel-down>"))
-  (define-key key-translation-map  (kbd "<mouse-12>")  (kbd "<M-wheel-up>"))
-  (define-key key-translation-map  (kbd "<mouse-13>")  (kbd "<M-wheel-down>"))
-  (define-key key-translation-map  (kbd "<mouse-20>")  (kbd "<C-wheel-up>"))
-  (define-key key-translation-map  (kbd "<mouse-21>")  (kbd "<C-wheel-down>"))
-
   (xterm-map-function-keys-csi)
   )
 
 (defun bmz/xterm-init-keys (&optional frame)
   (interactive)
-  (ignore-errors
-    (load-library "term/xterm")
-    (terminal-init-xterm)))
+  (when (not (display-graphic-p))
+      (ignore-errors
+        (load-library "term/xterm")
+        (terminal-init-xterm))))
       
 (add-hook 'after-make-frame-functions 'bmz/xterm-init-keys)
 
