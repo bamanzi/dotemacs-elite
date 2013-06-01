@@ -78,6 +78,24 @@
      (progn
        (list (line-beginning-position) (line-beginning-position 2)) ) ) ))
 
+;;*** copy/paste rectangle
+;;stolen from http://ergoemacs.org/emacs/emacs_string-rectangle_ascii-art.html
+(unless (functionp 'copy-rectangle-as-kill)  ;; emacs-24 has this
+  (defun copy-rectangle-to-clipboard (p1 p2)
+    "Copy region as column (rectangle) to operating system's clipboard.
+This command will also put the text in register 0.
+
+See also: `kill-rectangle', `copy-to-register'."
+    (interactive "r")
+    (let ((x-select-enable-clipboard t))
+      (copy-rectangle-to-register ?0 p1 p2)
+      (kill-new
+       (with-temp-buffer
+         (insert-register ?0)
+         (buffer-string) )) ) )
+
+  (define-key global-map (kbd "C-x r M-w") 'copy-rectangle-to-clipboard))
+
 
 ;;** minibuffer
 ;;*** easily insert buffer name (useful for `shell-command', `compile' etc)
@@ -386,3 +404,4 @@
 (global-set-key (kbd "M-X") 'load-and-execute)
 
 
+(setq ediff-window-setup-function 'ediff-setup-windows-plain)
