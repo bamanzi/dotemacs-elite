@@ -182,6 +182,24 @@ See also: `kill-rectangle', `copy-to-register'."
      "User"
      ))))
 
+
+;;add extra leading & ending space to tab label
+(defun tabbar-buffer-tab-label/xterm (tab)
+  "Return a label for TAB.
+That is, a string used to represent it on the tab bar."
+  (let ((label  (if tabbar--buffer-show-groups
+                    (format "[%s]" (tabbar-tab-tabset tab))
+                  (format " %s " (tabbar-tab-value tab)))))
+    ;; Unless the tab bar auto scrolls to keep the selected tab
+    ;; visible, shorten the tab label to keep as many tabs as possible
+    ;; in the visible area of the tab bar.
+    (if tabbar-auto-scroll-flag
+        label
+      (tabbar-shorten
+       label (max 1 (/ (window-width)
+                       (length (tabbar-view
+                                (tabbar-current-tabset)))))))))
+
 (eval-after-load "tabbar"
   `(progn
      (tabbar-mode t)
@@ -197,7 +215,8 @@ See also: `kill-rectangle', `copy-to-register'."
      (define-key tabbar-mode-map (kbd "<f12> <up>")    'tabbar-press-home)
 
      (if (display-graphic-p)
-         (require 'tabbar-ruler nil t))  
+         (require 'tabbar-ruler nil t)
+       (setq tabbar-tab-label-function 'tabbar-buffer-tab-label/xterm))
      ))
 
 (eval-after-load "tabbar-ruler"
