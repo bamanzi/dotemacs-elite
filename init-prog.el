@@ -203,7 +203,7 @@ found in DIRECTORY or any of its ancestors."
 ;;** projectile
 (setq projectile-keymap-prefix (kbd "<M-f12>"))
 
-;;(idle-require 'projectile)
+(idle-require 'projectile-ext)
 (autoload 'projectile-global-mode "projectile"
   "Toggle Projectile mode in every possible buffer." t)
 
@@ -211,7 +211,9 @@ found in DIRECTORY or any of its ancestors."
   `(progn
      (require 'anything-projectile)
      
-     (require 'projectile-ext)
+;;     (require 'projectile-ext)
+     (define-key projectile-mode-map (kbd "<M-f12> C-f") 'projectile-find-file-)
+     (define-key projectile-mode-map (kbd "<M-f12> d") 'projectile-dired)     
      (define-key projectile-mode-map (kbd "<M-f12> E") 'projectile-eshell-cd-current)
      (define-key projectile-mode-map (kbd "<M-f12> E") 'projectile-eshell-cd-root)
      (define-key projectile-mode-map (kbd "<M-f12> G") 'projectile-grin)
