@@ -20,7 +20,7 @@
 
 
 ;;*** some eshell command
-(defun eshell/vim (&rest args)
+(defun eshell/edit (&rest args)
   "Invoke find-file' on the file.
 \"vi +42 foo\" also goes to line 42 in the buffer."
   (while args
@@ -31,9 +31,12 @@
           (goto-line line))
       (find-file (pop args)))))
 
-(defalias 'eshell/vi 'eshell/vim)
+(defalias 'eshell/vi 'eshell/edit)
+(defalias 'eshell/vim 'eshell/edit)
+(defalias 'eshell/emacs 'eshell/edit)
 
-(defun eshell/start (file)
+
+(defun eshell/open (file)
     "Invoke system's associated application for FILE.
 On Windows, baskslashes is substituted with slashes."
     (if (eq system-type 'gnu/linux)
@@ -42,6 +45,9 @@ On Windows, baskslashes is substituted with slashes."
       (w32-shell-execute "Open"
                        (subst-char-in-string ?\\ ?/ (expand-file-name file))
 		       nil)))
+
+(defalias 'eshell/start 'eshell/open)
+
 
 (defun eshell/clear()
   "to clear the eshell buffer."
@@ -80,6 +86,14 @@ On Windows, baskslashes is substituted with slashes."
     (if (= p (point))
         (beginning-of-line))))
 
+;;stolen from http://comments.gmane.org/gmane.emacs.help/7319
+(defun kai-eshell-insert-last-word (n)
+  (interactive "p")
+  (insert (car (reverse
+                (split-string
+                 (eshell-previous-input-string (- n 1)))))))
+
+
 (defun bmz/eshell-mode-init ()
   ;; swap <home> and C-a
   (define-key eshell-mode-map (kbd "C-a")    'eshell-maybe-bol)
@@ -87,12 +101,21 @@ On Windows, baskslashes is substituted with slashes."
   
   (define-key eshell-mode-map (kbd "<up>")   'eshell-previous-input)
   (define-key eshell-mode-map (kbd "<down>") 'eshell-next-input)
-  
+
+  (define-key eshell-mode-map (kbd "<M-up>")   'eshell-previous-matching-input)
+  (define-key eshell-mode-map (kbd "<M-down>") 'eshell-next-matching-input)  
+
+  ;;I'd like M-s as highlight-xxx prefix key
+  (define-key eshell-mode-map (kbd "M-s") nil)
+
   (if (fboundp 'drag-stuff-mode)
       (drag-stuff-mode -1))
-  (define-key eshell-mode-map (kbd "<M-up>")   'previous-line)
-  (define-key eshell-mode-map (kbd "<M-down>") 'next-line)    
+  
+  (define-key eshell-mode-map (kbd "<C-up>")   'previous-line)
+  (define-key eshell-mode-map (kbd "<C-down>") 'next-line)    
 
+  (define-key eshell-mode-map (kbd "M-.") 'kai-eshell-insert-last-word)  
+  
   (setq outline-regexp "^.* $")
   (outline-minor-mode t)
   )
