@@ -92,6 +92,25 @@
   (let ((default-directory (projectile-get-project-root)))
     (call-interactively 'grind)))
 
+
+(defun projectile-dired (dir)
+  "If there is an EShell buffer, cd to DIR in that buffer."
+  (interactive
+   (list (let ((default-directory (projectile-get-project-root)))
+           (if (and (symbolp 'ido-mode) ido-mode)
+               (ido-read-directory-name "Dired to: " nil nil 'must-match)
+             (read-directory-name "Dired to: " nil nil 'must-match)))))
+  (dired dir "-al"))
+
+(defun projectile-find-file- (file)
+  "If there is an EShell buffer, cd to DIR in that buffer."
+  (interactive
+   (list (let ((default-directory (projectile-get-project-root)))
+           (if (and (symbolp 'ido-mode) ido-mode)
+               (read-file-name "Find file: " nil nil 'must-match)))))
+  (find-file file))
+
+
 (easy-menu-define projectile-mode-menu projectile-mode-map
   "Menu for Projectile mode"
   '("Projectile"
@@ -100,6 +119,7 @@
                    (projectile-jump-to-project-file))]
     ["Find file (ack)" projectile-ack]
     ["Find file (grind)" projectile-grind]
+    ["Dired" projectile-dired]
     ["Switch buffer" projectile-switch-to-buffer]
     "--"
     ["Grep in project" (if (fboundp 'projectile-grep)
