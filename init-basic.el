@@ -315,6 +315,7 @@
   `(progn
       (ac-config-default)
       (define-key ac-completing-map (kbd "ESC ESC") 'ac-stop)
+      (define-key ac-completing-map (kbd "C-s") 'ac-isearch) 
       
       ;;(add-hook 'lisp-interaction-mode 'ac-emacs-lisp-mode-setup)
 
