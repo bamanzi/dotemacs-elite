@@ -77,6 +77,45 @@ On Windows, baskslashes is substituted with slashes."
 
 (define-key global-map (kbd "C-. p") 'ac-complete-pcomplete)
 
+;;** compilation-shell-minor-mode (also for grep/grin in shell)
+(global-set-key (kbd "C-c <f9>") 'compilation-shell-minor-mode)
+
+(global-set-key (kbd "M-g <f9>") 'compile-goto-error)
+
+
+;;** cursor keysc
+
+(defun comint-toggle-cursor-keybinding (arg)
+  "Toggle up/down key between {previous,next}-line and {previous,next}-input."
+  (interactive "P")
+  (if (or arg (eq (key-binding (kbd "<up>") 'previous-line)))
+      (progn
+        (define-key comint-mode-map (kbd "<up>")   'comint-previous-input)
+        (define-key comint-mode-map (kbd "<down>") 'comint-next-input)
+        (message "up/down key now binding to `eshell-{previous,next}-input'."))
+    (progn
+        (define-key comint-mode-map (kbd "<up>")   'previous-line)
+        (define-key comint-mode-map (kbd "<down>") 'next-line))))
+
+(defun eshell-toggle-cursor-keybinding (arg)
+  "Toggle up/down key between {previous,next}-line and {previous,next}-input."
+  (interactive "P")
+  (if (or arg (eq (key-binding (kbd "<up>") 'previous-line)))
+      (progn
+        (define-key eshell-mode-map (kbd "<up>")   'eshell-previous-input)
+        (define-key eshell-mode-map (kbd "<down>") 'eshell-next-input)
+        (message "up/down key now binding to `eshell-{previous,next}-input'."))
+    (progn
+        (define-key eshell-mode-map (kbd "<up>")   'previous-line)
+        (define-key eshell-mode-map (kbd "<down>") 'next-line))))
+          
+
+;;** autojump
+(eval-after-load 'eshell
+  '(require 'eshell-autojump nil t))
+;;use command `j' to list your MRU path,
+;;use command `j regexp' to jump to one
+
 
 ;;** misc
 (defun eshell-maybe-bol ()
@@ -97,22 +136,18 @@ On Windows, baskslashes is substituted with slashes."
 (defun bmz/eshell-mode-init ()
   ;; swap <home> and C-a
   (define-key eshell-mode-map (kbd "C-a")    'eshell-maybe-bol)
-  (define-key eshell-mode-map (kbd "<home>") 'eshell-maybe-bol)
-  
-  (define-key eshell-mode-map (kbd "<up>")   'eshell-previous-input)
-  (define-key eshell-mode-map (kbd "<down>") 'eshell-next-input)
+  (define-key eshell-mode-map (kbd "<home>") 'eshell-maybe-bol)  
 
   (define-key eshell-mode-map (kbd "<M-up>")   'eshell-previous-matching-input)
   (define-key eshell-mode-map (kbd "<M-down>") 'eshell-next-matching-input)  
 
+  (eshell-toggle-cursor-keybinding 1)
+  
   ;;I'd like M-s as highlight-xxx prefix key
   (define-key eshell-mode-map (kbd "M-s") nil)
 
   (if (fboundp 'drag-stuff-mode)
       (drag-stuff-mode -1))
-  
-  (define-key eshell-mode-map (kbd "<C-up>")   'previous-line)
-  (define-key eshell-mode-map (kbd "<C-down>") 'next-line)    
 
   (define-key eshell-mode-map (kbd "M-.") 'kai-eshell-insert-last-word)  
   
@@ -121,3 +156,10 @@ On Windows, baskslashes is substituted with slashes."
   )
 
 (add-hook 'eshell-mode-hook 'bmz/eshell-mode-init)
+
+;;*** eshell prompt
+(setq eshell-prompt-function (lambda nil
+                               (concat
+                                (propertize (eshell/pwd) 'face `(:foreground "blue"))
+                                (propertize " $ " 'face `(:foreground "green")))))
+(setq eshell-highlight-prompt nil)
