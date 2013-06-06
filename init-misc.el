@@ -388,9 +388,29 @@ That is, a string used to represent it on the tab bar."
 
 ;;(add-hook 'prog-mode-hook 'diff-hl-mode)
 
+
 (global-highlight-changes-mode 1)
 (global-set-key (kbd "<f10> h c") 'highlight-changes-visible-mode)
 
+;;*** git-gutter
+;; https://github.com/syohex/emacs-git-gutter
+(autoload 'git-gutter:toggle "git-gutter"
+  "toggle to show diff information" t)
+
+(defun frame-reinit-git-gutter (&optional frame)
+  "Choose `git-gutter' implementation from `git-gutter.el' or `git-gutter-fringe.el'."
+  (interactive)
+  (if (require 'git-gutter-fringe nil t)
+      (if (display-graphic-p)
+          (setq git-gutter:init-function 'git-gutter-fr:init
+                git-gutter:view-diff-function 'git-gutter-fr:view-diff-infos
+                git-gutter:clear-function 'git-gutter-fr:clear)
+        (setq git-gutter:init-function nil
+                git-gutter:view-diff-function 'git-gutter:view-diff-infos
+                git-gutter:clear-function 'git-gutter:clear-diff-infos))))
+
+;;(add-hook 'after-make-frame-functions 'frame-reinit-git-gutter)
+ 
 
 ;;** yasnippet
 (autoload 'anything-yasnippet-2  "anything-yasnippet-2"
