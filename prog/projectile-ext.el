@@ -143,6 +143,21 @@
     "--"
     ["Show project info" projectile-show-project-info]))     
 
+;;** integration with desktop-mode
+(defun projectile-save-desktop ()
+  (interactive)
+  (if (projectile-get-project-root)
+      (let ((desktop-file-name-format 'local) ;;Relative to directory of desktop file.
+            (desktop-files-not-to-save "\\(^/[^/:]*:\\|(ftp)$\\|^\\.\\./\\)")) ;;exclude files not in project folder
+        (desktop-save (projectile-get-project-root)))
+    (message "Current directory is not in a project.")))
+        
+(defun projectile-load-desktop()
+  (interactive)
+  (if (projectile-get-project-root)
+      (let ((desktop-restore-eager 5))
+        (desktop-read (projectile-get-project-root)))
+    (message "Current directory is not in a project."))
 
 ;;** tabbar: group by project name
 
