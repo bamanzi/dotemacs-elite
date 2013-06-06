@@ -72,7 +72,8 @@ On Windows, baskslashes is substituted with slashes."
 (eval-after-load "eshell"
   `(progn
      (require 'pcmpl-git nil t)
-     (require 'pcmpl-args nil t)
+     (if (require 'pcase nil t)
+         (require 'pcmpl-args nil t))
      ))
 
 (define-key global-map (kbd "C-. p") 'ac-complete-pcomplete)
@@ -138,8 +139,6 @@ On Windows, baskslashes is substituted with slashes."
   (define-key eshell-mode-map (kbd "C-a")    'eshell-maybe-bol)
   (define-key eshell-mode-map (kbd "<home>") 'eshell-maybe-bol)  
 
-  (define-key eshell-mode-map (kbd "<M-up>")   'eshell-previous-matching-input)
-  (define-key eshell-mode-map (kbd "<M-down>") 'eshell-next-matching-input)  
 
   (eshell-toggle-cursor-keybinding 1)
   
@@ -149,6 +148,9 @@ On Windows, baskslashes is substituted with slashes."
   (if (fboundp 'drag-stuff-mode)
       (drag-stuff-mode -1))
 
+  (define-key eshell-mode-map (kbd "<M-up>")   'eshell-previous-matching-input)
+  (define-key eshell-mode-map (kbd "<M-down>") 'eshell-next-matching-input)
+  
   (define-key eshell-mode-map (kbd "M-.") 'kai-eshell-insert-last-word)  
   
   (setq outline-regexp "^.* $")
