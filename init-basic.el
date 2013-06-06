@@ -454,6 +454,8 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
 ;;*** iedit
 (autoload 'iedit-mode "iedit"
   "Edit multiple regions in the same way simultaneously." t)
+(autoload 'iedit-mode-on-function "iedit"
+  "Toggle Iedit mode on current function." t)
 
 (global-set-key (kbd "C-;") 'iedit-mode)
 (global-set-key (kbd "C-c ;") 'iedit-mode)  ;;for terminal
@@ -481,21 +483,31 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
   )
 
 
-;;*** other highlighting
-;; highlight url
-(defun highlight-url/bmz ()
-  (interactive)
-  (require 'hi-lock)
-  (highlight-regexp "https?://[^]
-\n\|]+" 'link))
-
-;;(add-hook 'find-file-hook 'highlight-url/bmz)
+;;*** highlight url
 (add-hook 'find-file-hook 'goto-address-mode) ;;this one is better
 (define-key goto-map "u" 'goto-address)
 
 (global-set-key (kbd "M-s RET") 'browse-url)
 
+;;**** this supports more link types
+;; http://orgmode.org/manual/External-links.html
+;; file:/etc/fstab
+;; file:/user@machine:/home/user/.bashrc
+;; info:org
+;; shell:ls -l
+;; elisp:tool-bar-mode
 
+(autoload 'org-link-minor-mode "org-link-minor-mode"
+  "Toggle display of org-mode style bracket links in non-org-mode buffers." t)
+
+(when (and (require 'org nil t)
+         (string< "7.3" org-version))
+  (remove-hook 'find-file-hook 'goto-address-mode)
+  (add-hook 'find-file-hook 'org-link-minor-mode))
+
+(global-set-key (kbd "C-c C-o") 'org-open-at-point-global)
+
+;;*** other highlighting
 ;; highlight todo
 (defun highlight-todo/bmz ()
   (interactive)
