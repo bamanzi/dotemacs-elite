@@ -157,7 +157,7 @@
   (if (projectile-get-project-root)
       (let ((desktop-restore-eager 5))
         (desktop-read (projectile-get-project-root)))
-    (message "Current directory is not in a project."))
+    (message "Current directory is not in a project.")))
 
 ;;** tabbar: group by project name
 
@@ -165,14 +165,18 @@
   "Return the list of group names the current buffer belongs to.
 Return a list of one element based on projectile's project."
   (list (cond
-         (projectile-mode
+         ((and projectile-mode
+               (or
+                (buffer-file-name)
+                (memq major-mode '(dired-mode comint-mode occur-mode grep-mode compilation-mode eshell-mode shell-mode))))
           (projectile-get-project-name))
-         ((projectile-get-project-root)
-          (projectile-get-project-name))          
          ((= (aref (buffer-name) 0) ?*)
-          "*Utils*")
+            (if (or (member (buffer-name) '("*scratch*" "*Buffer List*" "*Help*"))
+                    (memq major-mode '()))
+                "*utils*"
+              "*temp*"))
          (t
-          "*Files*"))))
+          "*files*"))))
 
 (defun tabbar-group-by-project ()
   (interactive)
