@@ -154,6 +154,7 @@
 (define-key global-map (kbd "<M-wheel-up>")   'previous-error)
 
 (global-set-key (kbd "C-c <f9>") 'compilation-shell-minor-mode)
+(global-set-key (kbd "M-g <f9>") 'compile-goto-error)
 
 ;;** flymake
 (setq flymake-log-level 2)  ;; -1 = NONE, 0 = ERROR, 1 = WARNING, 2 = INFO, 3 = DEBUG
@@ -210,7 +211,9 @@ found in DIRECTORY or any of its ancestors."
 (eval-after-load "projectile"
   `(progn
      (require 'anything-projectile)
-     
+
+     (delete ".projectile" projectile-project-root-files)
+     (add-to-list 'projectile-project-root-files ".projectile")     
 ;;     (require 'projectile-ext)
      (define-key projectile-mode-map (kbd "<M-f12> C-f") 'projectile-find-file-)
      (define-key projectile-mode-map (kbd "<M-f12> d") 'projectile-dired)     

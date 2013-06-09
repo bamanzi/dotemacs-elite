@@ -556,7 +556,7 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
 ;;** major modes
 ;;*** emacs lisp mode
 (eval-after-load "lisp-mode"
-  `(progn
+  `(progn     
      (define-key goto-map (kbd "f") 'find-function-at-point)
      (define-key goto-map (kbd "F") 'find-function)
      (define-key goto-map (kbd "v") 'find-variable-at-point)
@@ -568,9 +568,11 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
      ))
 
 
+(defalias 'fdap 'find-function-at-point)
+(defalias 'fvap 'find-variable-at-point)
+
 ;;** utils
 
-;;*** eshell
 
 
 ;;** misc
