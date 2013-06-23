@@ -407,9 +407,9 @@ That is, a string used to represent it on the tab bar."
      ))
 
 ;;*** google-translate
-(autoload google-translate-at-point "google-translate"
+(autoload 'google-translate-at-point "google-translate"
   "Translate the word at point or the words in the active region." t)
-(autoload google-translate-query-translate "google-translate"
+(autoload 'google-translate-query-translate "google-translate"
   "Interactively translate text with Google Translate." t)
 
 (defalias 'gtap 'google-translate-at-point)
