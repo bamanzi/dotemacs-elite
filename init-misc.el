@@ -160,7 +160,8 @@ See also: `kill-rectangle', `copy-to-register'."
 
 
 (define-key search-map "g " 'grep)
-(define-key search-map "G" (kbd "C-u M-x grep"))
+(define-key search-map " g" 'grep)
+
 (define-key search-map "gg" 'grin)
 (define-key search-map "gd" 'grind)
 (define-key search-map "ga" 'ack)
@@ -322,7 +323,8 @@ That is, a string used to represent it on the tab bar."
 
 
 
-;;** spell
+;;** languages tools
+;;*** spell
 (define-key global-map (kbd "ESC M-$") 'ispell-complete-word)
 
 (defun ac-ispell-get-candidates ()
@@ -342,7 +344,7 @@ That is, a string used to represent it on the tab bar."
 
 (define-key global-map (kbd "C-. $") 'ac-complete-ispell-word)
 
-;;** sdcv
+;;*** sdcv
 (autoload 'sdcv-search-input "sdcv"
   "Search WORD through the `command-line' tool sdcv." t)
 (define-key search-map "D"  'sdcv-search-input)
@@ -362,7 +364,7 @@ That is, a string used to represent it on the tab bar."
 (global-set-key (kbd "<C-down-mouse-1>") 'sdcv-search-word-at-pt-mouse)
 
 
-;;** dict protocol
+;;*** dict protocol
 (setq dictem-server "localhost")
 (autoload 'dictem-run-search  "dictem" nil t)
 (autoload 'dictem-run-match   "dictem" nil t)
@@ -379,6 +381,22 @@ That is, a string used to represent it on the tab bar."
      (dictem-initialize)
      ))
 
+;;*** google-translate
+(autoload google-translate-at-point "google-translate"
+  "Translate the word at point or the words in the active region." t)
+(autoload google-translate-query-translate "google-translate"
+  "Interactively translate text with Google Translate." t)
+
+(defalias 'gtap 'google-translate-at-point)
+(defalias 'gtqt 'google-translate-query-translate)
+
+(setq google-translate-enable-ido-completion t
+      google-translate-default-source-language "en"
+      google-translate-default-target-language "zh-CN")
+
+(define-key search-map "G" 'google-translate-at-point)
+(define-key search-map " G" 'google-translate-query-translate)
+    
 
 ;;** highlight changes
 (autoload 'diff-hl-mode  "diff-hl"
