@@ -523,7 +523,11 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
 (defun highlight-outline-header/bmz ()
   (interactive)
   (highlight-lines-matching-regexp "^;;; \\w" 'hi-black-hb)
-  (highlight-lines-matching-regexp "^;;\\*+ " 'hi-blue))
+  ;; highlight headers in this file
+  (highlight-lines-matching-regexp "^;;\\* "    'org-level-1)
+  (highlight-lines-matching-regexp "^;;\\*\\* " 'org-level-2)
+  (highlight-lines-matching-regexp "^;;\\*\\*\\* " 'org-level-3))
+  
 
 (eval-after-load "lisp-mode"
   `(add-hook 'emacs-lisp-mode-hook 'highlight-outline-header/bmz))
