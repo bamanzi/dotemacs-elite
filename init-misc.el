@@ -150,21 +150,46 @@ See also: `kill-rectangle', `copy-to-register'."
 
 
 ;;** grin & ack: better grep replacement for source code project
+(defun grep-on-dir (dir)
+  (interactive "DGrep on dir: ")
+  (require 'grep)
+  (let ((default-directory dir))
+    (call-interactively 'grep)))
+
+(define-key search-map "g " 'grep-on-dir)
+(define-key search-map " g" 'grep-on-dir)
+
+
 (autoload 'grin "grin"
   "Use `grin' command for grepping text across files." t)
 (autoload 'grind "grin"
   "Use `grind' command for find files." t)
 
+(defun grin-on-dir (dir &optional pattern)
+  (interactive "DGrin on dir: ")
+  (require 'grin)
+  (let* ((default-directory dir)
+         (c (concat grin-cmd " \"" (or pattern (thing-at-point 'symbol)) "\""))
+         (l (+ 3 (length grin-cmd)))
+         (cmd (read-shell-command "Command: " (cons c l) 'grin-hist))
+         (null-device nil))
+    (grep cmd)))
+
+(define-key search-map "gG" 'grin-on-dir)
+
+
 (autoload 'ack "ack"
   "ack.el provides a simple compilation mode for the perl grep-a-like ack program." t)
 
+(defun ack-on-dir (dir &optional pattern)
+  (interactive "DAck on dir: ")
+  (require 'ack)
+  (let* ((default-directory dir)
+         (ack-command (concat ack-command " \"" (or pattern (thing-at-point 'symbol)) "\"")))
+    (call-interactively 'ack)))
+   
+(define-key search-map "ga" 'ack-on-dir)
 
-(define-key search-map "g " 'grep)
-(define-key search-map " g" 'grep)
-
-(define-key search-map "gg" 'grin)
-(define-key search-map "gd" 'grind)
-(define-key search-map "ga" 'ack)
 
 
 ;;** tabbar
