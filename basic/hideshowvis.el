@@ -114,9 +114,11 @@
               (put-text-property 0
                                  (length marker-string)
                                  'display
-                                 (list 'left-fringe
-                                       'hideshowvis-hideable-marker
-                                       'hideshowvis-hidable-face)
+                                 (if window-system                                     
+                                     (list 'left-fringe
+                                           'hideshowvis-hideable-marker
+                                           'hideshowvis-hidable-face)
+                                   (list '(margin left-margin) ">"))
                                  marker-string)
               (overlay-put ovl 'before-string marker-string)
               (overlay-put ovl 'hideshowvis-hs t))))))))
@@ -140,8 +142,15 @@
   (let ((hideshowvis-mode-map (make-sparse-keymap)))
     (define-key hideshowvis-mode-map [left-fringe mouse-1]
       'hideshowvis-click-fringe)
+    (define-key hideshowvis-mode-map [left-margin mouse-1]
+      'hideshowvis-click-fringe)    
     hideshowvis-mode-map)
   "Keymap for hideshowvis mode")
+
+(defun hideshowvis-update-margin ()
+  (if hideshowvis-minor-mode
+      (set-window-margins (selected-window) 2)
+    (set-window-margins (selected-window) nil)))
 
 ;;;###autoload
 (define-minor-mode hideshowvis-minor-mode ()
@@ -154,9 +163,25 @@
       (if hideshowvis-minor-mode
           (progn
             (hs-minor-mode 1)
+            
+            (when (not window-system)
+              (if (car (window-margins (selected-window)))
+                  (display-warning :warning
+                                   "`hideshowvis' needs to use left-margin, \n
+but currenly it seems to be already used (`linum-mode' on?).
+Anyway `hideshowvis-mode' will continue to turn on."))
+              (add-hook 'window-configuration-change-hook
+                        'hideshowvis-update-margin nil 'local)
+              (hideshowvis-update-margin))
+  
             (hideshowvis-highlight-hs-regions-in-fringe (point-min) (point-max) 0)
             (add-to-list 'after-change-functions
                          'hideshowvis-highlight-hs-regions-in-fringe))
+        
+        (remove-hook 'window-configuration-change-hook
+                     'hideshowvis-update-margin 'local)
+        (hideshowvis-update-margin)
+    
         (remove-overlays (point-min) (point-max) 'hideshowvis-hs t)
         (setq after-change-functions
               (remove 'hideshowvis-highlight-hs-regions-in-fringe
@@ -172,10 +197,10 @@
   (hideshowvis-minor-mode 1))
 
 
-;; Add the following to your .emacs and uncomment it in order to get a + symbol
-;; in the fringe and a yellow marker indicating the number of hidden lines at
-;; the end of the line for hidden regions:
-;;
+Add the following to your .emacs and uncomment it in order to get a + symbol
+in the fringe and a yellow marker indicating the number of hidden lines at
+the end of the line for hidden regions:
+
 (define-fringe-bitmap 'hs-marker [0 24 24 126 126 24 24 0])
 
 (defcustom hs-fringe-face 'hs-fringe-face
@@ -205,7 +230,11 @@
            (display-string (format "(%d)..." (count-lines (overlay-start ov) (overlay-end ov))))
            )
       (overlay-put ov 'help-echo "Hiddent text. C-c,= to show")
-      (put-text-property 0 marker-length 'display (list 'left-fringe 'hs-marker 'hs-fringe-face) marker-string)
+      (put-text-property 0 marker-length 'display
+                         (if window-system
+                             (list 'left-fringe 'hs-marker 'hs-fringe-face)
+                           (list '(margin left-margin) "+"))
+                         marker-string)      
       (overlay-put ov 'before-string marker-string)
       (put-text-property 0 (length display-string) 'face 'hs-face display-string)
       (overlay-put ov 'display display-string)
