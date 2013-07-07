@@ -127,7 +127,9 @@
 (autoload 'find-file-in-tags "find-file-in-tags"
   "find file in TAGS file.")
 
+
 ;;*** ctags
+;;similar to 'taglist' plugin of vim, you don't need to create tags file by yourself to use `anything-c-source-ctags'
 (defun anything-ctags-current-file ()
   "Show ctags list of current file, using current symbol as input to narrow the choices."
   (interactive)
@@ -144,6 +146,18 @@
   )
 
 (global-set-key (kbd "<f5> t") 'anything-ctags-current-file)
+
+
+;;*** tags history
+;; tags-view works with etags.el & gtags.el
+(autoload 'tv-view-history "tags-view"
+  "Open a buffer listing locations on the tag stack." t)
+
+(global-set-key (kbd "<f5> SPC .") 'tv-view-history)
+
+;; etags-stack.el works too, but it's a stack (you can't go forward once backward)
+;; anything-etags+ also works. but it requires you bind M-. to its `anything-etags+-select`
+
 
 
 ;;**  compilation
