@@ -162,6 +162,6 @@ On Windows, baskslashes is substituted with slashes."
 ;;*** eshell prompt
 (setq eshell-prompt-function (lambda nil
                                (concat
-                                (propertize (eshell/pwd) 'face `(:foreground "blue"))
-                                (propertize " $ " 'face `(:foreground "green")))))
+                                (propertize (eshell/pwd) 'face 'font-lock-keyword-face)
+                                (propertize " $ " 'face  'font-lock-type-face))))
 (setq eshell-highlight-prompt nil)

@@ -526,7 +526,8 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
   ;; highlight headers in this file
   (highlight-lines-matching-regexp "^;;\\* "    'org-level-1)
   (highlight-lines-matching-regexp "^;;\\*\\* " 'org-level-2)
-  (highlight-lines-matching-regexp "^;;\\*\\*\\* " 'org-level-3))
+  (highlight-lines-matching-regexp "^;;\\*\\*\\* " 'org-level-3)
+  (highlight-lines-matching-regexp "^;;\\*\\*\\*\\* " 'org-level-4))
   
 
 (eval-after-load "lisp-mode"
