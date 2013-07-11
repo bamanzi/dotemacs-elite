@@ -128,7 +128,7 @@ See also: `kill-rectangle', `copy-to-register'."
 
 ;;** multi-occur for buffers of same mods
 ;; stolen from http://www.masteringemacs.org/articles/2011/07/20/searching-buffers-occur-mode/
-(defun get-buffers-matching-mode (mode)
+(defun _get-buffers-matching-mode (mode)
   "Returns a list of buffers where their major-mode is equal to MODE"
   (let ((buffer-mode-matches '()))
    (dolist (buf (buffer-list))
@@ -142,7 +142,7 @@ See also: `kill-rectangle', `copy-to-register'."
   (interactive
    (list (read-string "Occur in same mode: " (thing-at-point 'symbol))
          current-prefix-arg))
-  (multi-occur (get-buffers-matching-mode major-mode)
+  (multi-occur (_get-buffers-matching-mode major-mode)
                (format "%s" symbol)
                arg))
 
@@ -440,7 +440,7 @@ That is, a string used to represent it on the tab bar."
 (autoload 'git-gutter:toggle "git-gutter"
   "toggle to show diff information" t)
 
-(defun frame-reinit-git-gutter (&optional frame)
+(defun _frame-reinit-git-gutter (&optional frame)
   "Choose `git-gutter' implementation from `git-gutter.el' or `git-gutter-fringe.el'."
   (interactive)
   (if (require 'git-gutter-fringe nil t)
@@ -452,7 +452,7 @@ That is, a string used to represent it on the tab bar."
                 git-gutter:view-diff-function 'git-gutter:view-diff-infos
                 git-gutter:clear-function 'git-gutter:clear-diff-infos))))
 
-;;(add-hook 'after-make-frame-functions 'frame-reinit-git-gutter)
+;;(add-hook 'after-make-frame-functions '_frame-reinit-git-gutter)
  
 
 ;;** yasnippet
@@ -468,22 +468,6 @@ That is, a string used to represent it on the tab bar."
   `(require 'info+)
   )
 
-(defun load-and-execute (library)
-  "load a library 'foobar' and execute the command with same name:
-`foobar' or `foobar-mode'"
-  (interactive
-   (list (completing-read "Load library: "
-                          (apply-partially 'locate-file-completion-table
-                                           load-path
-                                           (get-load-suffixes)))))
-  (when (load library)
-    (let ( (command (if (fboundp (intern library))
-                        (intern library)
-                      (intern (concat library "-mode")))) )
-      (message "try to execute `%s'" command)
-      (call-interactively command))))
-
-(global-set-key (kbd "M-X") 'load-and-execute)
 
 
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
