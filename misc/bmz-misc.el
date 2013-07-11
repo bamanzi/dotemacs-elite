@@ -1,4 +1,23 @@
+;;** load-and-execute
+(defun load-and-execute (library)
+  "load a library 'foobar' and execute the command with same name:
+`foobar' or `foobar-mode'"
+  (interactive
+   (list (completing-read "Load library: "
+                          (apply-partially 'locate-file-completion-table
+                                           load-path
+                                           (get-load-suffixes)))))
+  (when (load library)
+    (let ( (command (if (fboundp (intern library))
+                        (intern library)
+                      (intern (concat library "-mode")))) )
+      (message "try to execute `%s'" command)
+      (call-interactively command))))
 
+(global-set-key (kbd "M-X") 'load-and-execute)
+
+
+;;** helper for writing "(autoload ...." statement
 (defun insert-function-autoload-spec (function)
   "Insert the first line of documentation of a function.
 
@@ -23,6 +42,7 @@ Useful when writing autoload spec."
 
 (defalias 'ifas 'insert-function-autoload-spec)
 
+;;** modeline helper
 (defun mode-line-install-element (element &optional position)
   "Install an ELEMENT to mode-line.
 
@@ -78,6 +98,7 @@ or just:
   (force-mode-line-update t))
 
 
+;;** if nothing marked, use current line as region 
 ;; http://pastebin.com/G7N4F4eE
 ;; from aquamacs emacs
 ;; if nothing marked, use current line as region
@@ -94,6 +115,9 @@ or just:
          (set-mark (point))
          (end-of-line)
          (call-interactively (function ,orig-function))))))
+
+(allow-line-as-region-for-function 'kill-ring-save)
+(allow-line-as-region-for-function 'kill-region)
 
 ;; (allow-line-as-region-for-function comment-region)
 ;; (allow-line-as-region-for-function uncomment-region)
