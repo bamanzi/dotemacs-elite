@@ -39,6 +39,7 @@
 (define-key help-map "ik" 'Info-goto-emacs-key-command-node)
 (define-key help-map "i " 'Info-goto-node)
 
+
 (defun describe-keymap (keymap)
     (interactive
      (list (intern (completing-read "Keymap: " obarray
@@ -47,11 +48,18 @@
     (with-output-to-temp-buffer "*Help*"
       (princ (substitute-command-keys (concat "\\{" (symbol-name keymap) "}")))
       ))
+
 (define-key help-map (kbd "M-k") 'describe-keymap)
 
 (define-key global-map (kbd "<C-f10> g") 'customize-group)
 (define-key global-map (kbd "<C-f10> v") 'customize-variable)
 (define-key global-map (kbd "<C-f10> f") 'customize-face)
+
+(eval-after-load "info"
+  `(progn
+     (define-key Info-mode-map (kbd "<mouse-4>") nil)
+     (define-key Info-mode-map (kbd "<mouse-5>") nil)
+     ))
 
 ;;** gui options
 
