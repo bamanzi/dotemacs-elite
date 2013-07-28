@@ -238,3 +238,11 @@ found in DIRECTORY or any of its ancestors."
      (define-key projectile-mode-map (kbd "<M-f12> A") 'projectile-ack-find-file)  
      ))
 
+
+;;** vc
+;;*** svn
+(unless (fboundp 'vc-svn-root)  ;;fix emacs-23's svn support
+  (defun vc-svn-root (file)
+    (vc-find-root file vc-svn-admin-directory)))
+
+

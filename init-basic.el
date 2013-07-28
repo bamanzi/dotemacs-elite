@@ -104,11 +104,6 @@
 (setq recentf-menu-path '("File"))
 (recentf-mode t)
 
-;;*** vc
-(unless (fboundp 'vc-svn-root)  ;;fix emacs-23's svn support
-  (defun vc-svn-root (file)
-    (vc-find-root file vc-svn-admin-directory)))
-
 ;;*** nav
 (autoload 'nav "nav"
   "Opens Nav in a new window to the left of the current one." t)
