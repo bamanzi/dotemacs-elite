@@ -197,9 +197,9 @@ Anyway `hideshowvis-mode' will continue to turn on."))
   (hideshowvis-minor-mode 1))
 
 
-Add the following to your .emacs and uncomment it in order to get a + symbol
-in the fringe and a yellow marker indicating the number of hidden lines at
-the end of the line for hidden regions:
+;; Add the following to your .emacs and uncomment it in order to get a + symbol
+;; in the fringe and a yellow marker indicating the number of hidden lines at
+;; the end of the line for hidden regions:
 
 (define-fringe-bitmap 'hs-marker [0 24 24 126 126 24 24 0])
 
