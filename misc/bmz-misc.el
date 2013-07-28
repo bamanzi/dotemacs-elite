@@ -116,8 +116,8 @@ or just:
          (end-of-line)
          (call-interactively (function ,orig-function))))))
 
-(allow-line-as-region-for-function 'kill-ring-save)
-(allow-line-as-region-for-function 'kill-region)
+(allow-line-as-region-for-function kill-ring-save)
+(allow-line-as-region-for-function kill-region)
 
 ;; (allow-line-as-region-for-function comment-region)
 ;; (allow-line-as-region-for-function uncomment-region)
