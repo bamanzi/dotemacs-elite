@@ -537,9 +537,6 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
   `(add-hook 'emacs-lisp-mode-hook 'highlight-outline-header/bmz))
 
 
-;;** programming
-
-
 ;;** buffer navigations
 ;;*** mark
 (global-set-key (kbd "M-`")   'set-mark)
@@ -580,14 +577,15 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
 (defalias 'fvap 'find-variable-at-point)
 
 ;;** utils
+(autoload 'ifas "bmz-misc"
+  "Insert the first line of documentation of a function." t)
 
+(autoload 'load-and-execute  "bmz-misc"
+  "load a library 'foobar' and execute the command with same name:" t)
+
+(global-set-key (kbd "M-X") 'load-and-execute)
 
 
 ;;** misc
 (column-number-mode t)
 
-
-
-
-	 
-  
