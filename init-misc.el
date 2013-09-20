@@ -36,6 +36,31 @@
         (lambda nil (interactive) (joc-dired-single-buffer ".."))))
      )) 
 
+;;*** nc.el: norton commander clone
+(autoload 'nc "nc" "Major mode for File Browser in GNU emacs." t)
+
+(eval-after-load "nc"
+  `(progn
+     (defadvice nc (around nc-window-configuration activate)
+       ;;save window configuration before nc starts
+       (frame-configuration-to-register ? )
+       ad-do-it
+       (let ( (nc-win1 (get-buffer-window "*NC 1*"))
+              (nc-win2 (get-buffer-window "*NC 2*"))
+              (nc-win3 (get-buffer-window "*NC shell*")) )
+         (set-window-dedicated-p nc-win1 t)
+         (set-window-dedicated-p nc-win2 t)
+         (set-window-dedicated-p nc-win3 t)
+         (unless (get-register ?C)
+           (frame-configuration-to-register ?C))))
+     ))
+
+(defun nc-goto-dir (dir)
+  (interactive "Dnc to: ")
+  (nc)
+  (with-current-buffer nc-active-nc-buffer
+    (nc-display-new-dir dir)))
+
 
 ;;** mark, copy & yank
 (idle-require 'mark-copy-something)
