@@ -78,6 +78,29 @@
 (global-set-key (kbd "<C-M-wheel-down>") 'text-scale-decrease)
 
 
+;;*** maximize frame
+(defun maximize-frame (&optional frame)
+  (interactive)
+  (cond
+   ((eq system-type 'windows-nt)
+    (w32-send-sys-command #xf030))
+   ((eq window-system 'x)
+    (progn
+;;      (set-frame-parameter nil 'fullscreen 'fullboth)
+       (x-send-client-message nil 0 nil "_NET_WM_STATE" 32
+               '(2 "_NET_WM_STATE_MAXIMIZED_VERT" 0))
+       (x-send-client-message nil 0 nil "_NET_WM_STATE" 32
+               '(2 "_NET_WM_STATE_MAXIMIZED_HORZ" 0))
+       ;; adjust window borders, needed when running remote emacs on local X server (?)
+       (when nil
+         (set-frame-position (selected-frame) 5 25)
+         (set-frame-width nil (- (frame-parameter nil 'width) 2))
+         (set-frame-height nil (- (frame-parameter nil 'height) 2)))))))
+
+(add-hook 'window-setup-hook 'maximize-frame t)    
+
+(run-with-idle-timer 2 nil 'maximize-frame)
+
 ;;** files & buffers
 (define-key search-map (kbd "C-f") 'ffap)
 
