@@ -239,22 +239,3 @@ found in DIRECTORY or any of its ancestors."
      ))
 
 
-;;** vc
-;;*** svn
-(unless (fboundp 'vc-svn-root)  ;;fix emacs-23's svn support
-  (defun vc-svn-root (file)
-    (vc-find-root file vc-svn-admin-directory)))
-
-;;*** git
-(autoload 'magit-log  "magit"
-  "Command for 'git log'." t)
-
-(autoload 'magit-status "magit"
-  "Open a Magit status buffer for the Git repository containing DIR." t)
-
-;;*** hg
-(autoload 'monky-log  "monky"
-  "Undocumented." t)
-
-(autoload 'monky-status  "monky"
-  "Show the status of Hg repository." t)
