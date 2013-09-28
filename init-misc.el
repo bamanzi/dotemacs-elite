@@ -495,3 +495,6 @@ i.e. change right window to bottom, or change bottom window to right."
   `(require 'info+)
   )
 
+
+(autoload 'sr-speedbar-toggle "sr-speedbar"
+  "Toggle sr-speedbar window." t)
