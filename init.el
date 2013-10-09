@@ -24,6 +24,10 @@
                 (normal-top-level-add-subdirs-to-load-path))))
         (directory-files dotemacs-elite-dir 'full "^[a-z][^\\.]+"))
 
+  ;;for cl-lib
+  (if (< emacs-major-version 24)
+      (add-to-list 'load-path (concat dotemacs-elite-dir "_extra")))
+
   (setq idle-require-idle-delay 5
         idle-require-load-break 1)
 
