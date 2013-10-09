@@ -28,6 +28,11 @@
   (if (< emacs-major-version 24)
       (add-to-list 'load-path (concat dotemacs-elite-dir "_extra")))
 
+  (add-to-list 'Info-default-directory-list
+               (concat dotemacs-elite-dir "_extra"))
+  (setq 'Info-directory-list nil)
+
+  
   (setq idle-require-idle-delay 5
         idle-require-load-break 1)
 
