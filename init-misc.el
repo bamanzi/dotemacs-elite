@@ -466,6 +466,10 @@ That is, a string used to represent it on the tab bar."
 
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
 
+;;*** perspectives
+(autoload 'persp-mode  "persp-mode"
+  "Toggle perspective mode." t)
+
 ;;** misc
 
 ;;info+.el: more colors (and other enhancements) 
