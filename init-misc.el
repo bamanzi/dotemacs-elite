@@ -315,6 +315,8 @@ That is, a string used to represent it on the tab bar."
       org-export-with-author-info nil ;; no author info in export
       org-export-with-creator-info nil ;; no creator info
       org-export-htmlize-output-type 'css ;; separate css
+
+      ;; org-list-indent-offset 4
       )
 
 (global-set-key (kbd "C-c o l") 'org-store-link)
@@ -495,6 +497,12 @@ i.e. change right window to bottom, or change bottom window to right."
   `(require 'info+)
   )
 
+(eval-after-load "info+"
+  `(progn
+     (defvar Info-next-link-keymap (make-sparse-keymap))
+     (defvar Info-prev-link-keymap (make-sparse-keymap))
+     (defvar Info-up-link-keymap   (make-sparse-keymap))
+     (defvar Info-down-link-keymap   (make-sparse-keymap))))
 
 (autoload 'sr-speedbar-toggle "sr-speedbar"
   "Toggle sr-speedbar window." t)

@@ -56,10 +56,11 @@
 (define-key global-map (kbd "<C-f10> f") 'customize-face)
 
 (eval-after-load "info"
-  `(progn
-     (define-key Info-mode-map (kbd "<mouse-4>") nil)
-     (define-key Info-mode-map (kbd "<mouse-5>") nil)
-     ))
+  `(add-hook 'Info-mode-hook #'(lambda ()
+                                 ;; cancel binding to `Info-history-forward' and `Info-history-back'
+                                 (define-key Info-mode-map (kbd "<mouse-4>") nil)
+                                 (define-key Info-mode-map (kbd "<mouse-5>") nil)
+                                 )))
 
 ;;** gui options
 
@@ -86,20 +87,21 @@
     (w32-send-sys-command #xf030))
    ((eq window-system 'x)
     (progn
-;;      (set-frame-parameter nil 'fullscreen 'fullboth)
        (x-send-client-message nil 0 nil "_NET_WM_STATE" 32
                '(2 "_NET_WM_STATE_MAXIMIZED_VERT" 0))
        (x-send-client-message nil 0 nil "_NET_WM_STATE" 32
                '(2 "_NET_WM_STATE_MAXIMIZED_HORZ" 0))
        ;; adjust window borders, needed when running remote emacs on local X server (?)
-       (when nil
+       (unless (string-match "^\\(localhost\\)?:[0-9]." (getenv "DISPLAY"))
+         (set-frame-parameter nil 'fullscreen 'fullboth)
          (set-frame-position (selected-frame) 5 25)
-         (set-frame-width nil (- (frame-parameter nil 'width) 2))
-         (set-frame-height nil (- (frame-parameter nil 'height) 2)))))))
+         (set-frame-width nil (- (frame-parameter nil 'width) 3))
+         (set-frame-height nil (- (frame-parameter nil 'height) 3)))))))
 
 (add-hook 'window-setup-hook 'maximize-frame t)    
 
 (run-with-idle-timer 2 nil 'maximize-frame)
+
 
 ;;** files & buffers
 (define-key search-map (kbd "C-f") 'ffap)
@@ -134,9 +136,12 @@
 (autoload 'nav-toggle "nav"
   "Toggles the nav panel." t)
 
+
 ;;** windows
 (setq split-width-threshold 120
-      split-height-threshold 40)
+      split-height-threshold 60)
+
+(global-set-key (kbd "<kp-add> C-x 1") 'delete-other-windows-vertically)
 
 ;;***  winner-mode
 (setq winner-dont-bind-my-keys t)
@@ -269,6 +274,7 @@
 (global-set-key (kbd "C-=") 'align-regexp)
 
 (global-set-key (kbd "C-c ;") 'comment-or-uncomment-region)
+
 
 ;;** minibuffer
 
@@ -486,6 +492,7 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
 (global-set-key (kbd "C-;") 'iedit-mode)
 (global-set-key (kbd "C-c ;") 'iedit-mode)  ;;for terminal
 
+
 ;;** some visual effect
 
 ;;***  bm
@@ -612,3 +619,4 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
 ;;** misc
 (column-number-mode t)
 
+(global-set-key (kbd "C-x C-j") 'dired-jump)
