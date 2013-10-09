@@ -30,7 +30,7 @@
 
   (add-to-list 'Info-default-directory-list
                (concat dotemacs-elite-dir "_extra"))
-  (setq 'Info-directory-list nil)
+  (setq Info-directory-list nil)
 
   
   (setq idle-require-idle-delay 5

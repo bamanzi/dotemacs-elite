@@ -1,5 +1,10 @@
 This is monky.info, produced by makeinfo version 4.11 from monky.texi.
 
+INFO-DIR-SECTION Emacs
+START-INFO-DIR-ENTRY
+* Monky: (monky).        An emacs extension providing an interactive interface for Hg.
+END-INFO-DIR-ENTRY
+
 Copyright (C) 2010 Anantha Kumaran.
 
      Permission is granted to copy, distribute and/or modify this
