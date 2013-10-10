@@ -448,13 +448,6 @@ That is, a string used to represent it on the tab bar."
 
 (define-key search-map "G" 'google-translate-at-point)
 (define-key search-map " G" 'google-translate-query-translate)
- 
-
-;;** yasnippet
-(autoload 'anything-yasnippet-2  "anything-yasnippet-2"
-  "Find yasnippets." t)
-
-(global-set-key (kbd "<f5> s")  'anything-yasnippet-2)
 
 
 ;;** windows
