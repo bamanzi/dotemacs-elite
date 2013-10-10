@@ -350,10 +350,6 @@
       (define-key ac-completing-map (kbd "C-s") 'ac-isearch) 
       
       ;;(add-hook 'lisp-interaction-mode 'ac-emacs-lisp-mode-setup)
-
-      (if (load "auto-complete-scite-api" t)
-          (add-to-list 'ac-sources 'ac-source-scite-api)
-        (message "%s: failed to load `auto-complete-scite-api'." load-file-name)))
   )
 
 (define-key global-map (kbd "<f10> a c") 'auto-complete-mode)
