@@ -141,7 +141,8 @@
 (setq split-width-threshold 120
       split-height-threshold 60)
 
-(global-set-key (kbd "<kp-add> C-x 1") 'delete-other-windows-vertically)
+(global-set-key (kbd "<f11> 1 v") 'delete-other-windows-vertically)
+(global-set-key (kbd "<f11> 1 h") 'delete-other-windows-horizontally)
 
 ;;***  winner-mode
 (setq winner-dont-bind-my-keys t)
@@ -158,6 +159,13 @@
   (global-set-key (kbd "<f11> <right>") 'windmove-right)
   )
 
+;;*** dedicated window
+(defun toggle-window-dedicated (win)
+  (interactive (list (selected-window)))
+  (set-window-dedicated-p win (not (window-dedicated-p win))))
+
+(global-set-key (kbd "<f11> *") 'toggle-window-dedicated)
+  
 ;;*** windresize
 (autoload 'windresize "windresize" "Resize windows interactively." t)
 (setq windresize-default-increment 4)
