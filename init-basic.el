@@ -350,7 +350,7 @@
       (define-key ac-completing-map (kbd "C-s") 'ac-isearch) 
       
       ;;(add-hook 'lisp-interaction-mode 'ac-emacs-lisp-mode-setup)
-  )
+      ))
 
 (define-key global-map (kbd "<f10> a c") 'auto-complete-mode)
 

@@ -91,7 +91,7 @@ On Windows, baskslashes is substituted with slashes."
 (defun comint-toggle-cursor-keybinding (arg)
   "Toggle up/down key between {previous,next}-line and {previous,next}-input."
   (interactive "P")
-  (if (or arg (eq (key-binding (kbd "<up>") 'previous-line)))
+  (if (or arg (eq (key-binding (kbd "<up>")) 'previous-line))
       (progn
         (define-key comint-mode-map (kbd "<up>")   'comint-previous-input)
         (define-key comint-mode-map (kbd "<down>") 'comint-next-input)
@@ -103,7 +103,7 @@ On Windows, baskslashes is substituted with slashes."
 (defun eshell-toggle-cursor-keybinding (arg)
   "Toggle up/down key between {previous,next}-line and {previous,next}-input."
   (interactive "P")
-  (if (or arg (eq (key-binding (kbd "<up>") 'previous-line)))
+  (if (or arg (eq (key-binding (kbd "<up>")) 'previous-line))
       (progn
         (define-key eshell-mode-map (kbd "<up>")   'eshell-previous-input)
         (define-key eshell-mode-map (kbd "<down>") 'eshell-next-input)
@@ -143,6 +143,7 @@ On Windows, baskslashes is substituted with slashes."
 
 
   (eshell-toggle-cursor-keybinding 1)
+  (define-key eshell-mode-map (kbd "<Scroll_Lock>") 'eshell-toggle-cursor-keybinding)
   
   ;;I'd like M-s as highlight-xxx prefix key
   (define-key eshell-mode-map (kbd "M-s") nil)
