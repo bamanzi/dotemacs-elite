@@ -268,6 +268,11 @@
 (global-set-key (kbd "C-c d") 'diff-buffer-with-file)
 
 ;;***  quickly swap lines
+(autoload 'drag-stuff-up "drag-stuff"
+  "Drag stuff ARG lines up." t)
+(autoload 'drag-stuff-down "drag-stuff"
+  "Drag stuff ARG lines down." t)
+
 (eval-after-load "drag-stuff"
   `(progn
      ;;    (setq drag-stuff-modifier 'hyper)
@@ -407,6 +412,8 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
   `(progn
      (define-key hs-minor-mode-map (kbd "M-+")  'hs-toggle-hiding)
      (define-key hs-minor-mode-map (kbd "<C-mouse-1>") 'hs-mouse-toggle-hiding)
+     
+     
      ))
 
 (define-key global-map (kbd "<f10> h s") 'hs-minor-mode)
@@ -423,8 +430,18 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
      )
 
 (eval-after-load "hideshowvis"
-  ` (define-key global-map (kbd "<f10> h s") 'hideshowvis-minor-mode)
-  )
+  ` (progn
+      (define-key global-map (kbd "<f10> h s") 'hideshowvis-minor-mode)
+      (define-key hideshowvis-mode-map [left-fringe S-mouse-1] 'hs-mouse-hide-level)
+      (define-key hideshowvis-mode-map [left-margin S-mouse-1] 'hs-mouse-hide-level)
+      (set-face-attribute 'hs-face nil :inherit 'font-lock-warning-face)      
+      ))
+
+(defun hs-mouse-hide-level (e)
+  "Mouse version of `hs-hide-level'."
+  (interactive)
+  (mouse-set-point e)
+  (call-interactively 'hs-hide-level))
 
 
 ;;***  outline
@@ -462,6 +479,8 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
 
 
 ;;***  highlight-symbol
+(autoload 'highlight-symbol-at-point "highlight-symbol"
+  "Toggle highlighting of the symbol at point." t)
 (idle-require 'highlight-symbol)
 
 (define-key search-map (kbd "j")     'highlight-symbol-at-point)
@@ -471,13 +490,7 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
 (global-set-key (kbd "<double-mouse-1>")  'highlight-symbol-at-point)
 (global-set-key (kbd "<S-wheel-up>")      'highlight-symbol-prev)
 (global-set-key (kbd "<S-wheel-down>")    'highlight-symbol-next)
-
-;;*** occur
-(defun occur-current-symbol (arg)
-  (interactive "P")
-  (occur (thing-at-point 'symbol) arg))
-
-(define-key search-map "O" 'occur-current-symbol)
+(global-set-key (kbd "<S-mouse-3>")       'highlight-symbol-occur)
 
 
 ;;*** idle-highlight
@@ -516,7 +529,7 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
   (global-set-key (kbd "<left-fringe> <C-mouse-1>")     'bm-toggle-mouse)
   (global-set-key (kbd "<left-fringe> <C-wheel-up>")    'bm-previous-mouse)
   (global-set-key (kbd "<left-fringe> <C-wheel-down>")  'bm-next-mouse)
-  (global-set-key (kbd "<left-fringe> <C-mouse-2>")     'bm-show)
+  (global-set-key (kbd "<left-fringe> <C-mouse-3>")     'bm-show)
   )
 
 

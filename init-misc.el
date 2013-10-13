@@ -326,6 +326,11 @@ That is, a string used to represent it on the tab bar."
   `(progn
      (require 'org-cua-dwim nil t)
 
+     (eval-after-load "org"
+       `(progn
+          (define-key org-mode-map (kbd "M-p") 'drag-stuff-up)
+          (define-key org-mode-map (kbd "M-n") 'drag-stuff-down)))
+
      (set-face-attribute 'org-level-1 nil :height 1.5 :bold t)
      (set-face-attribute 'org-level-2 nil :height 1.3 :bold t)
      (set-face-attribute 'org-level-3 nil :height 1.1)))
