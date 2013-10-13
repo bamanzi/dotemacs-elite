@@ -162,7 +162,8 @@
 ;;*** dedicated window
 (defun toggle-window-dedicated (win)
   (interactive (list (selected-window)))
-  (set-window-dedicated-p win (not (window-dedicated-p win))))
+  (set-window-dedicated-p win (not (window-dedicated-p win)))
+  (message "Dedicated state of window '%s' now set to %s" win (window-dedicated-p win)))
 
 (global-set-key (kbd "<f11> *") 'toggle-window-dedicated)
   
