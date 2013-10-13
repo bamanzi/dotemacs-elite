@@ -24,12 +24,12 @@
                 (normal-top-level-add-subdirs-to-load-path))))
         (directory-files dotemacs-elite-dir 'full "^[a-z][^\\.]+"))
 
-  ;;for cl-lib
+  ;;for cl-lib, pcase
   (if (< emacs-major-version 24)
-      (add-to-list 'load-path (concat dotemacs-elite-dir "_extra")))
+      (add-to-list 'load-path (concat dotemacs-elite-dir "_extra/emacs-23")))
 
   (add-to-list 'Info-default-directory-list
-               (concat dotemacs-elite-dir "_extra"))
+               (concat dotemacs-elite-dir "_extra/info"))
   (setq Info-directory-list nil)
 
   
