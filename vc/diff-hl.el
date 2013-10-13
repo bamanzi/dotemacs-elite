@@ -3,7 +3,7 @@
 ;; Author:   Dmitry Gutov <dgutov@yandex.ru>
 ;; URL:      https://github.com/dgutov/diff-hl
 ;; Keywords: vc, diff
-;; Version:  1.4.0
+;; Version:  1.5.0
 ;; Package-Requires: ((cl-lib "0.2"))
 
 ;; This file is not part of GNU Emacs.
@@ -23,8 +23,9 @@
 
 ;;; Commentary:
 
-;; `diff-hl-mode' highlights uncommitted changes on the left fringe of the
-;; window, allows you to jump between the hunks and revert them selectively.
+;; `diff-hl-mode' highlights uncommitted changes on the left side of
+;; the window (using the fringe, by default), allows you to jump
+;; between the hunks and revert them selectively.
 
 ;; Provided commands:
 ;;
@@ -52,13 +53,13 @@
 (require 'vc)
 (require 'vc-dir)
 (eval-when-compile
-  (require 'cl)
+  (require 'cl-lib)
   (require 'vc-git)
   (require 'vc-hg)
   (require 'face-remap))
 
 (defgroup diff-hl nil
-  "VC diff fringe highlighting"
+  "VC diff highlighting on the side of a window"
   :group 'vc)
 
 (defface diff-hl-insert
@@ -82,17 +83,42 @@
   "Face used to highlight changed lines."
   :group 'diff-hl)
 
+(defface diff-hl-unknown
+  '((default :inherit diff-header))
+  "Face used to highlight unregistered files.")
+
 (defcustom diff-hl-draw-borders t
   "Non-nil to draw borders around fringe indicators."
   :group 'diff-hl
   :type 'boolean)
 
+(defcustom diff-hl-highlight-function 'diff-hl-highlight-on-fringe
+  "Function to highlight the current line. Its arguments are
+  overlay, change type and position within a hunk."
+  :group 'diff-hl
+  :type 'function)
+
+(defcustom diff-hl-fringe-bmp-function 'diff-hl-fringe-bmp-from-pos
+  "Function to choose the fringe bitmap for a given change type
+  and position within a hunk.  Should accept two arguments."
+  :group 'diff-hl
+  :type '(choice (const diff-hl-fringe-bmp-from-pos)
+                 (const diff-hl-fringe-bmp-from-type)
+                 function))
+
+(defvar diff-hl-reference-revision nil
+  "Revision to diff against.  nil means the most recent one.")
+
 (defun diff-hl-define-bitmaps ()
   (let* ((scale (if (and (boundp 'text-scale-mode-amount)
-                         (plusp text-scale-mode-amount))
+                         (numberp text-scale-mode-amount))
                     (expt text-scale-mode-step text-scale-mode-amount)
                   1))
-         (h (round (* (frame-char-height) scale)))
+         (spacing (or (default-value 'line-spacing) 0))
+         (h (round (+ (* (frame-char-height) scale)
+                      (if (floatp spacing)
+                          (* (frame-char-height) spacing)
+                        spacing))))
          (w (frame-parameter nil 'left-fringe))
          (middle (make-vector h (expt 2 (1- w))))
          (ones (1- (expt 2 w)))
@@ -106,27 +132,51 @@
     (define-fringe-bitmap 'diff-hl-bmp-top top h w 'top)
     (define-fringe-bitmap 'diff-hl-bmp-middle middle h w 'center)
     (define-fringe-bitmap 'diff-hl-bmp-bottom bottom h w 'bottom)
-    (define-fringe-bitmap 'diff-hl-bmp-single single h w 'top)))
+    (define-fringe-bitmap 'diff-hl-bmp-single single h w 'top)
+    (let* ((w2 (* (/ w 2) 2))
+           (delete-row (- (expt 2 (1- w2)) 2))
+           (middle-pos (1- (/ w2 2)))
+           (middle-bit (expt 2 middle-pos))
+           (insert-bmp (make-vector w2 (* 3 middle-bit))))
+      (define-fringe-bitmap 'diff-hl-bmp-delete (make-vector 2 delete-row) w2 w2)
+      (aset insert-bmp 0 0)
+      (aset insert-bmp middle-pos delete-row)
+      (aset insert-bmp (1+ middle-pos) delete-row)
+      (aset insert-bmp (1- w2) 0)
+      (define-fringe-bitmap 'diff-hl-bmp-insert insert-bmp w2 w2)
+      (define-fringe-bitmap 'diff-hl-bmp-change (make-vector
+                                                 w2 (* 3 middle-bit)) w2 w2))))
 
-(when (window-system)
-  (define-fringe-bitmap 'diff-hl-bmp-empty [0] 1 1 'center)
-  (diff-hl-define-bitmaps))
+(defun diff-hl-maybe-define-bitmaps ()
+  (when (window-system) ;; No fringes in the console.
+    (unless (fringe-bitmap-p 'diff-hl-bmp-empty)
+      (diff-hl-define-bitmaps)
+      (define-fringe-bitmap 'diff-hl-bmp-empty [0] 1 1 'center))))
 
 (defvar diff-hl-spec-cache (make-hash-table :test 'equal))
 
 (defun diff-hl-fringe-spec (type pos)
-  (let* ((key (cons type pos))
+  (let* ((key (list type pos diff-hl-fringe-bmp-function))
          (val (gethash key diff-hl-spec-cache)))
     (unless val
-      (let* ((face-sym (intern (concat "diff-hl-" (symbol-name type))))
-             (bmp-sym (intern (concat "diff-hl-bmp-" (symbol-name pos)))))
+      (let* ((face-sym (intern (format "diff-hl-%s" type)))
+             (bmp-sym (funcall diff-hl-fringe-bmp-function type pos)))
         (setq val (propertize " " 'display `((left-fringe ,bmp-sym ,face-sym))))
         (puthash key val diff-hl-spec-cache)))
     val))
 
+(defun diff-hl-fringe-bmp-from-pos (type pos)
+  (intern (format "diff-hl-bmp-%s" pos)))
+
+(defun diff-hl-fringe-bmp-from-type (type pos)
+  (if (eq type 'unknown)
+      'question-mark
+    (intern (format "diff-hl-bmp-%s" type))))
+
 (defmacro diff-hl-with-diff-switches (body)
   `(let ((vc-git-diff-switches nil)
          (vc-hg-diff-switches nil)
+         (vc-svn-diff-switches nil)
          (vc-diff-switches '("-U0"))
          (vc-disable-async-diff t))
      ,body))
@@ -135,36 +185,45 @@
   (let* ((file buffer-file-name)
          (backend (vc-backend file)))
     (when backend
-      (case (vc-state file backend)
-        (edited
-         (let* ((buf-name " *diff-hl* ")
-                res)
-           (diff-hl-with-diff-switches
-            (vc-call-backend backend 'diff (list file) nil nil buf-name))
-           (with-current-buffer buf-name
-             (goto-char (point-min))
-             (unless (eobp)
-               (diff-beginning-of-hunk t)
-               (while (looking-at diff-hunk-header-re-unified)
-                 (let ((line (string-to-number (match-string 3)))
-                       (len (let ((m (match-string 4)))
-                              (if m (string-to-number m) 1)))
-                       (beg (point)))
-                   (diff-end-of-hunk)
-                   (let* ((inserts (diff-count-matches "^\\+" beg (point)))
-                          (deletes (diff-count-matches "^-" beg (point)))
-                          (type (cond ((zerop deletes) 'insert)
-                                      ((zerop inserts) 'delete)
-                                      (t 'change))))
-                     (when (eq type 'delete)
-                       (setq len 1)
-                       (incf line))
-                     (push (list line len type) res))))))
-           (nreverse res)))
-        (added
-         `((1 ,(line-number-at-pos (point-max)) insert)))
-        (removed
-         `((1 ,(line-number-at-pos (point-max)) delete)))))))
+      (let ((state (vc-state file backend)))
+        (cond
+         ((or (eq state 'edited)
+              (and (eq state 'up-to-date)
+                   ;; VC state is stale in after-revert-hook.
+                   (or revert-buffer-in-progress-p
+                       ;; Diffing against an older revision.
+                       diff-hl-reference-revision)))
+          (let* ((buf-name " *diff-hl* ")
+                 diff-auto-refine-mode
+                 res)
+            (diff-hl-with-diff-switches
+             (vc-call-backend backend 'diff (list file)
+                              diff-hl-reference-revision nil
+                              buf-name))
+            (with-current-buffer buf-name
+              (goto-char (point-min))
+              (unless (eobp)
+                (diff-beginning-of-hunk t)
+                (while (looking-at diff-hunk-header-re-unified)
+                  (let ((line (string-to-number (match-string 3)))
+                        (len (let ((m (match-string 4)))
+                               (if m (string-to-number m) 1)))
+                        (beg (point)))
+                    (diff-end-of-hunk)
+                    (let* ((inserts (diff-count-matches "^\\+" beg (point)))
+                           (deletes (diff-count-matches "^-" beg (point)))
+                           (type (cond ((zerop deletes) 'insert)
+                                       ((zerop inserts) 'delete)
+                                       (t 'change))))
+                      (when (eq type 'delete)
+                        (setq len 1)
+                        (cl-incf line))
+                      (push (list line len type) res))))))
+            (nreverse res)))
+         ((eq state 'added)
+          `((1 ,(line-number-at-pos (point-max)) insert)))
+         ((eq state 'removed)
+          `((1 ,(line-number-at-pos (point-max)) delete))))))))
 
 (defun diff-hl-update ()
   (let ((changes (diff-hl-changes))
@@ -173,31 +232,50 @@
     (save-excursion
       (goto-char (point-min))
       (dolist (c changes)
-        (destructuring-bind (line len type) c
+        (cl-destructuring-bind (line len type) c
           (forward-line (- line current-line))
+          (setq current-line line)
           (let ((hunk-beg (point)))
-            (forward-line len)
-            (setq current-line (+ line len))
-            (let ((h (make-overlay hunk-beg (1- (point))))
+            (while (cl-plusp len)
+              (diff-hl-add-highlighting
+               type
+               (cond
+                ((not diff-hl-draw-borders) 'empty)
+                ((and (= len 1) (= line current-line)) 'single)
+                ((= len 1) 'bottom)
+                ((= line current-line) 'top)
+                (t 'middle)))
+              (forward-line 1)
+              (cl-incf current-line)
+              (cl-decf len))
+            (let ((h (make-overlay hunk-beg (point)))
                   (hook '(diff-hl-overlay-modified)))
               (overlay-put h 'diff-hl t)
-              (if (= len 1)
-                  (overlay-put h 'before-string (diff-hl-fringe-spec type 'single))
-                (overlay-put h 'before-string (diff-hl-fringe-spec type 'top))
-                (overlay-put h 'line-prefix (diff-hl-fringe-spec type 'middle))
-                (overlay-put h 'after-string (diff-hl-fringe-spec type 'bottom)))
+              (overlay-put h 'diff-hl-hunk t)
               (overlay-put h 'modification-hooks hook)
               (overlay-put h 'insert-in-front-hooks hook)
               (overlay-put h 'insert-behind-hooks hook))))))))
+
+(defun diff-hl-add-highlighting (type shape)
+  (let ((o (make-overlay (point) (point))))
+    (overlay-put o 'diff-hl t)
+    (funcall diff-hl-highlight-function o type shape)
+    o))
+
+(defun diff-hl-highlight-on-fringe (ovl type shape)
+  (overlay-put ovl 'before-string (diff-hl-fringe-spec type shape)))
 
 (defun diff-hl-remove-overlays ()
   (dolist (o (overlays-in (point-min) (point-max)))
     (when (overlay-get o 'diff-hl) (delete-overlay o))))
 
 (defun diff-hl-overlay-modified (ov after-p _beg _end &optional _length)
-  "Delete the overlay."
+  "Delete the hunk overlay and all our line overlays inside it."
   (unless after-p
     (when (overlay-buffer ov)
+      (save-restriction
+        (narrow-to-region (overlay-start ov) (overlay-end ov))
+        (diff-hl-remove-overlays))
       (delete-overlay ov))))
 
 (defvar diff-hl-timer nil)
@@ -221,7 +299,7 @@
   (vc-buffer-sync)
   (let* ((line (line-number-at-pos))
          (buffer (current-buffer)))
-    (vc-diff-internal t (vc-deduce-fileset) nil nil t)
+    (vc-diff-internal t (vc-deduce-fileset) diff-hl-reference-revision nil t)
     (vc-exec-after `(if (< (line-number-at-pos (point-max)) 3)
                         (with-current-buffer ,buffer (diff-hl-remove-overlays))
                       (diff-hl-diff-skip-to ,line)
@@ -243,10 +321,10 @@ in the source file, or the last line of the hunk above it."
               ;; Retreat to the previous hunk.
               (forward-line -1)
             (let ((to-go (1+ (- line hunk-line))))
-              (while (plusp to-go)
+              (while (cl-plusp to-go)
                 (forward-line 1)
                 (unless (looking-at "^-")
-                  (decf to-go))))))))))
+                  (cl-decf to-go))))))))))
 
 (defun diff-hl-revert-hunk ()
   "Revert the diff hunk with changes at or above the point."
@@ -261,7 +339,8 @@ in the source file, or the last line of the hunk above it."
         (fileset (vc-deduce-fileset)))
     (unwind-protect
         (progn
-          (vc-diff-internal nil fileset nil nil nil diff-buffer)
+          (vc-diff-internal nil fileset diff-hl-reference-revision nil
+                            nil diff-buffer)
           (vc-exec-after
            `(let (beg-line end-line)
               (when (eobp)
@@ -283,7 +362,7 @@ in the source file, or the last line of the hunk above it."
                     (recenter (/ (+ wbh (- beg-line end-line) 2) 2))
                   (recenter 1)))
               (unless (yes-or-no-p (format "Revert current hunk in %s?"
-                                           ,(caadr fileset)))
+                                           ,(cl-caadr fileset)))
                 (error "Revert canceled"))
               (let ((diff-advance-after-apply-hunk nil))
                 (diff-apply-hunk t))
@@ -293,8 +372,8 @@ in the source file, or the last line of the hunk above it."
       (quit-windows-on diff-buffer))))
 
 (defun diff-hl-hunk-overlay-at (pos)
-  (loop for o in (overlays-at pos)
-           when (overlay-get o 'diff-hl)
+  (cl-loop for o in (overlays-in pos (1+ pos))
+           when (overlay-get o 'diff-hl-hunk)
            return o))
 
 (defun diff-hl-next-hunk (&optional backward)
@@ -307,9 +386,7 @@ in the source file, or the last line of the hunk above it."
                                   (previous-overlay-change (point))
                                 (next-overlay-change (point))))
                    (let ((o (diff-hl-hunk-overlay-at (point))))
-                     (when (and o (if backward
-                                      (<= (overlay-end o) (1+ (point)))
-                                    (>= (overlay-start o) (point))))
+                     (when (and o (= (overlay-start o) (point)))
                        (throw 'found (overlay-start o)))))))))
     (if pos
         (goto-char pos)
@@ -320,14 +397,16 @@ in the source file, or the last line of the hunk above it."
   (interactive)
   (diff-hl-next-hunk t))
 
+;;;###autoload
 (define-minor-mode diff-hl-mode
-  "Toggle VC diff fringe highlighting."
+  "Toggle VC diff highlighting."
   :lighter "" :keymap `(([remap vc-diff] . diff-hl-diff-goto-hunk)
                         (,(kbd "C-x v n") . diff-hl-revert-hunk)
                         (,(kbd "C-x v [") . diff-hl-previous-hunk)
                         (,(kbd "C-x v ]") . diff-hl-next-hunk))
   (if diff-hl-mode
       (progn
+        (diff-hl-maybe-define-bitmaps)
         (add-hook 'after-save-hook 'diff-hl-update nil t)
         (add-hook 'after-change-functions 'diff-hl-edit nil t)
         (if vc-mode
@@ -346,7 +425,7 @@ in the source file, or the last line of the hunk above it."
 
 (when (require 'smartrep nil t)
   (let (smart-keys)
-    (labels ((scan (map)
+    (cl-labels ((scan (map)
                       (map-keymap
                        (lambda (event binding)
                          (if (consp binding)
@@ -377,18 +456,17 @@ in the source file, or the last line of the hunk above it."
 ;;;###autoload
 (defun turn-on-diff-hl-mode ()
   "Turn on `diff-hl-mode' or `diff-hl-dir-mode' in a buffer if appropriate."
-  (when (window-system) ;; No fringes in the console.
-    (cond
-     (buffer-file-name
-      (diff-hl-mode 1))
-     ((eq major-mode 'vc-dir-mode)
-      (diff-hl-dir-mode 1)))))
+  (cond
+   (buffer-file-name
+    (diff-hl-mode 1))
+   ((eq major-mode 'vc-dir-mode)
+    (diff-hl-dir-mode 1))))
 
 ;;;###autoload
-;;(define-globalized-minor-mode global-diff-hl-mode diff-hl-mode
-;;  turn-on-diff-hl-mode :after-hook (diff-hl-global-mode-change))
-(define-globalized-minor-mode global-diff-hl-mode diff-hl-mode
-  turn-on-diff-hl-mode)
+(if (>= emacs-major-version 24)
+    (define-globalized-minor-mode global-diff-hl-mode diff-hl-mode
+      turn-on-diff-hl-mode :after-hook (diff-hl-global-mode-change))
+    (define-globalized-minor-mode global-diff-hl-mode diff-hl-mode turn-on-diff-hl-mode))
 
 (defun diff-hl-global-mode-change ()
   (unless global-diff-hl-mode
