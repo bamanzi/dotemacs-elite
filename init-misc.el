@@ -326,10 +326,12 @@ That is, a string used to represent it on the tab bar."
   `(progn
      (require 'org-cua-dwim nil t)
 
-     (eval-after-load "org"
-       `(progn
-          (define-key org-mode-map (kbd "M-p") 'drag-stuff-up)
-          (define-key org-mode-map (kbd "M-n") 'drag-stuff-down)))
+     (define-key org-mode-map (kbd "M-p") 'drag-stuff-up)
+     (define-key org-mode-map (kbd "M-n") 'drag-stuff-down)
+
+     ;; with the following settings, no need to switch off IME when adding new headings
+     (define-key org-mode-map (kbd "×") (kbd "*"))
+     (define-key org-mode-map (kbd "－") (kbd "-"))
 
      (set-face-attribute 'org-level-1 nil :height 1.5 :bold t)
      (set-face-attribute 'org-level-2 nil :height 1.3 :bold t)
