@@ -287,10 +287,10 @@ That is, a string used to represent it on the tab bar."
       (require 'color-theme nil t)
       (eval-after-load "color-theme"
         `(progn
-           (require 'color-theme-sanityinc-tomorrow)
-
-           (if (require 'color-theme-tangotango)
-               (color-theme-tangotango))         
+           (if (require 'color-theme-tangotango nil t)
+               (color-theme-tangotango)
+             (if (require 'color-theme-molokai nil t)
+               (color-theme-molokai)))
            )))
   (progn
     (let ((theme-dir (locate-library "tangotango-theme")))
