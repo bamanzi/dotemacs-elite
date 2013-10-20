@@ -411,24 +411,26 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
 ;;***  hideshow
 (eval-after-load "hideshow"
   `(progn
+     (or (require 'hideshow-fringe nil t)
+         (ignore-errors
+           (hideshowvis-symbols)))
+     
      (define-key hs-minor-mode-map (kbd "M-+")  'hs-toggle-hiding)
      (define-key hs-minor-mode-map (kbd "<C-mouse-1>") 'hs-mouse-toggle-hiding)
-     
-     
      ))
 
 (define-key global-map (kbd "<f10> h s") 'hs-minor-mode)
 
 (defun bmz/turn-on-hideshow ()
   (interactive)
-  (if (display-graphic-p)
-      (if (require 'hideshowvis nil t)
-          (progn
-            (require 'hideshow-fringe nil t))
-            (hs-minor-mode t)
-            (hideshowvis-enable))
-        (hs-minor-mode t))
-     )
+  (if (require 'hideshowvis nil t)
+      (progn
+        (or (require 'hideshow-fringe nil t)
+            (ignore-errors
+              (hideshowvis-symbols)))
+        (hs-minor-mode t)
+        (hideshowvis-enable))
+    (hs-minor-mode t)))
 
 (eval-after-load "hideshowvis"
   ` (progn
