@@ -3,8 +3,9 @@
 ;; Copyright 2008-2012 Jan Rehders
 ;;
 ;; Author: Jan Rehders <cmdkeen@gmx.de>
-;; Version: 0.4
-;; Contributions and bug fixes by Bryan Waite, Michael Heerdegen and John Yates.
+;; Version: 0.5
+;; Contributions and bug fixes by Bryan Waite, Michael Heerdegen, John Yates and
+;; Matthew Fidler.
 ;;
 ;; This file is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -50,11 +51,20 @@
 ;; customize-option, hideshowvis-ignore-same-line and set it to nil. This will
 ;; then display - icons for foldable regions of one line, too but is faster
 ;;
-;; At the end of this file you will find code to add to your .emacs to enable
-;; displaying a + symbol in the fringe for folded regions. It is not enabled by
-;; default because it might interfere with custom hs-set-up-overlay functions
+;; To enable displaying a + symbol in the fringe for folded regions,
+;; use:
+;;
+;;    (hideshowvis-symbols)
+;;
+;; in your ~/.emacs
+;;
+;; It is not enabled by default because it might interfere with custom
+;; hs-set-up-overlay functions
 ;;
 ;;; Changelog
+;;
+;; v0.5, 2012-09-11
+;; - Made ELPA compliant and added function `hideshowvis-symbols'
 ;;
 ;; v0.4, 2012-03-13
 ;; - fixed bug causing transpose-words to be broken as well as causing problems
@@ -71,7 +81,7 @@
 
 (define-fringe-bitmap 'hideshowvis-hideable-marker [0 0 0 126 126 0 0 0])
 
-(defconst hideshowvis-version "v0.4" "Version of hideshowvis minor mode")
+(defconst hideshowvis-version "v0.5" "Version of hideshowvis minor mode")
 
 (defface hideshowvis-hidable-face
   '((t (:foreground "#ccc" :box t)))
@@ -104,21 +114,18 @@
                                 (line-number-at-pos (point))))
                         (save-excursion
                           (goto-char (match-beginning 0))
-                          (condition-case nothing
-                              (progn
-                                (funcall hs-forward-sexp-func 1)
-                                (> (line-number-at-pos (point)) begin-line))
-                            (error nil))))
+                          (ignore-errors
+                            (progn
+                              (funcall hs-forward-sexp-func 1)
+                              (> (line-number-at-pos (point)) begin-line)))))
                     t)))
             (when doit
               (put-text-property 0
                                  (length marker-string)
                                  'display
-                                 (if window-system                                     
-                                     (list 'left-fringe
-                                           'hideshowvis-hideable-marker
-                                           'hideshowvis-hidable-face)
-                                   (list '(margin left-margin) ">"))
+                                 (list 'left-fringe
+                                       'hideshowvis-hideable-marker
+                                       'hideshowvis-hidable-face)
                                  marker-string)
               (overlay-put ovl 'before-string marker-string)
               (overlay-put ovl 'hideshowvis-hs t))))))))
@@ -142,15 +149,8 @@
   (let ((hideshowvis-mode-map (make-sparse-keymap)))
     (define-key hideshowvis-mode-map [left-fringe mouse-1]
       'hideshowvis-click-fringe)
-    (define-key hideshowvis-mode-map [left-margin mouse-1]
-      'hideshowvis-click-fringe)    
     hideshowvis-mode-map)
   "Keymap for hideshowvis mode")
-
-(defun hideshowvis-update-margin ()
-  (if hideshowvis-minor-mode
-      (set-window-margins (selected-window) 2)
-    (set-window-margins (selected-window) nil)))
 
 ;;;###autoload
 (define-minor-mode hideshowvis-minor-mode ()
@@ -163,25 +163,9 @@
       (if hideshowvis-minor-mode
           (progn
             (hs-minor-mode 1)
-            
-            (when (not window-system)
-              (if (car (window-margins (selected-window)))
-                  (display-warning :warning
-                                   "`hideshowvis' needs to use left-margin, \n
-but currenly it seems to be already used (`linum-mode' on?).
-Anyway `hideshowvis-mode' will continue to turn on."))
-              (add-hook 'window-configuration-change-hook
-                        'hideshowvis-update-margin nil 'local)
-              (hideshowvis-update-margin))
-  
             (hideshowvis-highlight-hs-regions-in-fringe (point-min) (point-max) 0)
             (add-to-list 'after-change-functions
                          'hideshowvis-highlight-hs-regions-in-fringe))
-        
-        (remove-hook 'window-configuration-change-hook
-                     'hideshowvis-update-margin 'local)
-        (hideshowvis-update-margin)
-    
         (remove-overlays (point-min) (point-max) 'hideshowvis-hs t)
         (setq after-change-functions
               (remove 'hideshowvis-highlight-hs-regions-in-fringe
@@ -196,50 +180,51 @@ Anyway `hideshowvis-mode' will continue to turn on."))
   (interactive)
   (hideshowvis-minor-mode 1))
 
-
-;; Add the following to your .emacs and uncomment it in order to get a + symbol
-;; in the fringe and a yellow marker indicating the number of hidden lines at
-;; the end of the line for hidden regions:
-
-(define-fringe-bitmap 'hs-marker [0 24 24 126 126 24 24 0])
-
-(defcustom hs-fringe-face 'hs-fringe-face
-  "*Specify face used to highlight the fringe on hidden regions."
-  :type 'face
-  :group 'hideshow)
-
-(defface hs-fringe-face
-  '((t (:foreground "#888" :box (:line-width 2 :color "grey75" :style released-button))))
-  "Face used to highlight the fringe on folded regions"
-  :group 'hideshow)
-
-(defcustom hs-face 'hs-face
-  "*Specify the face to to use for the hidden region indicator"
-  :type 'face
-  :group 'hideshow)
-
-(defface hs-face
-  '((t (:background "#ff8" :box t)))
-  "Face to hightlight the ... area of hidden regions"
-  :group 'hideshow)
-
-(defun display-code-line-counts (ov)
-  (when (eq 'code (overlay-get ov 'hs))
-    (let* ((marker-string "*fringe-dummy*")
-           (marker-length (length marker-string))
-           (display-string (format "(%d)..." (count-lines (overlay-start ov) (overlay-end ov))))
-           )
-      (overlay-put ov 'help-echo "Hiddent text. C-c,= to show")
-      (put-text-property 0 marker-length 'display
-                         (if window-system
-                             (list 'left-fringe 'hs-marker 'hs-fringe-face)
-                           (list '(margin left-margin) "+"))
-                         marker-string)      
-      (overlay-put ov 'before-string marker-string)
-      (put-text-property 0 (length display-string) 'face 'hs-face display-string)
-      (overlay-put ov 'display display-string)
-      )))
-
-(setq hs-set-up-overlay 'display-code-line-counts)
+;;;###autoload
+(defun hideshowvis-symbols ()
+  "Defines the things necessary to get a + symbol in the fringe
+and a yellow marker indicating the number of hidden lines at
+the end of the line for hidden regions."
+  (interactive)
+  
+  (define-fringe-bitmap 'hs-marker [0 24 24 126 126 24 24 0])
+  
+  (defcustom hs-fringe-face 'hs-fringe-face
+    "*Specify face used to highlight the fringe on hidden regions."
+    :type 'face
+    :group 'hideshow)
+  
+  (defface hs-fringe-face
+    '((t (:foreground "#888" :box (:line-width 2 :color "grey75" :style released-button))))
+    "Face used to highlight the fringe on folded regions"
+    :group 'hideshow)
+  
+  (defcustom hs-face 'hs-face
+    "*Specify the face to to use for the hidden region indicator"
+    :type 'face
+    :group 'hideshow)
+  
+  (defface hs-face
+    '((t (:background "#ff8" :box t)))
+    "Face to hightlight the ... area of hidden regions"
+    :group 'hideshow)
+  
+  (defun display-code-line-counts (ov)
+    (when (eq 'code (overlay-get ov 'hs))
+      (let* ((marker-string "*fringe-dummy*")
+             (marker-length (length marker-string))
+             (display-string (format "(%d)..." (count-lines (overlay-start ov) (overlay-end ov))))
+             )
+        (overlay-put ov 'help-echo "Hiddent text. C-c,= to show")
+        (put-text-property 0 marker-length 'display (list 'left-fringe 'hs-marker 'hs-fringe-face) marker-string)
+        (overlay-put ov 'before-string marker-string)
+        (put-text-property 0 (length display-string) 'face 'hs-face display-string)
+        (overlay-put ov 'display display-string)
+        )))
+  
+  (setq hs-set-up-overlay 'display-code-line-counts))
 
 (provide 'hideshowvis)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; hideshowvis.el ends here

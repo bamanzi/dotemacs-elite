@@ -3,12 +3,13 @@
 ;; Author     : ??
 ;; origin     : http://paste.lisp.org/display/60617,1/raw
 ;; Maintainer : Dino Chiesa <dpchiesa@hotmail.com>
+;;            : Donald Curtis <dcurtis@milkbox.net>
 ;; Created    : May 2011
-;; Modified   : May 2011
-;; Version    : 0.1.1
+;; Modified   : December 2012
+;; Version    : 0.1.5
 ;; Keywords   : languages mode flymake
 ;; X-URL      : http://www.emacswiki.org/emacs/flymake-cursor.el
-;; Last-saved : <2011-May-09 16:35:59>
+;; Last-saved : <2012-Dec-20 09:49:28>
 ;;
 ;; -------------------------------------------------------
 ;;
@@ -19,7 +20,6 @@
 ;; in the minibuffer when point is on a line containing a flymake
 ;; error. This saves having to mouse over the error, which is a
 ;; keyboard user's annoyance.
-;;
 ;; -------------------------------------------------------
 ;;
 ;; This flymake-cursor module displays the flymake error in the
@@ -50,7 +50,21 @@
 ;;
 ;; You can, of course, put that in an eval-after-load clause.
 ;;
+;; -------------------------------------------------------
+;;
+;; Update 2012-03-06 by Donald Curtis
+;; --
+;; Added some autoload statements and the closing comment to make
+;; compatible with package.el parser.
+;;
+;; Update 2012-12-20 by Jeremy Moore
+;; --
+;; Alter post-command-hook's local value via add-hook so that it plays
+;; nicely with other packages.
+;;
 
+
+(require 'cl)
 
 (defvar flyc--e-at-point nil
   "Error at point, after last command")
@@ -68,14 +82,14 @@ message to display, so there is one ;)"
         (t ;; could not compile error
          (format "compile error, problem on line %s" (flymake-ler-line errore)))))
 
-
 (defun flyc/show-stored-error-now ()
   "Displays the stored error in the minibuffer."
   (interactive)
-  (if flyc--e-at-point
-      (progn
-        (message "%s" (flyc/maybe-fixup-message flyc--e-at-point))
-        (setq flyc--e-display-timer nil))))
+  (let ((editing-p (= (minibuffer-depth) 0)))
+   (if (and flyc--e-at-point editing-p)
+       (progn
+         (message "%s" (flyc/maybe-fixup-message flyc--e-at-point))
+         (setq flyc--e-display-timer nil)))))
 
 
 (defun flyc/-get-error-at-point ()
@@ -88,6 +102,7 @@ message to display, so there is one ;)"
     flyc-e))
 
 
+;;;###autoload
 (defun flyc/show-fly-error-at-point-now ()
   "If the cursor is sitting on a flymake error, display
 the error message in the  minibuffer."
@@ -103,7 +118,7 @@ the error message in the  minibuffer."
           (flyc/show-stored-error-now)))))
 
 
-
+;;;###autoload
 (defun flyc/show-fly-error-at-point-pretty-soon ()
   "If the cursor is sitting on a flymake error, grab the error,
 and set a timer for \"pretty soon\". When the timer fires, the error
@@ -127,7 +142,7 @@ second, does the flymake error message (if any) get displayed.
             flyc--e-display-timer nil))))
 
 
-
+;;;###autoload
 (eval-after-load "flymake"
   '(progn
 
@@ -144,8 +159,9 @@ second, does the flymake error message (if any) get displayed.
 cursor is sitting on a flymake error the error information is
 displayed in the minibuffer (rather than having to mouse over
 it)"
-       (set (make-local-variable 'post-command-hook)
-            (cons 'flyc/show-fly-error-at-point-pretty-soon post-command-hook)))))
+       (add-hook 'post-command-hook 'flyc/show-fly-error-at-point-pretty-soon t t))))
 
 
 (provide 'flymake-cursor)
+
+;;; flymake-cursor.el ends here
