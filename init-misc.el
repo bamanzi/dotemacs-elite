@@ -285,6 +285,25 @@ That is, a string used to represent it on the tab bar."
 
 (idle-require 'tabbar)
 
+;;*** anything-jump-to-tab
+(defun anything-jump-to-tab ()
+  "Jump to a buffer in current tabbar group."
+  (interactive)
+  (unless (and (featurep 'tabbar)
+               tabbar-mode)
+    (error "Error: tabbar-mode not turned on."))
+  (let* ( ;; Swaps the current buffer name with the next one along.
+         (visible-buffers (mapcar '(lambda (tab) (buffer-name (tabbar-tab-value tab)))
+                                  (tabbar-tabs (tabbar-current-tabset t))))
+         (buffer-name (anything-comp-read "Tab: " visible-buffers))
+         window-of-buffer)
+    (if (not (member buffer-name visible-buffers))
+        (error "'%s' does not have a visible window" buffer-name)
+      (switch-to-buffer buffer-name))))
+
+(define-key global-map (kbd "C-x B") 'anything-jump-to-tab)
+(define-key global-map (kbd "<f11> TAB") 'anything-jump-to-tab)
+
 
 ;;** color-theme
 (idle-require 'color-theme)
