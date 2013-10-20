@@ -324,12 +324,13 @@
 
 (eval-after-load "anything-config"    
     `(progn
+       ;;enable multiple keyword/regexp match
+       (require 'anything-match-plugin nil t)
+       
        (global-set-key (kbd "<f5> a") anything-command-map)
 
-       (define-key global-map (kbd "<f5> |") 'anything-toggle-resplit-window)
+       (define-key global-map (kbd "<f5> |") 'anything-toggle-resplit-window)       
        
-       ;;enable multiple keyword/regexp match
-       ;;(load "anything-match-plugin" t) ;;FIXME: would cause crash?
        ;;(global-set-key (kbd "M-x") 'anything-M-x)
 
        (define-key minibuffer-local-map (kbd "<f5> <f5>") 'anything-minibuffer-history)
@@ -339,6 +340,7 @@
 ;;(unless (require 'anything-config nil t)
 ;;  (message "%s: failed to load `anything'." load-file-name))
 (idle-require 'anything-config)
+
 
 ;;*** misc
 
