@@ -1,3 +1,23 @@
+;;; qtmstr-outline.el --- fringe indicator for outline-mode
+
+;; Original author: quotemstr <twitter: quotemstr>
+;; Original URL:    http://paste.lisp.org/display/86638 )
+;; Current maintainer: Ba Manzi <bamanzi@gmail.com>
+
+;;; Commmentary:
+
+;; This package would add left-fringe indicator for outline(-minor)-mode.
+;;
+;; On terminal, left-margin would be used (because no left-fringe on term).
+;; Note `linum-mode' would use left-margin also, thus they can't be turned
+;; on together.
+;;
+;; Usage:
+;;    step 1. M-x load-library RET qtmstr-outline RET
+;;    step 2. M-x qtmstr-outline-mode
+
+;;; Code:
+
 (require 'foldout)
 
 (eval-when-compile
@@ -158,14 +178,21 @@
            km)))
 (fset 'qtmstr-outline-header-map qtmstr-outline-header-map)
 
+(define-fringe-bitmap 'qtmstr-fringe-icon-expanded [0 0 0 126 126 0 0 0])
+(define-fringe-bitmap 'qtmstr-fringe-icon-collaped [0 24 24 126 126 24 24 0])
+
 (defvar qtmstr-outline-overlay-open
-  (propertize "▼"
-              'display '(when window-system left-fringe filled-square))
+  (propertize " "
+              'display '(if window-system
+                          '(left-fringe qtmstr-fringe-icon-expanded)
+                          '((margin left-margin) "-")))
   "String displayed before a header line when it is open")
 
 (defvar qtmstr-outline-overlay-closed
-  (propertize "▶"
-              'display '(when window-system left-fringe right-triangle))
+  (propertize " "
+              'display '(if window-system
+                            '(left-fringe qtmstr-fringe-icon-collaped)
+                          '((margin left-margin) "+")))
   "String displayed before a header line when it is closed")
 
 (defun qtmstr-outline-fixup-overlay (o)
@@ -223,9 +250,24 @@ add an overlay for this heading."
       (when (overlay-get o 'qtmstr-outline)
         (qtmstr-outline-fixup-overlay o)))))
 
+(defun qtmstr-outline-update-margin ()
+  (if qtmstr-outline-mode
+      (set-window-margins (selected-window) 2)
+    (set-window-margins (selected-window) nil)))
+
 (defun qtmstr-outline-add-overlays ()
   "Add overlays for outline headings"
-
+  (interactive)
+  (when (not window-system)
+    (if (car (window-margins (selected-window)))
+        (display-warning :warning
+                         "`qtmstr-outline' needs to use left-margin, \n
+        but currenly it seems to be already used (`linum-mode'on?).
+        Anyway `qtmstr-outline' will continue to turn on."))
+    (add-hook 'window-configuration-change-hook
+              'qtmstr-outline-update-margin nil 'local)
+    (qtmstr-outline-update-margin))
+  
   (add-hook 'after-change-functions #'qtmstr-outline-after-change t t)
   (add-hook 'post-command-hook #'qtmstr-outline-post-command-hook t t)
   (add-hook 'outline-view-change-hook #'qtmstr-outline-view-change t t)
@@ -241,11 +283,35 @@ add an overlay for this heading."
             (qtmstr-outline-add-overlay-at-point)))))))
 
 (defun qtmstr-outline-remove-overlays ()
+  (interactive)
+  (remove-hook 'window-configuration-change-hook
+               'qtmstr-outline-update-margin 'local)
+  (qtmstr-outline-update-margin)
+
   (remove-hook 'after-change-functions #'qtmstr-outline-after-change t)
   (remove-hook 'post-command-hook #'qtmstr-outline-post-command-hook t)
   (save-restriction
     (widen)
     (remove-overlays nil nil 'qtmstr-outline t)))
+
+(define-minor-mode qtmstr-outline-mode
+  "Add left-fringe +/- icons and line overlays for outline-sections."
+  nil
+  " qo"
+  :require 'outline
+  :group 'outline
+  (if qtmstr-outline-mode
+      ;;turn on
+      (progn
+        (require 'qtmstr-outline)
+        (unless outline-minor-mode
+          (outline-minor-mode t))
+        (qtmstr-outline-add-overlays)
+        ;;(unless (and (boundp 'hs-minor-mode) hs-minor-mode)
+        ;; ;; avoid key conflictingve with hideshowvis
+        ;; (local-set-key [left-fringe mouse-1] 'qtmstr-outline-fringe-click))
+        )
+    (qtmstr-outline-remove-overlays)))
 
 (defun qtmstr-outline-mode-hook ()
   (if outline-minor-mode
@@ -258,8 +324,11 @@ add an overlay for this heading."
 
 (provide 'qtmstr-outline)
 
-;;; Emacs
+
 ;; Local Variables:
 ;; outline-regexp: ";;; "
 ;; coding: utf-8
 ;; End:
+
+;;; qtmstr-outline ends here
+
