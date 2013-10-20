@@ -80,13 +80,14 @@ On Windows, baskslashes is substituted with slashes."
 
 (define-key global-map (kbd "C-. p") 'ac-complete-pcomplete)
 
+
 ;;** compilation-shell-minor-mode (also for grep/grin in shell)
 (global-set-key (kbd "C-c <f9>") 'compilation-shell-minor-mode)
 
 (global-set-key (kbd "M-g <f9>") 'compile-goto-error)
 
 
-;;** cursor keysc
+;;** cursor keys
 
 (defun comint-toggle-cursor-keybinding (arg)
   "Toggle up/down key between {previous,next}-line and {previous,next}-input."
@@ -144,15 +145,16 @@ On Windows, baskslashes is substituted with slashes."
 
   (eshell-toggle-cursor-keybinding 1)
   (define-key eshell-mode-map (kbd "<Scroll_Lock>") 'eshell-toggle-cursor-keybinding)
+  (define-key eshell-mode-map (kbd "<scroll>") 'eshell-toggle-cursor-keybinding)
+
+  (define-key eshell-mode-map (kbd "<M-up>")   'eshell-previous-matching-input)
+  (define-key eshell-mode-map (kbd "<M-down>") 'eshell-next-matching-input)
   
   ;;I'd like M-s as highlight-xxx prefix key
   (define-key eshell-mode-map (kbd "M-s") nil)
 
   (if (fboundp 'drag-stuff-mode)
       (drag-stuff-mode -1))
-
-  (define-key eshell-mode-map (kbd "<M-up>")   'eshell-previous-matching-input)
-  (define-key eshell-mode-map (kbd "<M-down>") 'eshell-next-matching-input)
   
   (define-key eshell-mode-map (kbd "M-.") 'kai-eshell-insert-last-word)  
   

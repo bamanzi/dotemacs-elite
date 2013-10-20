@@ -129,12 +129,10 @@
 (setq recentf-menu-path '("File"))
 (recentf-mode t)
 
-;;*** nav
-(autoload 'nav "nav"
-  "Opens Nav in a new window to the left of the current one." t)
+;;*** midnight-mode
+(require 'midnight)
+;; (midnight-delay-set 'midnight-delay "12:40")
 
-(autoload 'nav-toggle "nav"
-  "Toggles the nav panel." t)
 
 
 ;;** windows
@@ -434,6 +432,9 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
 
 (eval-after-load "hideshowvis"
   ` (progn
+      (ignore-errors
+        (set-face-attribute 'hs-face nil :inherit 'font-lock-warning-face))
+      
       (define-key global-map (kbd "<f10> h s") 'hideshowvis-minor-mode)
       (define-key hideshowvis-mode-map [left-fringe S-mouse-1] 'hs-mouse-hide-level)
       (define-key hideshowvis-mode-map [left-margin S-mouse-1] 'hs-mouse-hide-level)
@@ -522,12 +523,13 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
 (autoload 'bm-toggle-mouse "bm" "Toggle a bookmark with a mouse click." t)
 
 (progn
-  (global-set-key (kbd "<C-f2>")     'bm-toggle)
+  (global-set-key (kbd "<C-f2>")    'bm-toggle)
   
-  (global-set-key (kbd "<f2> <f2>") 'bm-toggle)
+  (global-set-key (kbd "<f2> SPC")  'bm-toggle)
   (global-set-key (kbd "<f2> n")    'bm-next)
   (global-set-key (kbd "<f2> p")    'bm-previous)
   (global-set-key (kbd "<f2> l")    'bm-show)
+  (global-set-key (kbd "<f2> <f2>") 'bm-next)
 
   (global-set-key (kbd "<left-fringe> <C-mouse-1>")     'bm-toggle-mouse)
   (global-set-key (kbd "<left-fringe> <C-wheel-up>")    'bm-previous-mouse)
