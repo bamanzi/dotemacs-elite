@@ -19,21 +19,21 @@
 
 
 ;;*** dired-single
-(autoload 'joc-dired-single-buffer "dired-single"
+(autoload 'dired-single-buffer "dired-single"
 "Visits the selected directory in the current buffer, replacing the" t)
 
-(autoload 'joc-dired-single-buffer-mouse "dired-single"
+(autoload 'dired-single-buffer-mouse "dired-single"
 "Visits the selected directory in the current buffer, replacing the" t)
 
 (eval-after-load "dired"
   `(progn
-     (define-key dired-mode-map [return] 'joc-dired-single-buffer)
-     (define-key dired-mode-map (kbd "RET") 'joc-dired-single-buffer)
+     (define-key dired-mode-map [return] 'dired-single-buffer)
+     (define-key dired-mode-map (kbd "RET") 'dired-single-buffer)
      
-     (define-key dired-mode-map [mouse-1] 'joc-dired-single-buffer-mouse)
+     (define-key dired-mode-map [mouse-1] 'dired-single-buffer-mouse)
      (define-key dired-mode-map "^"
        (function
-        (lambda nil (interactive) (joc-dired-single-buffer ".."))))
+        (lambda nil (interactive) (dired-single-buffer ".."))))
      )) 
 
 ;;*** nc.el: norton commander clone
