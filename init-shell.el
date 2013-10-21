@@ -137,6 +137,10 @@ On Windows, baskslashes is substituted with slashes."
                  (eshell-previous-input-string (- n 1)))))))
 
 
+(autoload 'anything-eshell-history "anything-config"
+  "Preconfigured anything for eshell history." t)
+(autoload 'anything-esh-pcomplete  "anything-config"
+  "Preconfigured anything to provide anything completion in eshell." t)
 (defun bmz/eshell-mode-init ()
   ;; swap <home> and C-a
   (define-key eshell-mode-map (kbd "C-a")    'eshell-maybe-bol)
@@ -147,6 +151,9 @@ On Windows, baskslashes is substituted with slashes."
   (define-key eshell-mode-map (kbd "<Scroll_Lock>") 'eshell-toggle-cursor-keybinding)
   (define-key eshell-mode-map (kbd "<scroll>") 'eshell-toggle-cursor-keybinding)
 
+  (define-key eshell-mode-map (kbd "<f5> <up>") 'anything-eshell-history)
+  (define-key eshell-mode-map (kbd "<f5> TAB")  'anything-esh-pcomplete)
+  
   (define-key eshell-mode-map (kbd "<M-up>")   'eshell-previous-matching-input)
   (define-key eshell-mode-map (kbd "<M-down>") 'eshell-next-matching-input)
   

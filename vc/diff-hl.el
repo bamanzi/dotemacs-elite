@@ -190,7 +190,7 @@
          ((or (eq state 'edited)
               (and (eq state 'up-to-date)
                    ;; VC state is stale in after-revert-hook.
-                   (or revert-buffer-in-progress-p
+                   (or (and (boundp 'revert-buffer-in-progress-p) revert-buffer-in-progress-p)
                        ;; Diffing against an older revision.
                        diff-hl-reference-revision)))
           (let* ((buf-name " *diff-hl* ")
@@ -466,7 +466,7 @@ in the source file, or the last line of the hunk above it."
 (if (>= emacs-major-version 24)
     (define-globalized-minor-mode global-diff-hl-mode diff-hl-mode
       turn-on-diff-hl-mode :after-hook (diff-hl-global-mode-change))
-    (define-globalized-minor-mode global-diff-hl-mode diff-hl-mode turn-on-diff-hl-mode))
+  (define-globalized-minor-mode global-diff-hl-mode diff-hl-mode turn-on-diff-hl-mode))
 
 (defun diff-hl-global-mode-change ()
   (unless global-diff-hl-mode

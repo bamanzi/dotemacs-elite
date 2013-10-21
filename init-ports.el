@@ -9,7 +9,7 @@
   (interactive)
   (anything  '(anything-c-source-lacarte)))
 
-(define-key global-map (kbd "<f5> <f10>") 'lacarte-execute-menu-command)
+(define-key global-map (kbd "<f5> <f10>") 'anything-lacarte)
 
 
 ;;** x11 mouse
@@ -98,7 +98,7 @@ but not mapped by term/xterm.el"
 (autoload 'sudo-find-file "sudo"
   "Open a file, which may or may not be readable. If we can't" t)
 
-(autoload sudo-unset-ro-or-save "sudo"
+(autoload 'sudo-unset-ro-or-save "sudo"
   "Unset read-only flag for buffer, otherwise" t)
 
 (global-set-key (kbd "C-x M-f") 'sudo-find-file)
