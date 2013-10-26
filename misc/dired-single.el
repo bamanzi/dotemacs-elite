@@ -300,7 +300,8 @@ in another window."
 						 (string= current-buffer-name dired-single-magic-buffer-name))
 					(rename-buffer dired-single-magic-buffer-name)))
 			;; it's just a file
-		  (find-file name)))))))
+            (if name
+                (find-file name))))))))
 
 ;;;; ------------------------------------------------------------------------
 ;;;###autoload

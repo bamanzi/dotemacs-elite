@@ -313,6 +313,8 @@
   "Preconfigured `anything' for `recentf'." t)
 
 (progn
+  (global-set-key (kbd "<M-f5>") 'anything-resume)
+  
   (global-set-key (kbd "<f5> r") 'anything-recentf)
   (global-set-key (kbd "<f5> b") 'anything-buffers+)
   (global-set-key (kbd "<f5> B") 'anything-bookmarks)
@@ -498,6 +500,7 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
 (global-set-key (kbd "<S-wheel-down>")    'highlight-symbol-next)
 (global-set-key (kbd "<S-mouse-3>")       'highlight-symbol-occur)
 
+(define-key search-map "O" 'highlight-symbol-occur)
 
 ;;*** idle-highlight
 (autoload 'idle-highlight "idle-highlight"
@@ -600,16 +603,6 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
 (global-set-key (kbd "M-`")   'set-mark-command)
 ;;(global-set-key (kbd "M-`")   'cua-exchange-point-and-mark)
 (global-set-key (kbd "ESC M-`") 'pop-to-mark-command)
-
-
-;;***  recent-jump
-(setq rj-column-threshold 100)
-(if (load "recent-jump" t)
-    (recent-jump-mode t)
-  (message "Warning: failed to load `recent-jump' (%s)." load-file-name))
-
-(global-set-key (kbd "C-c <") 'recent-jump-backward)
-(global-set-key (kbd "C-c >") 'recent-jump-forward)
 
 
 ;;** major modes
