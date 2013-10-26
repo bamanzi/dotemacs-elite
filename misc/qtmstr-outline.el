@@ -93,7 +93,7 @@
 
     (qtmstr-outline-reveal-point)))
 
-(defun qtmstr-outline-define-keys ()
+(defun qtmstr-outline-define-keys_orig ()
   (interactive)
   (define-key outline-mode-map "\r" #'qtmstr-outline-newline)
   (define-key outline-mode-map [(tab)] #'qtmstr-outline-demote)
@@ -126,6 +126,24 @@
           (right       . foldout-zoom-subtree)))
 
   (push (cons 'outline-minor-mode outline-minor-mode-map) minor-mode-map-alist))
+
+(defun qtmstr-outline-define-keys ()
+  (interactive)
+  (define-key outline-mode-prefix-map (kbd "RET") #'qtmstr-outline-newline)
+  (define-key outline-mode-prefix-map (kbd "C-u") #'qtmstr-outline-up-heading)
+  (define-key outline-mode-prefix-map (kbd "TAB") #'qtmstr-outline-toggle-children)
+
+  (define-key outline-mode-prefix-map (kbd "<M-right>") #'qtmstr-outline-demote)
+  (define-key outline-mode-prefix-map (kbd "<M-left>")  #'qtmstr-outline-promote)
+  (define-key outline-mode-prefix-map (kbd "<M-up>")    #'outline-move-subtree-up)
+  (define-key outline-mode-prefix-map (kbd "<M-down>")  #'outline-move-subtree-down)  
+
+  (define-key outline-mode-prefix-map (kbd "C-w")       #'qtmstr-outline-show-top)
+
+  (define-key outline-minor-mode-map [left-fringe mouse-1] #'qtmstr-outline-fringe-click)
+  (define-key outline-minor-mode-map [left-margin mouse-1] #'qtmstr-outline-fringe-click)
+  (define-key outline-minor-mode-map [left-margin mouse-3] #'show-subtree)
+  )
 
 (eval-after-load "outline"
   '(progn
@@ -173,8 +191,10 @@
 
 (defvar qtmstr-outline-header-map
   (progn (let ((km (make-sparse-keymap)))
-           (define-key km [mouse-2] #'qtmstr-outline-on-header-click)
-           (define-key km "\r" #'qtmstr-outline-on-header-return)
+           (define-key km [mouse-1] #'qtmstr-outline-on-header-click)
+;;           (define-key km "\r"      #'qtmstr-outline-on-header-return)
+           (define-key km [mouse-3] #'show-subtree)
+           (define-key km (kbd "C-c TAB") #'outline-toggle-children)
            km)))
 (fset 'qtmstr-outline-header-map qtmstr-outline-header-map)
 
@@ -203,14 +223,14 @@ correct. Shoud not be called when buffer is narrowed."
                           (outline-on-heading-p t)))
   (let ((end (overlay-end o)))
     (cond ((outline-invisible-p end)
-           (overlay-put o 'help-echo "mouse-2: open this outline node")
+           (overlay-put o 'help-echo "mouse-1: open this outline node")
            (overlay-put o 'before-string qtmstr-outline-overlay-closed))
           (t
-           (overlay-put o 'help-echo "mouse-2: close this outline node")
+           (overlay-put o 'help-echo "mouse-1: close this outline node")
            (overlay-put o 'before-string qtmstr-outline-overlay-open)))))
 
 (defface qtmstr-outline-header-face
-  '((t :slant italic))
+  '((t :slant italic :underline t))
   "Face used for outline headings")
 
 (defun qtmstr-outline-add-overlay-at-point ()
@@ -331,4 +351,3 @@ add an overlay for this heading."
 ;; End:
 
 ;;; qtmstr-outline ends here
-
