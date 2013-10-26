@@ -158,27 +158,37 @@ See also: `kill-rectangle', `copy-to-register'."
 (define-key minibuffer-local-map (kbd "<M-insert> M-s") 'minibuffer-insert-current-symbol)
 
 
-;;** multi-occur for buffers of same mods
-;; stolen from http://www.masteringemacs.org/articles/2011/07/20/searching-buffers-occur-mode/
-(defun _get-buffers-matching-mode (mode)
-  "Returns a list of buffers where their major-mode is equal to MODE"
-  (let ((buffer-mode-matches '()))
-   (dolist (buf (buffer-list))
-     (with-current-buffer buf
-       (if (eq mode major-mode)
-           (add-to-list 'buffer-mode-matches buf))))
-   buffer-mode-matches))
- 
-(defun multi-occur-in-this-mode (symbol &optional arg)
+;;** multi-occur extensions
+(defun moccur-all-buffers (regexp)
+  (interactive "MRegexp: ")
+  (multi-occur (buffer-list) rexp))
+
+(defun moccur-all-files (regexp)
+  "Call `multi-occur' on all buffers which has a filename."
+  (interactive "MRegexp: ")
+  (let ((buffers (remq nil (mapcar #'(lambda (buf)
+                                       (if (buffer-file-name buf)
+                                           buf))
+                                   (buffer-list)))))
+    (multi-occur buffers rexp)))
+
+;; based on code from http://www.masteringemacs.org/articles/2011/07/20/searching-buffers-occur-mode/
+(defun moccur-in-same-mode (symbol &optional arg)
   "Show all lines matching REGEXP in buffers with this major mode."
   (interactive
    (list (read-string "Occur in same mode: " (thing-at-point 'symbol))
          current-prefix-arg))
-  (multi-occur (_get-buffers-matching-mode major-mode)
-               (format "%s" symbol)
-               arg))
+  (let* ((target-major-mode major-mode)
+         (buffers (remq nil (mapcar #'(lambda (buf)
+                                        (with-current-buffer buf
+                                          (if (eq target-major-mode major-mode)
+                                              buf)))
+                                    (buffer-list)))))
+    (multi-occur buffers
+                 (format "%s" symbol)
+                 arg)))
 
-(define-key search-map (kbd "M-o") 'multi-occur-in-this-mode)
+(define-key search-map (kbd "M-o") 'moccur-in-same-mode)
 
 
 ;;** grin & ack: better grep replacement for source code project
