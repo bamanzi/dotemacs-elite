@@ -123,6 +123,17 @@
 (setq desktop-restore-eager 5)
 (desktop-save-mode t)
 
+;;**** desktop-registry
+(autoload 'desktop-registry-change-desktop  "desktop-registry"
+  "Change to the desktop named NAME." t)
+
+(idle-require 'desktop-registry)
+(eval-after-load "desktop-registry"
+  `(progn
+     (desktop-registry-auto-register 1)
+     ))
+
+
 ;;***  recentf
 (require 'recentf)
 (setq recentf-max-saved-items 100)
