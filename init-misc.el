@@ -161,7 +161,7 @@ See also: `kill-rectangle', `copy-to-register'."
 ;;** multi-occur extensions
 (defun moccur-all-buffers (regexp)
   (interactive "MRegexp: ")
-  (multi-occur (buffer-list) rexp))
+  (multi-occur (buffer-list) regexp))
 
 (defun moccur-all-files (regexp)
   "Call `multi-occur' on all buffers which has a filename."
@@ -170,7 +170,7 @@ See also: `kill-rectangle', `copy-to-register'."
                                        (if (buffer-file-name buf)
                                            buf))
                                    (buffer-list)))))
-    (multi-occur buffers rexp)))
+    (multi-occur buffers regexp)))
 
 ;; based on code from http://www.masteringemacs.org/articles/2011/07/20/searching-buffers-occur-mode/
 (defun moccur-in-same-mode (symbol &optional arg)
@@ -506,6 +506,22 @@ That is, a string used to represent it on the tab bar."
 (autoload 'persp-mode  "persp-mode"
   "Toggle perspective mode." t)
 
+;;** speedbar
+(autoload 'sr-speedbar-toggle "sr-speedbar"
+  "Toggle sr-speedbar window." t)
+
+(global-set-key (kbd "<M-f11>") 'sr-speedbar-toggle)
+                
+(eval-after-load "speedbar"
+  `(progn
+     (speedbar-disable-update)
+     (global-set-key (kbd "ESC <M-f11>") 'speedbar-update-contents) ;;
+     
+     (speedbar-toggle-show-all-files)
+     (speedbar-add-supported-extension ".org")
+     (speedbar-add-supported-extension ".md")     
+     ))
+
 ;;** misc
 
 ;;info+.el: more colors (and other enhancements) 
@@ -520,5 +536,3 @@ That is, a string used to represent it on the tab bar."
      (defvar Info-up-link-keymap   (make-sparse-keymap))
      (defvar Info-down-link-keymap   (make-sparse-keymap))))
 
-(autoload 'sr-speedbar-toggle "sr-speedbar"
-  "Toggle sr-speedbar window." t)
