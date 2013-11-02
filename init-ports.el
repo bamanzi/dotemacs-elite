@@ -105,4 +105,16 @@ but not mapped by term/xterm.el"
 (global-set-key (kbd "C-x M-s") 'sudo-unset-ro-or-save)
 
 
+;;** win32
+(when (memq system-type '(windows-nt ms-dos))
+  ;;http://sourceforge.net/projects/ezwinports/files/
+
+  (setq find-program "gfind")
+
+  (if (executable-find "ggrep")
+      (setq grep-program "ggrep"))
+  
+  (setq ispell-program-name "hunspell"
+        ispell-extra-args '("-d" "en_US"))
+  )
    
