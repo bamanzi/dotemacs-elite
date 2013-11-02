@@ -282,6 +282,17 @@ That is, a string used to represent it on the tab bar."
      (define-key tabbar-mode-map (kbd "<f12> <left>")  'tabbar-backward)
      (define-key tabbar-mode-map (kbd "<f12> <up>")    'tabbar-press-home)
 
+     (require 'color nil t)
+     (unless (fboundp 'color-name-to-rgb)
+         ;;required by `tabbar-ruler', but provided by emacs-24
+         (defun color-name-to-rgb (color &optional frame)
+           "Convert COLOR string to a list of normalized RGB components."
+           ;; `colors-values' maximum value is either 65535 or 65280 depending on the
+           ;; display system. So we use a white conversion to get the max value.
+           (let ((valmax (float (car (color-values "#ffffff")))))
+             (mapcar (lambda (x) (/ x valmax)) (color-values color frame))))
+       )
+         
      (if (display-graphic-p)
          (require 'tabbar-ruler nil t)
        (setq tabbar-tab-label-function 'tabbar-buffer-tab-label/xterm))
