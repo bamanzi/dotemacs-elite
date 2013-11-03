@@ -123,5 +123,32 @@ or just:
 ;; (allow-line-as-region-for-function uncomment-region)
 ;; (allow-line-as-region-for-function comment-or-uncomment-region)
 
+
+;;** loaddefs.el generator
+;;based on code from http://stackoverflow.com/a/4189794
+(defun _do-update-autoloads-for-dir (basedir recursively)
+  (require 'autoload)         ;ironic, i know
+  (when (not (file-exists-p generated-autoload-file))
+    (with-current-buffer (find-file-noselect generated-autoload-file)
+      (insert ";;") ;; create the file with non-zero size to appease autoload
+      (save-buffer)))
+  (update-directory-autoloads basedir)
+  (if recursively
+      (mapc #'(lambda (subdir)
+                (message "=== %s" subdir)
+                (when (and (file-directory-p subdir)
+                           (not (string= "." subdir))
+                           (not (string= ".." subdir)))
+                  (cd subdir)
+                  (_do-update-autoloads-for-dir subdir recursively)))
+            (directory-files basedir 'full))))
+  
+(defun update-autoloads-for-dir (basedir)
+  "Update autoloads for files in the diretory BASE."
+  (interactive "DDirectory: ")
+  (let ((generated-autoload-file (concat basedir "loaddefs.el")))
+    (_do-update-autoloads-for-dir basedir 'recursive))
+
+
 (provide 'bmz-misc)
 
