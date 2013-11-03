@@ -364,6 +364,7 @@ That is, a string used to represent it on the tab bar."
       org-export-htmlize-output-type 'css ;; separate css
 
       ;; org-list-indent-offset 4
+      org-src-fontify-natively t
       )
 
 (global-set-key (kbd "C-c o l") 'org-store-link)
@@ -385,6 +386,7 @@ That is, a string used to represent it on the tab bar."
      (set-face-attribute 'org-level-3 nil :height 1.1)))
 
 (idle-require 'org-cua-dwim)
+
 
 ;;** markdown
 (autoload 'markdown-mode  "markdown-mode"
@@ -425,7 +427,6 @@ That is, a string used to represent it on the tab bar."
  (add-hook 'markdown-mode-hook
            (lambda ()
              (setq imenu-generic-expression markdown-imenu-generic-expression)))
-
 
 
 
@@ -532,6 +533,32 @@ That is, a string used to represent it on the tab bar."
      (speedbar-add-supported-extension ".org")
      (speedbar-add-supported-extension ".md")     
      ))
+
+
+;;** indent guides
+;;show guides for each indentation level
+(autoload 'highlight-indentation-mode "highlight-indentation"
+  "Highlight indentation minor mode highlights indentation based" t)
+;;only the current column
+(autoload 'highlight-indentation-current-column-mode "highlight-indentation"
+  "Hilight Indentation minor mode displays" t)
+
+(global-set-key (kbd "<f10> hi") 'highlight-indentation-mode)
+
+
+(autoload 'indent-guide-mode "indent-guide"
+  "show vertical lines to guide indentation." t)
+
+(global-set-key (kbd "<f10> ig") 'indent-guide-mode)
+
+;; `indent-guide-mode' actually use a char as the guide line,
+;; thus if you use term's copy method (such as putty's or tmux's),
+;; maybe `highlight-indentation-mode' is better.
+(global-set-key (kbd "<f10> |") #'(lambda ()
+                                    (if (display-graphic-p)
+                                        (indent-guide-mode)
+                                      (highlight-indentation-mode))))
+
 
 ;;** misc
 
