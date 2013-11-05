@@ -306,24 +306,56 @@ That is, a string used to represent it on the tab bar."
 
 (idle-require 'tabbar)
 
-;;*** anything-jump-to-tab
-(defun anything-jump-to-tab ()
+;;*** ido-jump-to-tab
+(defun ido-jump-to-tab ()
   "Jump to a buffer in current tabbar group."
   (interactive)
   (unless (and (featurep 'tabbar)
                tabbar-mode)
     (error "Error: tabbar-mode not turned on."))
+  (if (< emacs-major-version 24)
+      (ido-common-initialization))  
   (let* ( ;; Swaps the current buffer name with the next one along.
          (visible-buffers (mapcar '(lambda (tab) (buffer-name (tabbar-tab-value tab)))
                                   (tabbar-tabs (tabbar-current-tabset t))))
-         (buffer-name (anything-comp-read "Tab: " visible-buffers))
+         (buffer-name (ido-completing-read "Tab: " visible-buffers))
          window-of-buffer)
     (if (not (member buffer-name visible-buffers))
         (error "'%s' does not have a visible window" buffer-name)
       (switch-to-buffer buffer-name))))
 
-(define-key global-map (kbd "C-x B") 'anything-jump-to-tab)
-(define-key global-map (kbd "<f11> TAB") 'anything-jump-to-tab)
+(define-key global-map (kbd "C-x B") 'ido-jump-to-tab)
+
+;;*** anything-jump-to-tab
+(defun anything-c-tab-list ()
+  "Return a list of buffer names of current tabbar group. "
+  (unless (and (featurep 'tabbar)
+               tabbar-mode)
+    (error "Error: tabbar-mode not turned on."))
+  (with-current-buffer anything-c-tab-current-buffer
+    (mapcar #'(lambda (tab) (buffer-name (tabbar-tab-value tab)))
+            (tabbar-tabs (tabbar-current-tabset t)))))
+
+;;NOTE: without this, anything would change current buffer (to '*anything-tabs*'),
+;; thus leads to wrong group
+(setq anything-c-tab-current-buffer nil)
+
+(defvar anything-c-source-tabs
+  '((name . "Buffers of current Tabbar Group")
+    (candidates . anything-c-tab-list)
+    (type . buffer)))
+
+(defun anything-tab-list ()
+  "Preconfigured `anything' to list buffers.
+It is an enhanced version of `anything-for-buffers'."
+  (interactive)
+  (setq anything-c-tab-current-buffer (current-buffer))
+  (anything :sources '(anything-c-source-tabs
+                       anything-c-source-buffer-not-found)
+            :buffer "*anything tabs*"
+            :keymap anything-c-buffer-map))
+
+(define-key global-map (kbd "<f11> TAB") 'anything-tab-list)
 
 
 ;;** color-theme
