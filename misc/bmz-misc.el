@@ -151,6 +151,60 @@ or just:
     (_do-update-autoloads-for-dir basedir 'recursive)))
 
 
+;;** find-symbol-at-point
+(defun find-symbol-at-point (symbol)
+  "Find the definiton of the SYMBOL near point.
+
+This is a front-end function for `find-function', `find-variable',
+`find-face-definition' & `find-library'."
+  (interactive
+   (list (intern-soft (read-string "Symbol: "
+                                   (thing-at-point 'symbol)))))
+  (cond
+   ((fboundp symbol)
+    (find-function symbol))
+   ((boundp symbol)
+    (find-variable symbol))
+   ((facep symbol)
+    (find-face-definition symbol))
+   ((featurep symbol)
+    ;;not accurate (if package name is different than feature name), but in most cases that's enough
+    (find-library (symbol-name symbol)))    
+   (t
+    (message "Unknown symbol: %s" symbol))))
+
+(defun describe-symbol-at-point (symbol)
+  "Describe the SYMBOL near point.
+
+This is a front-end function for `describe-function', `describe-variable',
+`describe-face' & `describe-package'."
+  (interactive
+   (list (intern-soft (read-string "Symbol: "
+                                   (thing-at-point 'symbol)))))
+  (cond
+   ((fboundp symbol)
+    (describe-function symbol))
+   ((boundp symbol)
+    (describe-variable symbol))
+   ((facep symbol)
+    (describe-face symbol))
+   ((featurep symbol)
+    ;;not accurate (if package name is different than feature name), but in most cases that's enough
+    (if (fboundp 'describe-package) ;; emacs-24 provides this
+        (describe-package (symbol-name symbol))
+      (finder-commentary (symbol-file symbol))))
+   (t
+    (message "Unknown symbol: %s" symbol))))
+  
+
+(eval-after-load "lisp-mode"
+  `(progn
+     (define-key emacs-lisp-mode-map (kbd "C-c .")         'find-symbol-at-point)
+     (define-key emacs-lisp-mode-map (kbd "C-h M-s")       'describe-symbol-at-point)
+     (define-key lisp-interaction-mode-map (kbd "C-c .")   'find-symbol-at-point)
+     (define-key lisp-interaction-mode-map (kbd "C-h M-s") 'describe-symbol-at-point)
+     ))
+
 (provide 'bmz-misc)
 ;;; bmz-misc.el ends here
 
