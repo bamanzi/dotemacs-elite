@@ -646,10 +646,10 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
 (defalias 'fvap 'find-variable-at-point)
 
 ;;** utils
-(autoload 'ifas "bmz-misc"
+(autoload 'ifas "bmz-elisp-misc"
   "Insert the first line of documentation of a function." t)
 
-(autoload 'load-and-execute  "bmz-misc"
+(autoload 'load-and-execute  "bmz-elisp-misc"
   "load a library 'foobar' and execute the command with same name:" t)
 
 (global-set-key (kbd "M-X") 'load-and-execute)
