@@ -1,3 +1,7 @@
+;; bmz-elisp-misc.el -- some elisp utilities
+
+;; Author: Ba Manzi <bamanzi AT gmail.com>
+
 ;;** load-and-execute
 (defun load-and-execute (library)
   "load a library 'foobar' and execute the command with same name:
@@ -205,6 +209,6 @@ This is a front-end function for `describe-function', `describe-variable',
      (define-key lisp-interaction-mode-map (kbd "C-h M-s") 'describe-symbol-at-point)
      ))
 
-(provide 'bmz-misc)
-;;; bmz-misc.el ends here
+(provide 'bmz-elisp-misc)
+;;; bmz-elisp-misc.el ends here
 
