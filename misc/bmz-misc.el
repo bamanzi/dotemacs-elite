@@ -37,6 +37,7 @@ Useful when writing autoload spec."
       (message "You didn't specify a function")
     (insert-string (format " \"%s\"\n  \"%s\" t)"
                            (replace-regexp-in-string ".elc?$" "" (file-name-nondirectory (symbol-file function 'defun)))
+			   (require 'eldoc)
                            (or (eldoc-docstring-first-line (documentation function t))
                                "Undocumented.")    ))))
 
@@ -147,8 +148,9 @@ or just:
   "Update autoloads for files in the diretory BASE."
   (interactive "DDirectory: ")
   (let ((generated-autoload-file (concat basedir "loaddefs.el")))
-    (_do-update-autoloads-for-dir basedir 'recursive))
+    (_do-update-autoloads-for-dir basedir 'recursive)))
 
 
 (provide 'bmz-misc)
+;;; bmz-misc.el ends here
 
