@@ -561,7 +561,7 @@ It is an enhanced version of `anything-for-buffers'."
      (speedbar-disable-update)
      (global-set-key (kbd "ESC <M-f11>") 'speedbar-update-contents) ;;
      
-     (speedbar-toggle-show-all-files)
+     (setq speedbar-show-unknown-files t)
      (speedbar-add-supported-extension ".org")
      (speedbar-add-supported-extension ".md")     
      ))
