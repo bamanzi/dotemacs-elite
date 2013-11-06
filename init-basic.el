@@ -127,23 +127,23 @@
 (autoload 'desktop-registry-change-desktop  "desktop-registry"
   "Change to the desktop named NAME." t)
 
-(when (>= emacs-major-version 24) ;;FIXME
-    (idle-require 'desktop-registry)
-    )
+(idle-require 'desktop-registry)
+
 (eval-after-load "desktop-registry"
   `(progn
-     (unless (fboundp 'file-name-base)
-       (defun file-name-base (&optional filename)
-         "Return the base name of the FILENAME: no directory, no extension.
-FILENAME defaults to `buffer-file-name'."
-         (file-name-sans-extension
-          (file-name-nondirectory (or filename (buffer-file-name))))))
-     (unless (fboundp 'cl-find)
-       (defalias 'cl-find 'find))
-
      (desktop-registry-auto-register 1)
      ))
 
+(unless (fboundp 'file-name-base)
+  (defun file-name-base (&optional filename)
+    "Return the base name of the FILENAME: no directory, no extension.
+FILENAME defaults to `buffer-file-name'."
+    (file-name-sans-extension
+     (file-name-nondirectory (or filename (buffer-file-name))))))
+
+(require 'cl-lib)
+(unless (fboundp 'cl-find)
+  (defalias 'cl-find 'find))
 
 ;;***  recentf
 (require 'recentf)
