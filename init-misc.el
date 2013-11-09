@@ -558,6 +558,8 @@ It is an enhanced version of `anything-for-buffers'."
                 
 (eval-after-load "speedbar"
   `(progn
+     (setq speedbar-verbosity-level 1)
+     
      (speedbar-disable-update)
      (global-set-key (kbd "ESC <M-f11>") 'speedbar-update-contents) ;;
      
@@ -587,10 +589,13 @@ It is an enhanced version of `anything-for-buffers'."
 ;; thus if you use term's copy method (such as putty's or tmux's),
 ;; maybe `highlight-indentation-mode' is better.
 (global-set-key (kbd "<f10> |") #'(lambda ()
+                                    (interactive)
                                     (if (display-graphic-p)
                                         (indent-guide-mode)
                                       (highlight-indentation-mode))))
 
+(if (boundp 'prog-mode-hook)
+    (add-hook 'prog-mode-hook 'indent-guide-mode))
 
 ;;** misc
 
@@ -606,3 +611,5 @@ It is an enhanced version of `anything-for-buffers'."
      (defvar Info-up-link-keymap   (make-sparse-keymap))
      (defvar Info-down-link-keymap   (make-sparse-keymap))))
 
+(global-unset-key (kbd "<f10>"))
+(global-set-key (kbd "<f10> ws") 'whitespace-mode)

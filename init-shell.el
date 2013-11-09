@@ -167,6 +167,8 @@ On Windows, baskslashes is substituted with slashes."
   
   (setq outline-regexp "^.* $")
   (outline-minor-mode t)
+
+  (eshell/alias "g" "grin --emacs --force-color $*")
   )
 
 (add-hook 'eshell-mode-hook 'bmz/eshell-mode-init)
