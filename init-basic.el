@@ -117,15 +117,22 @@
 
 (global-set-key (kbd "<f12> *")  (kbd "C-x b *scratch* RET"))
 
+(idle-require 'uniquify)
+(setq uniquify-buffer-name-style 'post-forward-angle-brackets)
 
 ;;*** desktop
 (require 'desktop)
 (setq desktop-restore-eager 5)
 (desktop-save-mode t)
 
+(global-set-key (kbd "<f12> C-l") 'desktop-change-dir)
+(global-set-key (kbd "<f12> C-s") 'desktop-save)
+
 ;;**** desktop-registry
 (autoload 'desktop-registry-change-desktop  "desktop-registry"
   "Change to the desktop named NAME." t)
+
+(global-set-key (kbd "<f12> <f12>") 'desktop-registry-change-desktop)
 
 (idle-require 'desktop-registry)
 
@@ -458,6 +465,8 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
 
 (eval-after-load "hideshowvis"
   ` (progn
+      (if (fboundp 'hideshowvis-symbols) ;;added in hideshowvis 0.5
+          (hideshowvis-symbols))
       (ignore-errors
         (set-face-attribute 'hs-face nil :inherit 'font-lock-warning-face))
       
