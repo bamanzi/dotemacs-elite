@@ -108,7 +108,7 @@
 ;;   - Peter J Weisberg
 ;;   - Yann Hodique
 ;;   - Rémi Vanicat
-;; Version: @GIT_DEV_VERSION@
+;; Version: git20130514
 ;; Keywords: tools
 
 ;; Magit is free software; you can redistribute it and/or modify it
@@ -143,7 +143,7 @@
 (eval-when-compile
   (require 'grep))
 
-(require 'cl)
+(require 'cl-lib)
 
 (require 'log-edit)
 (require 'easymenu)
@@ -168,7 +168,7 @@
 (declare-function eshell-parse-arguments 'eshell)
 
 ;; Dummy to be used by the defcustoms when first loading the file.
-(eval-when (load eval)
+(cl-eval-when (load eval)
   (defalias 'magit-set-variable-and-refresh 'set-default))
 
 
@@ -1325,7 +1325,7 @@ argument or a list of strings used as regexps."
             (cond ((and (functionp uninteresting)
                         (funcall uninteresting ref)))
                   ((and (not (functionp uninteresting))
-                        (loop for i in uninteresting thereis (string-match i ref))))
+                        (cl-loop for i in uninteresting thereis (string-match i ref))))
                   (t
                    (let ((fmt-ref (magit-format-ref ref)))
                      (when fmt-ref
@@ -1492,7 +1492,7 @@ an existing remote."
 ;; identifies what kind of object it represents (if any), and the
 ;; parent and grand-parent, etc provide the context.
 
-(defstruct magit-section
+(cl-defstruct magit-section
   parent title beginning end children hidden type info
   needs-refresh-on-show)
 
@@ -1638,7 +1638,7 @@ Use the specified START and END positions."
 (defun magit-find-section-before (pos)
   "Return the last section that begins before POS."
   (let ((section (magit-find-section-at pos)))
-    (do* ((current (or (magit-section-parent section)
+    (cl-do* ((current (or (magit-section-parent section)
                           section)
                       next)
              (next (if (not (magit-section-hidden current))
@@ -1937,7 +1937,7 @@ Expanded: everything is shown."
      (cond ((magit-section-hidden s)
             (magit-section-collapse s))
            ((with-no-warnings
-              (notany #'magit-section-hidden (magit-section-children s)))
+              (cl-notany #'magit-section-hidden (magit-section-children s)))
             (magit-section-set-hidden s t))
            (t
             (magit-section-expand s))))))
@@ -2611,7 +2611,7 @@ Please see the manual for a complete description of Magit.
 
 (defun magit-find-buffer (submode &optional dir)
   (let ((topdir (magit-get-top-dir (or dir default-directory))))
-    (find-if (lambda (buf)
+    (cl-find-if (lambda (buf)
                   (with-current-buffer buf
                     (and (eq major-mode submode)
                          default-directory
@@ -2711,7 +2711,7 @@ Please see the manual for a complete description of Magit.
 (defun magit-need-refresh (&optional buffer)
   "Mark BUFFER as needing to be refreshed.
 If optional BUFFER is nil, use the current buffer."
-  (pushnew (or buffer (current-buffer)) magit-refresh-needing-buffers :test 'eq))
+  (cl-pushnew (or buffer (current-buffer)) magit-refresh-needing-buffers :test 'eq))
 
 (defun magit-refresh ()
   "Refresh current buffer to match repository state.
@@ -2972,7 +2972,7 @@ Customize `magit-diff-refine-hunk' to change the default mode."
 (defvar magit-indentation-level 1)
 
 (defun magit-insert-diff-title (status file file2)
-  (let ((status-text (case status
+  (let ((status-text (cl-case status
                        ((unmerged)
                         (format "Unmerged   %s" file))
                        ((new)
@@ -3167,7 +3167,7 @@ Customize `magit-diff-refine-hunk' to change the default mode."
        ":\\([0-7]+\\) \\([0-7]+\\) [0-9a-f]+ [0-9a-f]+ \\(.\\)[0-9]*\t\\([^\t\n]+\\)$")
       (let ((old-perm (match-string-no-properties 1))
             (new-perm (match-string-no-properties 2))
-            (status (case (string-to-char (match-string-no-properties 3))
+            (status (cl-case (string-to-char (match-string-no-properties 3))
                       (?A 'new)
                       (?D 'deleted)
                       (?M 'modified)
@@ -3552,7 +3552,7 @@ must return a string which will represent the log line.")
     ("bisect" magit-log-get-bisect-state-color)))
 
 (defun magit-ref-get-label-color (r)
-  (let ((uninteresting (loop for re in magit-uninteresting-refs
+  (let ((uninteresting (cl-loop for re in magit-uninteresting-refs
                                 thereis (string-match re r))))
     (if uninteresting (list nil nil)
       (let* ((ref-re "\\(?:tag: \\)?refs/\\(?:\\([^/]+\\)/\\)?\\(.+\\)")
@@ -3586,7 +3586,7 @@ must return a string which will represent the log line.")
               (let ((colored-labels
                      (delete nil
                              (mapcar (lambda (r)
-                                       (destructuring-bind (label face)
+                                       (cl-destructuring-bind (label face)
                                            (magit-ref-get-label-color r)
                                          (and label
                                               (propertize label 'face face))))
@@ -3737,7 +3737,7 @@ insert a line to tell how to insert more of them"
              (magit-with-section "longer"  'longer
                (insert "type \"e\" to show more logs\n")))))))
 
-(defstruct magit-log-line
+(cl-defstruct magit-log-line
   chart sha1 author date msg refs gpg)
 
 (defun magit-parse-log-line (line style)
@@ -4564,7 +4564,7 @@ If there is no rebase in progress return nil."
             ;; How many commits we have in total, without the comments
             ;; at the end of git-rebase-todo.backup
             (let ((todo-lines-with-comments (magit-file-lines (concat git-dir "rebase-merge/git-rebase-todo.backup"))))
-              (loop for i in todo-lines-with-comments
+              (cl-loop for i in todo-lines-with-comments
                        until (string= "" i)
                        count i))))
           ((and (file-exists-p (concat git-dir "rebase-apply"))
@@ -4600,7 +4600,7 @@ If there is no rebase in progress return nil."
             (message-log-max nil))
         (message "Rebase in progress. [A]bort, [S]kip, or [C]ontinue? ")
         (let ((reply (read-event)))
-          (case reply
+          (cl-case reply
             ((?A ?a)
              (magit-run-git-async "rebase" "--abort"))
             ((?S ?s)
@@ -6418,7 +6418,7 @@ These are the branch names with the remote name stripped."
 
 (defun magit-remote-part-of-branch (branch)
   (when (string-match-p "^\\(?:refs/\\)?remotes\\/" branch)
-    (loop for remote in (magit-git-lines "remote")
+    (cl-loop for remote in (magit-git-lines "remote")
              when (string-match-p (format "^\\(?:refs/\\)?remotes\\/%s\\/" (regexp-quote remote)) branch) return remote)))
 
 (defun magit-branch-no-remote (branch)
@@ -6426,7 +6426,7 @@ These are the branch names with the remote name stripped."
     (if remote
         (progn
           ;; This has to match if remote is non-nil
-          (assert (string-match (format "^\\(?:refs/\\)?remotes\\/%s\\/\\(.*\\)" (regexp-quote remote)) branch)
+          (cl-assert (string-match (format "^\\(?:refs/\\)?remotes\\/%s\\/\\(.*\\)" (regexp-quote remote)) branch)
                      'show-args "Unexpected string-match failure: %s %s")
           (match-string 1 branch))
       branch)))
@@ -6564,9 +6564,9 @@ These are the branch names with the remote name stripped."
                           (goto-char (point-max))
                           (point-marker)))))
          ;; list of remote elements to display in the buffer
-         (remote-groups (loop for remote in remotes
+         (remote-groups (cl-loop for remote in remotes
                               for end-markers on (cdr markers)
-                              for marker = (loop for x in end-markers thereis x)
+                              for marker = (cl-loop for x in end-markers thereis x)
                               collect (list remote marker))))
 
     ;; actual displaying of information
@@ -6574,7 +6574,7 @@ These are the branch names with the remote name stripped."
       (insert-before-markers (propertize "Local:" 'face 'magit-section-title) "\n")
       (magit-set-section-info ".")
       (magit-wash-branches-between-point-and-marker
-       (loop for x in markers thereis x)))
+       (cl-loop for x in markers thereis x)))
 
     (insert-before-markers "\n")
 
