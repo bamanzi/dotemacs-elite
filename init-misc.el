@@ -597,6 +597,43 @@ It is an enhanced version of `anything-for-buffers'."
 (if (boundp 'prog-mode-hook)
     (add-hook 'prog-mode-hook 'indent-guide-mode))
 
+;;** viper
+(global-set-key (kbd "<f6>") 'viper-mode)
+
+(setq viper-expert-level '3)
+(setq viper-inhibit-startup-message 't)
+
+(eval-after-load "viper"
+  `(progn
+     (require 'vimpulse nil t)
+
+     (define-key viper-vi-global-user-map     (kbd "<f6>") 'viper-go-away)
+     (define-key viper-insert-global-user-map (kbd "<f6>") 'viper-go-away)
+
+     ;; fix some compartibility problems with CUA mode
+     (define-key viper-vi-global-user-map [backspace] 'backward-delete-char-untabify)
+     (define-key viper-vi-global-user-map "\C-d" 'delete-char)
+     (define-key viper-insert-global-user-map [backspace] 'backward-delete-char-untabify)
+     (define-key viper-insert-global-user-map "\C-d" 'delete-char))     
+     ))
+
+
+;;*** Ex commands without entering viper-mode
+;; stoem from http://www.advogato.org/person/chalst/diary/277.html
+;;for ex commands supported by viper, refer `ex-token-alist'
+
+(autoload 'viper-ex "viper-ex" nil t)
+
+(eval-after-load "viper-ex"
+  `(ignore-errors
+     ;;(require 'viper-ex)
+     (require 'viper-keym)
+     (require 'viper-cmd)
+     ))
+
+(define-key global-map (kbd "ESC ESC :") 'viper-ex)
+
+
 ;;** misc
 
 ;;info+.el: more colors (and other enhancements) 
