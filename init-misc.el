@@ -413,11 +413,25 @@ It is an enhanced version of `anything-for-buffers'."
      (define-key org-mode-map (kbd "×") (kbd "*"))
      (define-key org-mode-map (kbd "－") (kbd "-"))
 
-     (set-face-attribute 'org-level-1 nil :height 1.5 :bold t)
-     (set-face-attribute 'org-level-2 nil :height 1.3 :bold t)
-     (set-face-attribute 'org-level-3 nil :height 1.1)))
+     (set-face-attribute 'org-level-1 nil :height 1.6 :bold t)
+     (set-face-attribute 'org-level-2 nil :height 1.4 :bold t)
+     (set-face-attribute 'org-level-3 nil :height 1.2 :bold t)))
 
+;; make sure Org table line could align well when English & Chinese used together
+(when nil
+  (set-default-font "Dejavu Sans Mono 10")
+  (if (eq system-type 'windows-nt)
+      (set-fontset-font "fontset-default" 'unicode "宋体 12")
+    (set-fontset-font "fontset-default" 'unicode "WenQuanYi Micro Hei Mono 12"))
+  )
+
+;;fix compatibility with CUA mode
 (idle-require 'org-cua-dwim)
+
+
+(global-set-key (kbd "<f8> <f8>") #'(lambda ()
+                                      (interactive)
+                                      (find-file org-default-notes-file)))
 
 
 ;;** markdown
@@ -614,7 +628,7 @@ It is an enhanced version of `anything-for-buffers'."
      (define-key viper-vi-global-user-map [backspace] 'backward-delete-char-untabify)
      (define-key viper-vi-global-user-map "\C-d" 'delete-char)
      (define-key viper-insert-global-user-map [backspace] 'backward-delete-char-untabify)
-     (define-key viper-insert-global-user-map "\C-d" 'delete-char))     
+     (define-key viper-insert-global-user-map "\C-d" 'delete-char) 
      ))
 
 
@@ -650,3 +664,8 @@ It is an enhanced version of `anything-for-buffers'."
 
 (global-unset-key (kbd "<f10>"))
 (global-set-key (kbd "<f10> ws") 'whitespace-mode)
+
+(global-set-key (kbd "<C-f4>") 'kill-buffer)
+
+(add-hook 'emacs-lisp-mode-hook #'(lambda ()
+                                    (add-hook 'before-save-hook 'check-parens nil 'local)))
