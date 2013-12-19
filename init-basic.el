@@ -395,6 +395,9 @@ FILENAME defaults to `buffer-file-name'."
       (define-key ac-completing-map (kbd "C-s") 'ac-isearch) 
       
       ;;(add-hook 'lisp-interaction-mode 'ac-emacs-lisp-mode-setup)
+
+      (setq ac-quick-help-prefer-pos-tip t)
+      (require 'pos-tip nil t)
       ))
 
 (define-key global-map (kbd "<f10> a c") 'auto-complete-mode)
