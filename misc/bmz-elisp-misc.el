@@ -37,11 +37,11 @@ Useful when writing autoload spec."
 				(and fn (symbol-name fn))))
      (list (if (equal val "")
 	       fn (intern val)))))
+  (require 'eldoc)
   (if (null function)
       (message "You didn't specify a function")
     (insert-string (format " \"%s\"\n  \"%s\" t)"
                            (replace-regexp-in-string ".elc?$" "" (file-name-nondirectory (symbol-file function 'defun)))
-			   (require 'eldoc)
                            (or (eldoc-docstring-first-line (documentation function t))
                                "Undocumented.")    ))))
 
