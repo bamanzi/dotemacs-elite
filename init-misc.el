@@ -78,19 +78,6 @@
 (global-set-key (kbd "<M-insert>") 'copy-from-above-command)
 
 
-;;*** back-button: Visual navigation through mark rings
-;;https://github.com/rolandwalker/back-button
-(idle-require 'back-button)
-(eval-after-load "back-button"
-  `(progn
-     (back-button-mode 1)
-     (define-key goto-map (kbd "<left>")    'back-button-local-backward)
-     (define-key goto-map (kbd "<right>")   'back-button-local-backward)
-     (define-key goto-map (kbd "<M-left>")  'back-button-global-backward)
-     (define-key goto-map (kbd "<M-right>") 'back-button-global-backward)
-     ))
-
-
 ;;*** copy/cut current line if nothing selected
 ;; http://ergoemacs.org/emacs/emacs_copy_cut_current_line.html
 (defadvice kill-ring-save (before slick-copy activate compile)
