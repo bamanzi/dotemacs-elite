@@ -598,7 +598,8 @@ It is an enhanced version of `anything-for-buffers'."
 (if (boundp 'prog-mode-hook)
     (add-hook 'prog-mode-hook 'indent-guide-mode))
 
-;;** viper
+;;** vi(m) emulation
+;;*** viper
 (global-set-key (kbd "<f6>") 'viper-mode)
 
 (setq viper-expert-level '3)
@@ -623,7 +624,7 @@ It is an enhanced version of `anything-for-buffers'."
 ;; stoem from http://www.advogato.org/person/chalst/diary/277.html
 ;;for ex commands supported by viper, refer `ex-token-alist'
 
-(autoload 'viper-ex "viper-ex" nil t)
+(autoload 'viper-ex "viper-ex" "Undocumented." t)
 
 (eval-after-load "viper-ex"
   `(ignore-errors
@@ -633,6 +634,13 @@ It is an enhanced version of `anything-for-buffers'."
      ))
 
 (define-key global-map (kbd "ESC ESC :") 'viper-ex)
+
+;;*** vim-region
+(autoload 'vim-region-mode "vim-region"
+  "Toggle Local-Vim-Region mode in every possible buffer." t)
+
+(define-key global-map (kbd "<M-f6>") 'vim-region-mode)
+(define-key global-map (kbd "M-RET") 'vim-region-mode)
 
 
 ;;** misc
