@@ -24,7 +24,7 @@
 (define-key key-translation-map (kbd "<left-fringe> <C-mouse-5>") (kbd "<left-fringe> <C-wheel-down>"))
 
 
-;;** emacs enviroment
+;;** emacs environment
 (global-set-key (kbd "ESC ESC e r") 'eval-region)
 (global-set-key (kbd "ESC ESC e b") 'eval-buffer)
 (global-set-key (kbd "ESC ESC l l") 'load-library)
@@ -119,6 +119,21 @@
 
 (idle-require 'uniquify)
 (setq uniquify-buffer-name-style 'post-forward-angle-brackets)
+
+;;*** backups
+(setq make-backup-files t) ;;to disable backup, set it to nil
+(setq backup-directory-alist '(("." . "~/.emacs.d/backups")))
+
+(setq backup-by-copying t
+      backup-by-copying-when-linked nil)
+
+(when nil
+ (setq version-control t
+       delete-old-versions t
+       kept-new-versions 6
+       kept-old-versions 2)
+ )
+
 
 ;;*** desktop
 (require 'desktop)
