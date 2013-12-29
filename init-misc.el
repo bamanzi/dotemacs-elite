@@ -77,6 +77,15 @@
 
 (global-set-key (kbd "<M-insert>") 'copy-from-above-command)
 
+;;*** copy buffer filename
+(defun copy-buffer-file-name ()
+  (interactive)
+  (kill-new
+   (if current-prefix-arg
+       (file-name-nondirectory (buffer-file-name))
+     (buffer-file-name))))
+
+(define-key global-map (kbd "C-c c %") 'copy-buffer-file-name)
 
 ;;*** copy/cut current line if nothing selected
 ;; http://ergoemacs.org/emacs/emacs_copy_cut_current_line.html
@@ -602,8 +611,8 @@ It is an enhanced version of `anything-for-buffers'."
 ;;*** viper
 (global-set-key (kbd "<f6>") 'viper-mode)
 
-(setq viper-expert-level '3)
-(setq viper-inhibit-startup-message 't)
+(setq viper-expert-level 3)
+(setq viper-inhibit-startup-message t)
 
 (eval-after-load "viper"
   `(progn
