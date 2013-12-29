@@ -155,7 +155,6 @@
 ;; (midnight-delay-set 'midnight-delay "12:40")
 
 
-
 ;;** windows
 (setq split-width-threshold 120
       split-height-threshold 60)
@@ -435,6 +434,9 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
 ;;** code folding
 
 ;;***  hideshow
+(autoload 'hideshowvis-enable "hideshowvis"
+  "Will enable hideshowvis minor mode" t)
+
 (eval-after-load "hideshow"
   `(progn
      (or (require 'hideshow-fringe nil t)
@@ -447,7 +449,7 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
 
 (define-key global-map (kbd "<f10> h s") 'hs-minor-mode)
 
-(defun bmz/turn-on-hideshow ()
+(defun turn-on-hideshow/bmz ()
   (interactive)
   (if (require 'hideshowvis nil t)
       (progn
@@ -495,13 +497,13 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
      (global-set-key (kbd "<C-wheel-down>") 'outline-next-visible-heading)
      
      ;;for folding, `outline-minor-mode' must be turnned on
-     (global-set-key (kbd "M-+")            'outline-toggle-children)
      (define-key outline-mode-prefix-map (kbd "<left>")  'hide-subtree)
      (define-key outline-mode-prefix-map (kbd "<right>") 'show-subtree)
 
-     (global-set-key (kbd "<C-mouse-1>")    'outline-toggle-children)
-     (global-set-key (kbd "<C-mouse-3>")    'show-subtree)
-     (global-set-key (kbd "<C-mouse-2>")    'show-all)
+     (define-key outline-minor-mode-map  (kbd "M-+")     'outline-toggle-children)
+     (define-key outline-minor-mode-map (kbd "<C-mouse-1>")    'outline-toggle-children)
+     (define-key outline-minor-mode-map (kbd "<C-mouse-3>")    'show-subtree)
+     (define-key outline-minor-mode-map (kbd "<C-mouse-2>")    'show-all)
   ))
 
 (define-key global-map (kbd "<f10> o l") 'outline-minor-mode)
