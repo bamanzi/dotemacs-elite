@@ -429,6 +429,23 @@ It is an enhanced version of `anything-for-buffers'."
                                       (interactive)
                                       (find-file org-default-notes-file)))
 
+;;***
+(defun org-archive-subtree-to-file (file)
+  "Move the current subtree to the archive.
+
+Different with `org-archive-subtree', this would ask for target file each time."
+  (interactive (list
+    (read-file-name "Archive to file:"
+                    (file-name-directory org-archive-location)
+                    (file-name-nondirectory org-archive-location))))
+  (set (make-variable-buffer-local 'org-archive-location) (concat file "::"))
+  (unless (string= (org-get-local-archive-location) (concat file "::"))
+    (message (org-get-local-archive-location))
+    (message (concat file "::"))
+    (error "Can't set `org-archive-location' properly. Maybe you have `#+ARCHIVE:' in header?"))
+  (call-interactively 'org-archive-subtree))
+
+;;(define-key org-mode-map (kbd "C-c C-x C-a") 'org-archive-subtree-to-file)
 
 ;;** markdown
 (autoload 'markdown-mode  "markdown-mode"
