@@ -527,7 +527,7 @@ Different with `org-archive-subtree', this would ask for target file each time."
   (require 'sdcv)
   (call-interactively 'sdcv-search-pointer+))
 
-(global-set-key (kbd "<C-down-mouse-1>") 'sdcv-search-word-at-pt-mouse)
+;;(global-set-key (kbd "<C-down-mouse-1>") 'sdcv-search-word-at-pt-mouse)
 
 
 ;;*** dict protocol
@@ -683,13 +683,20 @@ Different with `org-archive-subtree', this would ask for target file each time."
      (defvar Info-up-link-keymap   (make-sparse-keymap))
      (defvar Info-down-link-keymap   (make-sparse-keymap))))
 
-(global-unset-key (kbd "<f10>"))
+;;--
+;;(global-unset-key (kbd "<f10>"))
 (global-set-key (kbd "<f10> ws") 'whitespace-mode)
 
+;;--
 (global-set-key (kbd "<C-f4>") 'kill-buffer)
 
+;;--
 (add-hook 'emacs-lisp-mode-hook #'(lambda ()
                                     (add-hook 'before-save-hook 'check-parens nil 'local)))
 
-(define-key global-map (kbd "<C-M-mouse-1>") nil)
-(define-key global-map (kbd "<C-M-down-mouse-1>") 'ffap-at-mouse)
+;--
+(global-set-key (kbd "<C-down-mouse-1>") nil)
+(global-set-key (kbd "<C-mouse-1>") 'ffap-at-mouse)
+;; in case `outline-minor-mode' turned on
+(define-key global-map (kbd "<C-M-down-mouse-1>") nil)
+(define-key global-map (kbd "<C-M-mouse-1>") 'ffap-at-mouse)
