@@ -673,3 +673,6 @@ It is an enhanced version of `anything-for-buffers'."
 
 (add-hook 'emacs-lisp-mode-hook #'(lambda ()
                                     (add-hook 'before-save-hook 'check-parens nil 'local)))
+
+(define-key global-map (kbd "<C-M-mouse-1>") nil)
+(define-key global-map (kbd "<C-M-down-mouse-1>") 'ffap-at-mouse)
