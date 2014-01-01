@@ -40,3 +40,4 @@ For Ruby & Rails development, refer to [dotemacs-rails](http://bitbucket.org/bam
 
 - [eim](https://github.com/wenbinye/emacs-eim) (input methods for Chinese, 支持联想、词频调整)
 - [realgud](https://github.com/rocky/emacs-dbgr/) (Emacs front-end for gdb, pdb/pydb/pydbgr, rdebugger, perldb, bashdb...)
+- [w3m](http://w3m.sourceforge.net/index.en.html) and [emacs-w3m](http://emacs-w3m.namazu.org/)

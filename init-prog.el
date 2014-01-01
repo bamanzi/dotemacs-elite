@@ -109,6 +109,7 @@
 ;;** tags
 ;;*** etags
 (global-set-key (kbd "<f5> .") 'anything-c-etags-select)
+(global-set-key (kbd "C-c . <f5>") 'anything-c-etags-select)
 
 (defun anything-goto-etag ()
   "Show etags list, using current symbol as input to narrow the choices."
@@ -123,6 +124,7 @@
          )))
 
 (define-key goto-map "." 'anything-goto-etag)
+(global-set-key (kbd "C-c . M-g") 'anything-goto-etag)
 
 (autoload 'find-file-in-tags "find-file-in-tags"
   "find file in TAGS file.")
@@ -153,7 +155,7 @@
 (autoload 'tv-view-history "tags-view"
   "Open a buffer listing locations on the tag stack." t)
 
-(global-set-key (kbd "<f5> SPC .") 'tv-view-history)
+(global-set-key (kbd "C-c . M-h") 'tv-view-history)
 
 ;; etags-stack.el works too, but it's a stack (you can't go forward once backward)
 ;; anything-etags+ also works. but it requires you bind M-. to its `anything-etags+-select`
@@ -169,6 +171,7 @@
 
 (global-set-key (kbd "C-c <f9>") 'compilation-shell-minor-mode)
 (global-set-key (kbd "M-g <f9>") 'compile-goto-error)
+
 
 ;;** flymake
 (setq flymake-log-level 2)  ;; -1 = NONE, 0 = ERROR, 1 = WARNING, 2 = INFO, 3 = DEBUG
@@ -216,11 +219,13 @@ found in DIRECTORY or any of its ancestors."
 
 
 ;;** projectile
+(autoload 'projectile-global-mode "projectile"
+  "Toggle Projectile mode in every possible buffer." t)
+(global-set-key (kbd "<M-f12>") 'projectile-global-mode)
+
 (setq projectile-keymap-prefix (kbd "<M-f12>"))
 
 (idle-require 'projectile-ext)
-(autoload 'projectile-global-mode "projectile"
-  "Toggle Projectile mode in every possible buffer." t)
 
 (eval-after-load "projectile"
   `(progn
