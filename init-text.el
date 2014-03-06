@@ -113,3 +113,17 @@ If called with C-u prefix, it would archive to file \"%s_archive::\". "
  (add-hook 'markdown-mode-hook
            (lambda ()
              (setq imenu-generic-expression markdown-imenu-generic-expression)))
+
+;;* asciidoc
+(autoload 'doc-mode "doc-mode" nil t)
+(add-to-list 'auto-mode-alist '("\\.adoc$" . doc-mode))
+
+(eval-after-load "doc-mode"
+ `(progn
+    (add-hook 'doc-mode-hook
+	  '(lambda ()
+	     (turn-on-auto-fill)
+	     (require 'asciidoc)))
+    ))
+
+
