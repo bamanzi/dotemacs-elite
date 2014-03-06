@@ -433,11 +433,15 @@ It is an enhanced version of `anything-for-buffers'."
 (defun org-archive-subtree-to-file (file)
   "Move the current subtree to the archive.
 
-Different with `org-archive-subtree', this would ask for target file each time."
+Different with `org-archive-subtree', this would ask for target file each time.
+If called with C-u prefix, it would archive to file \"%s_archive::\". "
   (interactive (list
-    (read-file-name "Archive to file:"
-                    (file-name-directory org-archive-location)
-                    (file-name-nondirectory org-archive-location))))
+                (if current-prefix-arg
+                    (concat (buffer-file-name) "_archive")
+                  (read-file-name "Archive to file:"
+                                  (file-name-directory org-archive-location)
+                                  (file-name-nondirectory org-archive-location)))))
+  (require 'org-archive)
   (set (make-variable-buffer-local 'org-archive-location) (concat file "::"))
   (unless (string= (org-get-local-archive-location) (concat file "::"))
     (message (org-get-local-archive-location))
@@ -445,7 +449,8 @@ Different with `org-archive-subtree', this would ask for target file each time."
     (error "Can't set `org-archive-location' properly. Maybe you have `#+ARCHIVE:' in header?"))
   (call-interactively 'org-archive-subtree))
 
-;;(define-key org-mode-map (kbd "C-c C-x C-a") 'org-archive-subtree-to-file)
+(define-key org-mode-map (kbd "C-c C-x C-a") 'org-archive-subtree-to-file)
+
 
 ;;** markdown
 (autoload 'markdown-mode  "markdown-mode"
