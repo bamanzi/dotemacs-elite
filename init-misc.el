@@ -499,22 +499,29 @@ It is an enhanced version of `anything-for-buffers'."
 (global-set-key (kbd "<f10> hi") 'highlight-indentation-mode)
 
 
-(autoload 'indent-guide-mode "indent-guide"
-  "show vertical lines to guide indentation." t)
+;;`indent-guide-mode' only show guides on current section.
+;; but it would actually insert a char (`indent-guide-char'),
+;; thus it might not be suitable for terminal (if you use external copy (mouse or tmux))
+(autoload 'indent-guide-mode  "indent-guide"
+  "Show vertical lines to guide indentation." t)
 
 (global-set-key (kbd "<f10> ig") 'indent-guide-mode)
+
 
 ;; `indent-guide-mode' actually use a char as the guide line,
 ;; thus if you use term's copy method (such as putty's or tmux's),
 ;; maybe `highlight-indentation-mode' is better.
-(global-set-key (kbd "<f10> |") #'(lambda ()
-                                    (interactive)
-                                    (if (display-graphic-p)
-                                        (indent-guide-mode)
-                                      (highlight-indentation-mode))))
+(defun turn-on-highlight-indent ()
+  (interactive)
+  (if (display-graphic-p)
+      (indent-guide-mode)
+    (highlight-indentation-mode)))
+  
+(global-set-key (kbd "<f10> |") 'turn-on-highlight-indent)
 
 (if (boundp 'prog-mode-hook)
-    (add-hook 'prog-mode-hook 'indent-guide-mode))
+    (add-hook 'prog-mode-hook 'turn-on-highlight-indent))
+
 
 ;;** vi(m) emulation
 ;;*** viper
