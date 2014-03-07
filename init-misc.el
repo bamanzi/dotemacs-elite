@@ -1,4 +1,4 @@
-;;** files
+;; ** files
 
 (defun ido-find-file-at-point ()
   (interactive)
@@ -18,7 +18,7 @@
       (goto-char pt))))
 
 
-;;*** dired-single
+;; *** dired-single
 (autoload 'dired-single-buffer "dired-single"
 "Visits the selected directory in the current buffer, replacing the" t)
 
@@ -36,7 +36,7 @@
         (lambda nil (interactive) (dired-single-buffer ".."))))
      )) 
 
-;;*** nc.el: norton commander clone
+;; *** nc.el: norton commander clone
 (autoload 'nc "nc" "Major mode for File Browser in GNU emacs." t)
 
 (eval-after-load "nc"
@@ -61,7 +61,7 @@
   (with-current-buffer nc-active-nc-buffer
     (nc-display-new-dir dir)))
 
-;;*** nav
+;; *** nav
 (autoload 'nav "nav"
   "Opens Nav in a new window to the left of the current one." t)
 
@@ -69,7 +69,7 @@
   "Toggles the nav panel." t)
 
 
-;;** mark, copy & yank
+;; ** mark, copy & yank
 (idle-require 'mark-copy-something)
 
 (autoload 'copy-from-above-command "misc"
@@ -77,7 +77,7 @@
 
 (global-set-key (kbd "<M-insert>") 'copy-from-above-command)
 
-;;*** copy buffer filename
+;; *** copy buffer filename
 (defun copy-buffer-file-name ()
   (interactive)
   (kill-new
@@ -87,7 +87,7 @@
 
 (define-key global-map (kbd "C-c c %") 'copy-buffer-file-name)
 
-;;*** copy/cut current line if nothing selected
+;; *** copy/cut current line if nothing selected
 ;; http://ergoemacs.org/emacs/emacs_copy_cut_current_line.html
 (defadvice kill-ring-save (before slick-copy activate compile)
   "When called interactively with no active region, copy the current line."
@@ -106,7 +106,7 @@
      (progn
        (list (line-beginning-position) (line-beginning-position 2)) ) ) ))
 
-;;*** copy/paste rectangle
+;; *** copy/paste rectangle
 ;;stolen from http://ergoemacs.org/emacs/emacs_string-rectangle_ascii-art.html
 (unless (functionp 'copy-rectangle-as-kill)  ;; emacs-24 has this
   (defun copy-rectangle-to-clipboard (p1 p2)
@@ -125,8 +125,8 @@ See also: `kill-rectangle', `copy-to-register'."
   (define-key global-map (kbd "C-x r M-w") 'copy-rectangle-to-clipboard))
 
 
-;;** minibuffer
-;;*** easily insert buffer name (useful for `shell-command', `compile' etc)
+;; ** minibuffer
+;; *** easily insert buffer name (useful for `shell-command', `compile' etc)
 (defun minibuffer-insert-buffer-filename (arg)
   (interactive "P")
   (let ((target-buffer (window-buffer (minibuffer-selected-window))))
@@ -139,7 +139,7 @@ See also: `kill-rectangle', `copy-to-register'."
 
 (define-key minibuffer-local-map (kbd "<M-insert> %") 'minibuffer-insert-buffer-filename)
 
-;;*** insert current symbol to minibuffer
+;; *** insert current symbol to minibuffer
 (defun minibuffer-insert-current-symbol (arg)
   (interactive "P")
   (let ((target-buffer (window-buffer (minibuffer-selected-window))))
@@ -154,7 +154,7 @@ See also: `kill-rectangle', `copy-to-register'."
 (define-key minibuffer-local-map (kbd "<M-insert> M-s") 'minibuffer-insert-current-symbol)
 
 
-;;** multi-occur extensions
+;; ** multi-occur extensions
 (defun moccur-all-buffers (regexp)
   (interactive "MRegexp: ")
   (multi-occur (buffer-list) regexp))
@@ -187,7 +187,7 @@ See also: `kill-rectangle', `copy-to-register'."
 (define-key search-map (kbd "M-o") 'moccur-in-same-mode)
 
 
-;;** grin & ack: better grep replacement for source code project
+;; ** grin & ack: better grep replacement for source code project
 (defun grep-on-dir (dir)
   (interactive "DGrep on dir: ")
   (require 'grep)
@@ -230,7 +230,7 @@ See also: `kill-rectangle', `copy-to-register'."
 
 
 
-;;** tabbar
+;; ** tabbar
 (defun tabbar-buffer-groups/bmz ()
   "Return the list of group names the current buffer belongs to.
  Return a list of one element based on major mode."
@@ -302,7 +302,7 @@ That is, a string used to represent it on the tab bar."
 
 (idle-require 'tabbar)
 
-;;*** ido-jump-to-tab
+;; *** ido-jump-to-tab
 (defun ido-jump-to-tab ()
   "Jump to a buffer in current tabbar group."
   (interactive)
@@ -322,7 +322,7 @@ That is, a string used to represent it on the tab bar."
 
 (define-key global-map (kbd "C-x B") 'ido-jump-to-tab)
 
-;;*** anything-jump-to-tab
+;; *** anything-jump-to-tab
 (defun anything-c-tab-list ()
   "Return a list of buffer names of current tabbar group. "
   (unless (and (featurep 'tabbar)
@@ -354,7 +354,7 @@ It is an enhanced version of `anything-for-buffers'."
 (define-key global-map (kbd "<f11> TAB") 'anything-tab-list)
 
 
-;;** color-theme
+;; ** color-theme
 (idle-require 'color-theme)
 
 (if (string< emacs-version "24")
@@ -381,8 +381,8 @@ It is an enhanced version of `anything-for-buffers'."
 
 
 
-;;** languages tools
-;;*** spell
+;; ** languages tools
+;; *** spell
 (define-key global-map (kbd "ESC M-$") 'ispell-complete-word)
 
 (defun ac-ispell-get-candidates ()
@@ -402,7 +402,7 @@ It is an enhanced version of `anything-for-buffers'."
 
 (define-key global-map (kbd "C-. $") 'ac-complete-ispell-word)
 
-;;*** sdcv
+;; *** sdcv
 (autoload 'sdcv-search-input "sdcv"
   "Search WORD through the `command-line' tool sdcv." t)
 (define-key search-map "D"  'sdcv-search-input)
@@ -422,7 +422,7 @@ It is an enhanced version of `anything-for-buffers'."
 ;;(global-set-key (kbd "<C-down-mouse-1>") 'sdcv-search-word-at-pt-mouse)
 
 
-;;*** dict protocol
+;; *** dict protocol
 (setq dictem-server "localhost")
 (autoload 'dictem-run-search  "dictem" nil t)
 (autoload 'dictem-run-match   "dictem" nil t)
@@ -439,7 +439,7 @@ It is an enhanced version of `anything-for-buffers'."
      (dictem-initialize)
      ))
 
-;;*** google-translate
+;; *** google-translate
 (autoload 'google-translate-at-point "google-translate"
   "Translate the word at point or the words in the active region." t)
 (autoload 'google-translate-query-translate "google-translate"
@@ -456,7 +456,7 @@ It is an enhanced version of `anything-for-buffers'."
 (define-key search-map " G" 'google-translate-query-translate)
 
 
-;;** windows
+;; ** windows
 (autoload 'window-toggle-split-direction "bmz-window-misc"
   "Switch window split from horizontally to vertically, or vice versa." t)
 
@@ -465,11 +465,11 @@ It is an enhanced version of `anything-for-buffers'."
 
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
 
-;;*** perspectives
+;; *** perspectives
 (autoload 'persp-mode  "persp-mode"
   "Toggle perspective mode." t)
 
-;;** speedbar
+;; ** speedbar
 (autoload 'sr-speedbar-toggle "sr-speedbar"
   "Toggle sr-speedbar window." t)
 
@@ -488,7 +488,7 @@ It is an enhanced version of `anything-for-buffers'."
      ))
 
 
-;;** indent guides
+;; ** indent guides
 ;;show guides for each indentation level
 (autoload 'highlight-indentation-mode "highlight-indentation"
   "Highlight indentation minor mode highlights indentation based" t)
@@ -523,8 +523,8 @@ It is an enhanced version of `anything-for-buffers'."
     (add-hook 'prog-mode-hook 'turn-on-highlight-indent))
 
 
-;;** vi(m) emulation
-;;*** viper
+;; ** vi(m) emulation
+;; *** viper
 (global-set-key (kbd "<f6>") 'viper-mode)
 
 (setq viper-expert-level 3)
@@ -545,7 +545,7 @@ It is an enhanced version of `anything-for-buffers'."
      ))
 
 
-;;*** Ex commands without entering viper-mode
+;; *** Ex commands without entering viper-mode
 ;; stoem from http://www.advogato.org/person/chalst/diary/277.html
 ;;for ex commands supported by viper, refer `ex-token-alist'
 
@@ -560,7 +560,7 @@ It is an enhanced version of `anything-for-buffers'."
 
 (define-key global-map (kbd "ESC ESC :") 'viper-ex)
 
-;;*** vim-region
+;; *** vim-region
 (autoload 'vim-region-mode "vim-region"
   "Toggle Local-Vim-Region mode in every possible buffer." t)
 
@@ -568,7 +568,7 @@ It is an enhanced version of `anything-for-buffers'."
 (define-key global-map (kbd "M-RET") 'vim-region-mode)
 
 
-;;** misc
+;; ** misc
 
 ;;info+.el: more colors (and other enhancements) 
 (eval-after-load "info"

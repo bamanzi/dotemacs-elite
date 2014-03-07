@@ -5,11 +5,11 @@
 
 (server-start)
 
-;;** key bindings
+;; ** key bindings
 
-;;***  key modifiers
+;; ***  key modifiers
 
-;;***  <f1> .. <f12> as prefix key
+;; ***  <f1> .. <f12> as prefix key
 (global-unset-key (kbd "<f10>"))
 (global-set-key (kbd "<f10> <f10>") 'menu-bar-open)
 
@@ -17,20 +17,20 @@
 (global-unset-key (kbd "<f11>"))
 (global-unset-key (kbd "<f12>"))
 
-;;*** misc
+;; *** misc
 (define-key key-translation-map (kbd "<left-fringe> <mouse-4>")   (kbd "<left-fringe> <wheel-up>"))
 (define-key key-translation-map (kbd "<left-fringe> <mouse-5>")   (kbd "<left-fringe> <wheel-down>"))
 (define-key key-translation-map (kbd "<left-fringe> <C-mouse-4>") (kbd "<left-fringe> <C-wheel-up>"))
 (define-key key-translation-map (kbd "<left-fringe> <C-mouse-5>") (kbd "<left-fringe> <C-wheel-down>"))
 
 
-;;** emacs environment
+;; ** emacs environment
 (global-set-key (kbd "ESC ESC e r") 'eval-region)
 (global-set-key (kbd "ESC ESC e b") 'eval-buffer)
 (global-set-key (kbd "ESC ESC l l") 'load-library)
 (global-set-key (kbd "ESC ESC f l") 'find-library)
 
-;;*** help
+;; *** help
 (define-key help-map "F" 'describe-face)
 (define-key help-map "i" nil)
 (define-key help-map "ii" 'info)
@@ -62,7 +62,7 @@
                                  (define-key Info-mode-map (kbd "<mouse-5>") nil)
                                  )))
 
-;;** gui options
+;; ** gui options
 
 (if (fboundp 'tool-bar-mode)
     (tool-bar-mode -1))
@@ -79,7 +79,7 @@
 (global-set-key (kbd "<C-M-wheel-down>") 'text-scale-decrease)
 
 
-;;*** maximize frame
+;; *** maximize frame
 (defun maximize-frame (&optional frame)
   (interactive)
   (cond
@@ -103,7 +103,7 @@
 (run-with-idle-timer 2 nil 'maximize-frame)
 
 
-;;** files & buffers
+;; ** files & buffers
 (define-key search-map (kbd "C-f") 'ffap)
 
 (global-set-key (kbd "C-x C-b") 'electric-buffer-list)
@@ -120,7 +120,7 @@
 (idle-require 'uniquify)
 (setq uniquify-buffer-name-style 'post-forward-angle-brackets)
 
-;;*** backups
+;; *** backups
 (setq make-backup-files t) ;;to disable backup, set it to nil
 (setq backup-directory-alist '(("." . "~/.emacs.d/backups")))
 
@@ -135,7 +135,7 @@
  )
 
 
-;;*** desktop
+;; *** desktop
 (require 'desktop)
 (setq desktop-restore-eager 5)
 (desktop-save-mode t)
@@ -144,31 +144,31 @@
 (global-set-key (kbd "<f12> C-s") 'desktop-save)
 
 
-;;***  recentf
+;; ***  recentf
 (require 'recentf)
 (setq recentf-max-saved-items 100)
 (setq recentf-menu-path '("File"))
 (recentf-mode t)
 
-;;*** midnight-mode
+;; *** midnight-mode
 (require 'midnight)
 ;; (midnight-delay-set 'midnight-delay "12:40")
 
 
-;;** windows
+;; ** windows
 (setq split-width-threshold 120
       split-height-threshold 60)
 
 (global-set-key (kbd "<f11> 1 v") 'delete-other-windows-vertically)
 (global-set-key (kbd "<f11> 1 h") 'delete-other-windows-horizontally)
 
-;;***  winner-mode
+;; ***  winner-mode
 (setq winner-dont-bind-my-keys t)
 (winner-mode t)
 (global-set-key (kbd "<f11> C-z") 'winner-undo)
 (global-set-key (kbd "<f11> C-y") 'winner-redo)
 
-;;*** windmove
+;; *** windmove
 (idle-require 'windmove)
 (progn
   (global-set-key (kbd "<f11> <up>")    'windmove-up)
@@ -177,7 +177,7 @@
   (global-set-key (kbd "<f11> <right>") 'windmove-right)
   )
 
-;;*** dedicated window
+;; *** dedicated window
 (defun toggle-window-dedicated (win)
   (interactive (list (selected-window)))
   (set-window-dedicated-p win (not (window-dedicated-p win)))
@@ -185,12 +185,12 @@
 
 (global-set-key (kbd "<f11> *") 'toggle-window-dedicated)
   
-;;*** windresize
+;; *** windresize
 (autoload 'windresize "windresize" "Resize windows interactively." t)
 (setq windresize-default-increment 4)
 (global-set-key (kbd "<f11> RET") 'windresize)
 
-;;*** enlarge current window
+;; *** enlarge current window
 ;;(I don't use `golden-ratio-enable')
 (autoload 'golden-ratio "golden-ratio"
   "Resizes current window to the golden-ratio's size specs" t)
@@ -225,9 +225,9 @@
      ))
 
 
-;;** editing
+;; ** editing
 
-;;***  CUA
+;; ***  CUA
 
 (transient-mark-mode t)
 (setq shift-select-mode t)
@@ -247,18 +247,18 @@
 
 (setq mouse-yank-at-point t) ;;rather than the click point
 
-;;***  tab key & indent
+;; ***  tab key & indent
 (setq tab-always-indent t)
 
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
 
-;;***  parens
+;; ***  parens
 (setq show-paren-style 'mixed)
 (setq show-paren-mode t)
 (show-paren-mode t)
 
-;;***  newline & line-wrap
+;; ***  newline & line-wrap
 (setq require-final-newline 't)
 (setq-default truncate-lines t)
 (setq-default fill-column 100)
@@ -269,7 +269,7 @@
 (global-set-key (kbd "RET") 'newline-and-indent)
 (global-set-key (kbd "C-j") 'newline)
 
-;;***  changes
+;; ***  changes
 (require 'undo-tree nil 'noerror)
 (eval-after-load "undo-tree"
   `(progn
@@ -286,7 +286,7 @@
 (setq diff-switches "-u")    ;;I prefer the unified format
 (global-set-key (kbd "C-c d") 'diff-buffer-with-file)
 
-;;***  quickly swap lines
+;; ***  quickly swap lines
 (autoload 'drag-stuff-up "drag-stuff"
   "Drag stuff ARG lines up." t)
 (autoload 'drag-stuff-down "drag-stuff"
@@ -301,23 +301,23 @@
 (idle-require 'drag-stuff)
 
 
-;;***  misc
+;; ***  misc
 
 (global-set-key (kbd "C-=") 'align-regexp)
 
 (global-set-key (kbd "C-c ;") 'comment-or-uncomment-region)
 
 
-;;** minibuffer
+;; ** minibuffer
 
-;;***  icomplete
+;; ***  icomplete
 (icomplete-mode t)  ;; completion for minibuffer
                                         ; commands (M-x)
                                         ; variables (C-h v, customize-variable)
                                         ; functions (C-h f)
                                         ; customize-group
 
-;;***  ido
+;; ***  ido
 (require 'ido)
 
 (setq ido-everywhere t)
@@ -328,7 +328,7 @@
 (setq ido-auto-merge-work-directories-length -1)
 (ido-mode 'buffers)
 
-;;***  anything
+;; ***  anything
 (autoload 'anything-recentf "anything-config"
   "Preconfigured `anything' for `recentf'." t)
 
@@ -364,11 +364,11 @@
 (idle-require 'anything-config)
 
 
-;;*** misc
+;; *** misc
 
 
-;;** completion
-;;*** emacs built-in
+;; ** completion
+;; *** emacs built-in
 (if (string< "23.1.99" emacs-version) ;; emacs >= 23.2
    (setq tab-always-indent 'complete))
 
@@ -378,7 +378,7 @@
 
 (global-set-key (kbd "M-/") 'hippie-expand)
 
-;;***  auto-compelte
+;; ***  auto-compelte
 (eval-after-load "auto-complete-config"    
   `(progn
       (ac-config-default)
@@ -431,9 +431,9 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
   )
 
 
-;;** code folding
+;; ** code folding
 
-;;***  hideshow
+;; ***  hideshow
 (autoload 'hideshowvis-enable "hideshowvis"
   "Will enable hideshowvis minor mode" t)
 
@@ -480,7 +480,7 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
   (call-interactively 'hs-hide-level))
 
 
-;;***  outline
+;; ***  outline
 (idle-require 'outline)
 (global-unset-key (kbd "C-z"))
 (global-set-key (kbd "<C-up>")   'outline-previous-visible-heading)
@@ -514,7 +514,7 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
 (define-key global-map (kbd "<f10> q o") 'qtmstr-outline-mode)
 
 
-;;***  highlight-symbol
+;; ***  highlight-symbol
 (autoload 'highlight-symbol-at-point "highlight-symbol"
   "Toggle highlighting of the symbol at point." t)
 (idle-require 'highlight-symbol)
@@ -530,14 +530,14 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
 
 (define-key search-map "O" 'highlight-symbol-occur)
 
-;;*** idle-highlight
+;; *** idle-highlight
 (autoload 'idle-highlight "idle-highlight"
   "highlight the word the point is on" t)
 
 
 (define-key global-map (kbd "<f10> i h") 'idle-highlight)
 
-;;*** iedit
+;; *** iedit
 (autoload 'iedit-mode "iedit"
   "Edit multiple regions in the same way simultaneously." t)
 (autoload 'iedit-mode-on-function "iedit"
@@ -547,9 +547,9 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
 (global-set-key (kbd "C-c ;") 'iedit-mode-on-function)  ;;for terminal
 
 
-;;** some visual effect
+;; ** some visual effect
 
-;;***  bm
+;; ***  bm
 (idle-require 'bm)
 
 (autoload 'bm-toggle "bm" "Toggle bookmark at point." t)
@@ -571,13 +571,13 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
   )
 
 
-;;*** highlight url
+;; *** highlight url
 (add-hook 'find-file-hook 'goto-address-mode) ;;this one is better
 (define-key goto-map "u" 'goto-address)
 
 (global-set-key (kbd "M-s RET") 'browse-url)
 
-;;**** this supports more link types
+;; **** this supports more link types
 ;; http://orgmode.org/manual/External-links.html
 ;; file:/etc/fstab
 ;; file:/user@machine:/home/user/.bashrc
@@ -595,7 +595,7 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
 
 (global-set-key (kbd "C-c C-o") 'org-open-at-point-global)
 
-;;*** other highlighting
+;; *** other highlighting
 ;; highlight todo
 (defun highlight-todo/bmz ()
   (interactive)
@@ -612,18 +612,18 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
   (interactive)
   (highlight-lines-matching-regexp "^;;; \\w" 'hi-black-hb)
   ;; highlight headers in this file
-  (highlight-lines-matching-regexp "^;;\\* "    'org-level-1)
-  (highlight-lines-matching-regexp "^;;\\*\\* " 'org-level-2)
-  (highlight-lines-matching-regexp "^;;\\*\\*\\* " 'org-level-3)
-  (highlight-lines-matching-regexp "^;;\\*\\*\\*\\* " 'org-level-4))
+  (highlight-lines-matching-regexp "^;; \\* "          'org-level-1)
+  (highlight-lines-matching-regexp "^;; \\*\\* "       'org-level-2)
+  (highlight-lines-matching-regexp "^;; \\*\\*\\* "    'org-level-3)
+  (highlight-lines-matching-regexp "^;; \\*\\*\\*\\* " 'org-level-4))
   
 
 (eval-after-load "lisp-mode"
   `(add-hook 'emacs-lisp-mode-hook 'highlight-outline-header/bmz))
 
 
-;;** buffer navigations
-;;*** mark
+;; ** buffer navigations
+;; *** mark
 (global-set-key (kbd "M-`")   'set-mark)
 ;;(global-set-key (kbd "M-`") 'exchange-point-and-mark)
 ;;(global-set-key (kbd "ESC M-`")   'pop-mark)
@@ -633,8 +633,8 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
 (global-set-key (kbd "ESC M-`") 'pop-to-mark-command)
 
 
-;;** major modes
-;;*** emacs lisp mode
+;; ** major modes
+;; *** emacs lisp mode
 (eval-after-load "lisp-mode"
   `(progn     
      (define-key goto-map (kbd "f") 'find-function-at-point)
@@ -651,7 +651,7 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
 (defalias 'fdap 'find-function-at-point)
 (defalias 'fvap 'find-variable-at-point)
 
-;;** utils
+;; ** utils
 (autoload 'ifas "bmz-elisp-misc"
   "Insert the first line of documentation of a function." t)
 
@@ -661,7 +661,7 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
 (global-set-key (kbd "M-X") 'load-and-execute)
 
 
-;;** misc
+;; ** misc
 (column-number-mode t)
 
 (global-set-key (kbd "C-x C-j") 'dired-jump)

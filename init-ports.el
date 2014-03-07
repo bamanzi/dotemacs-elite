@@ -1,5 +1,5 @@
 
-;;** menu bar
+;; ** menu bar
 (autoload 'lacarte-execute-menu-command "lacarte"
   "Execute a menu-bar menu command in an alternative way." t)
 
@@ -12,7 +12,7 @@
 (define-key global-map (kbd "<f5> <f10>") 'anything-lacarte)
 
 
-;;** x11 mouse
+;; ** x11 mouse
 (progn
   (define-key key-translation-map (kbd "<S-mouse-4>") (kbd "<S-wheel-up>"))
   (define-key key-translation-map (kbd "<S-mouse-5>") (kbd "<S-wheel-down>"))
@@ -24,7 +24,7 @@
   (define-key key-translation-map (kbd "<C-M-mouse-5>") (kbd "<C-M-wheel-down>"))
   )
 
-;;** xterm mouse
+;; ** xterm mouse
 (defun bmz/xterm-init-mouse (&optional frame)
   (if (not (display-graphic-p))
       (xterm-mouse-mode 1)))
@@ -32,7 +32,7 @@
 (add-hook 'after-make-frame-functions 'bmz/xterm-init-mouse)
 
 
-;;** xterm keys
+;; ** xterm keys
 (defun xterm-map-function-keys-csi ()
   "Map xterm control sequences for F1..F4 keys.
 
@@ -94,7 +94,7 @@ but not mapped by term/xterm.el"
 (add-hook 'after-make-frame-functions 'bmz/xterm-init-keys)
 
 
-;;** sudo
+;; ** sudo
 (autoload 'sudo-find-file "sudo"
   "Open a file, which may or may not be readable. If we can't" t)
 
@@ -105,7 +105,7 @@ but not mapped by term/xterm.el"
 (global-set-key (kbd "C-x M-s") 'sudo-unset-ro-or-save)
 
 
-;;** win32
+;; ** win32
 (when (memq system-type '(windows-nt ms-dos))
   ;;http://sourceforge.net/projects/ezwinports/files/
 
