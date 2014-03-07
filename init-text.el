@@ -57,6 +57,46 @@ If called with C-u prefix, it would archive to file \"%s_archive::\". "
 
 (define-key org-mode-map (kbd "C-c C-x C-a") 'org-archive-subtree-to-file)
 
+;;** export
+
+;;*** markdown
+(eval-after-load "org"
+  `(progn
+    (if (string< org-version "8")
+        ;; 1. based on org-export-generic (C-c C-e g M)
+        (if (and (featurep 'org-exp)   ;; already in org core since 6.36
+                 (or (require 'org-export-generic nil t) ;; contrib/lisp/org-export-generic.el since 6.36
+                     (load-file (concat dotemacs-elite-dir "text/org-contrib/org-export-generic.el")))
+                 (locate-library "ORGMODE-markdown"))
+            (if (load-library "ORGMODE-markdown")  ;;https://github.com/alexhenning/ORGMODE-Markdown
+                (message "Package `org-export-generic' loaded. now you can publish org-mode to `Markdown' with <C-c C-e g M>")
+              )
+
+          ;; 2. `org-md' provides `org-md-export-as-markdown' and `org-md-export-to-markdown'
+          ;; (only for org-mode 7.9.2 - 7.9.4)
+          (if (and (featurep 'org-element)
+                   (require 'org-export nil t) ;; contrib/lisp/org-export.el since 7.8
+                   (require 'org-e-html nil t)) ;; contrib/lisp/org-e-html since 7.9
+              (load-library "org-md")))  ;; contrib/lisp/org-md.el in 7.9.2 - 7.9.x
+
+      ;; 3. org 8.x can export to Markdown directly (no contrib needed)
+      (require 'ox-md nil t))  ;; expose Markdown to C-c C-e menu
+      ))
+
+
+;;*** asciidoc
+(eval-after-load "org"
+  `(progn
+    (if (string< org-version "8")
+        ;; 1. export `org-export-as-ascii' to C-c C-e a/n/u  or C-c C-e A/N/U
+        (if (require 'org-ascii nil t) ;;since org-6.33 core
+            (message "Package `org-ascii' loaded. now you can publish org-mode to `asciidoc' with <C-c C-e a> or <C-c C-e A>"))
+
+      ;; 2. org 8.x can export to ASCII directly
+      (if (require 'ox-ascii nil t)  ;; expose ASCIIdocto C-c C-e menu
+          (message "Package `ox-ascii' loaded. now you can publish org-mode to `asciidoc' with <C-c C-e t a> or <C-c C-e t A>"))
+      )))
+
 
 ;;** misc
 ;; make sure Org table line could align well when English & Chinese used together
