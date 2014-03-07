@@ -1,4 +1,4 @@
-;;** shell toggle
+;; ** shell toggle
 
 ;;(idle-require 'esh-toggle)
 ;;(idle-require 'sh-toggle)
@@ -19,7 +19,7 @@
 (global-set-key (kbd "<f12> S") 'shell-toggle)
 
 
-;;*** some eshell command
+;; *** some eshell command
 (defun eshell/edit (&rest args)
   "Invoke find-file' on the file.
 \"vi +42 foo\" also goes to line 42 in the buffer."
@@ -58,7 +58,7 @@ On Windows, baskslashes is substituted with slashes."
 (defalias 'eshell/cls 'eshell/clear)
 
 
-;;*** pcomplete for shell commands & args
+;; *** pcomplete for shell commands & args
 ;;stolen from http://linuxtoy.org/archives/emacs-eshell.html
 (eval-after-load "auto-complete"
   `(progn
@@ -81,13 +81,13 @@ On Windows, baskslashes is substituted with slashes."
 (define-key global-map (kbd "C-. p") 'ac-complete-pcomplete)
 
 
-;;** compilation-shell-minor-mode (also for grep/grin in shell)
+;; ** compilation-shell-minor-mode (also for grep/grin in shell)
 (global-set-key (kbd "C-c <f9>") 'compilation-shell-minor-mode)
 
 (global-set-key (kbd "M-g <f9>") 'compile-goto-error)
 
 
-;;** cursor keys
+;; ** cursor keys
 
 (defun comint-toggle-cursor-keybinding (arg)
   "Toggle up/down key between {previous,next}-line and {previous,next}-input."
@@ -114,14 +114,14 @@ On Windows, baskslashes is substituted with slashes."
         (define-key eshell-mode-map (kbd "<down>") 'next-line))))
           
 
-;;** autojump
+;; ** autojump
 (eval-after-load "eshell"
   '(require 'eshell-autojump nil t))
 ;;use command `j' to list your MRU path,
 ;;use command `j regexp' to jump to one
 
 
-;;** misc
+;; ** misc
 (defun eshell-maybe-bol ()
   (interactive)
   (let ((p (point)))
@@ -173,7 +173,7 @@ On Windows, baskslashes is substituted with slashes."
 
 (add-hook 'eshell-mode-hook 'bmz/eshell-mode-init)
 
-;;*** eshell prompt
+;; *** eshell prompt
 (setq eshell-prompt-function (lambda nil
                                (concat
                                 (propertize (eshell/pwd) 'face 'font-lock-keyword-face)

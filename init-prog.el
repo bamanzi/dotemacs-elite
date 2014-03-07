@@ -1,4 +1,4 @@
-;;* programming
+;; * programming
 
 (unless (fboundp 'prog-mode)
   (defvar prog-mode-map
@@ -45,7 +45,7 @@
   ;;     (add-hook 'prog-mode-hook 'qtmstr-outline-mode))
   )
 
-;;** automatically highlight current symbol
+;; ** automatically highlight current symbol
 (eval-after-load "idle-highlight"
   `(progn
      (if (fboundp 'idle-highlight)
@@ -56,7 +56,7 @@
 (idle-require 'idle-highlight)
 
 
-;;** which-func-mode
+;; ** which-func-mode
 
 (define-key global-map (kbd "<f10> w f") 'which-func-mode)
 
@@ -75,7 +75,7 @@
      ))
 
 
-;;**  imenu
+;; **  imenu
 (autoload 'anything-imenu "anything-config"
   "Preconfigured `anything' for `imenu'." t)
 (autoload 'anything-browse-code "anythong-config"
@@ -106,8 +106,8 @@
 
 (define-key goto-map "s" 'anything-goto-symbol)
 
-;;** tags
-;;*** etags
+;; ** tags
+;; *** etags
 (global-set-key (kbd "<f5> .") 'anything-c-etags-select)
 (global-set-key (kbd "C-c . <f5>") 'anything-c-etags-select)
 
@@ -130,7 +130,7 @@
   "find file in TAGS file.")
 
 
-;;*** ctags
+;; *** ctags
 ;;similar to 'taglist' plugin of vim, you don't need to create tags file by yourself to use `anything-c-source-ctags'
 (defun anything-ctags-current-file ()
   "Show ctags list of current file, using current symbol as input to narrow the choices."
@@ -150,7 +150,7 @@
 (global-set-key (kbd "<f5> t") 'anything-ctags-current-file)
 
 
-;;*** tags history
+;; *** tags history
 ;; tags-view works with etags.el & gtags.el
 (autoload 'tv-view-history "tags-view"
   "Open a buffer listing locations on the tag stack." t)
@@ -162,7 +162,7 @@
 
 
 
-;;**  compilation
+;; **  compilation
 (setq compilation-error-regexp-alist '(gnu java))
 (global-set-key (kbd "<C-f9>") 'compile)
 
@@ -173,7 +173,7 @@
 (global-set-key (kbd "M-g <f9>") 'compile-goto-error)
 
 
-;;** flymake
+;; ** flymake
 (setq flymake-log-level 2)  ;; -1 = NONE, 0 = ERROR, 1 = WARNING, 2 = INFO, 3 = DEBUG
 (setq flymake-start-syntax-check-on-newline nil) ;;only syntax check when open/save
 
@@ -183,7 +183,7 @@
 (define-key goto-map (kbd "M-n") 'flymake-goto-next-error)
 (define-key goto-map (kbd "M-p") 'flymake-goto-prev-error)
 
-;;*** flycheck
+;; *** flycheck
 (autoload 'flycheck-mode "flycheck"
   "Flymake reloaded with useful checkers. " t)
 
@@ -218,7 +218,7 @@ found in DIRECTORY or any of its ancestors."
      ))
 
 
-;;** projectile
+;; ** projectile
 (autoload 'projectile-global-mode "projectile"
   "Toggle Projectile mode in every possible buffer." t)
 (global-set-key (kbd "<M-f12>") 'projectile-global-mode)

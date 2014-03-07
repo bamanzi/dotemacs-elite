@@ -1,4 +1,4 @@
-;;* org-mdoe
+;; * org-mdoe
 
 (setq org-completion-use-ido t
       ;; org-hide-leading-stars t
@@ -35,7 +35,7 @@
      (set-face-attribute 'org-level-3 nil :height 1.2 :bold t)))
 
 
-;;** archive
+;; ** archive
 (defun org-archive-subtree-to-file (file)
   "Move the current subtree to the archive.
 
@@ -57,9 +57,9 @@ If called with C-u prefix, it would archive to file \"%s_archive::\". "
 
 (define-key org-mode-map (kbd "C-c C-x C-a") 'org-archive-subtree-to-file)
 
-;;** export
+;; ** export
 
-;;*** markdown
+;; *** markdown
 (eval-after-load "org"
   `(progn
     (if (string< org-version "8")
@@ -84,7 +84,7 @@ If called with C-u prefix, it would archive to file \"%s_archive::\". "
       ))
 
 
-;;*** asciidoc
+;; *** asciidoc
 (eval-after-load "org"
   `(progn
     (if (string< org-version "8")
@@ -98,7 +98,7 @@ If called with C-u prefix, it would archive to file \"%s_archive::\". "
       )))
 
 
-;;** misc
+;; ** misc
 ;; make sure Org table line could align well when English & Chinese used together
 (when nil
   (set-default-font "Dejavu Sans Mono 10")
@@ -114,7 +114,7 @@ If called with C-u prefix, it would archive to file \"%s_archive::\". "
 
 
 
-;;* markdown
+;; * markdown
 (autoload 'markdown-mode  "markdown-mode"
   "Major mode for editing Markdown files." t)
 (autoload 'gfm-mode "markdown-mode"
@@ -123,7 +123,7 @@ If called with C-u prefix, it would archive to file \"%s_archive::\". "
 (add-to-list 'auto-mode-alist '("\\.mk?d" . markdown-mode))
 (add-to-list 'auto-mode-alist '("\\.markdown" . markdown-mode))
 
-;;** faces
+;; ** faces
 (eval-after-load "markdown-mode"
   `(progn
      (set-face-attribute 'markdown-header-face-1 nil :inherit 'org-level-1)
@@ -136,7 +136,7 @@ If called with C-u prefix, it would archive to file \"%s_archive::\". "
      (add-hook 'markdown-mode-hook 'buffer-face-mode) 
      ))
 
-;;** imenu
+;; ** imenu
 ;;stolen from http://tychoish.com/rhizome/imenu-for-markdown-and-writing/
 (setq markdown-imenu-generic-expression
      '(("title"  "^\\(.*\\)[\n]=+$" 1)
@@ -154,7 +154,7 @@ If called with C-u prefix, it would archive to file \"%s_archive::\". "
            (lambda ()
              (setq imenu-generic-expression markdown-imenu-generic-expression)))
 
-;;* asciidoc
+;; * asciidoc
 (autoload 'adoc-mode "adoc-mode"
   "Major mode for editing AsciiDoc text files." t)
 (add-to-list 'auto-mode-alist '("\\.adoc$" . adoc-mode))

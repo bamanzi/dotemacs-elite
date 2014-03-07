@@ -1,30 +1,30 @@
-;;** vc
-;;*** svn
+;; ** vc
+;; *** svn
 (unless (fboundp 'vc-svn-root)  ;;fix emacs-23's svn support
   (defun vc-svn-root (file)
     (vc-find-root file vc-svn-admin-directory)))
 
-;;*** git
+;; *** git
 (autoload 'magit-log  "magit"
   "Command for 'git log'." t)
 
 (autoload 'magit-status "magit"
   "Open a Magit status buffer for the Git repository containing DIR." t)
 
-;;*** hg
+;; *** hg
 (autoload 'monky-log  "monky"
   "Undocumented." t)
 
 (autoload 'monky-status  "monky"
   "Show the status of Hg repository." t)
 
-;;** highlight changes
+;; ** highlight changes
 
 (global-highlight-changes-mode 1)
 (global-set-key (kbd "<f10> h c") 'highlight-changes-visible-mode)
 
 
-;;*** diff-hl
+;; *** diff-hl
 (autoload 'diff-hl-mode  "diff-hl"
   "Toggle VC diff fringe highlighting." t)
 (autoload 'global-diff-hl-mode "diff-hl"
@@ -44,7 +44,7 @@
 
 (global-set-key (kbd "<f10> D h") 'global-diff-hl-mode)
 
-;;*** git-gutter
+;; *** git-gutter
 ;; https://github.com/syohex/emacs-git-gutter
 (autoload 'git-gutter:toggle "git-gutter"
   "toggle to show diff information" t)
