@@ -543,8 +543,8 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
 (autoload 'iedit-mode-on-function "iedit"
   "Toggle Iedit mode on current function." t)
 
-(global-set-key (kbd "C-;") 'iedit-mode)
-(global-set-key (kbd "C-c ;") 'iedit-mode)  ;;for terminal
+(global-set-key (kbd "C-;") 'iedit-mode-on-function)
+(global-set-key (kbd "C-c ;") 'iedit-mode-on-function)  ;;for terminal
 
 
 ;;** some visual effect
