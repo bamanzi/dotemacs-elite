@@ -163,7 +163,9 @@ On Windows, baskslashes is substituted with slashes."
   (if (fboundp 'drag-stuff-mode)
       (drag-stuff-mode -1))
   
-  (define-key eshell-mode-map (kbd "M-.") 'kai-eshell-insert-last-word)  
+  (define-key eshell-mode-map (kbd "M-.") 'kai-eshell-insert-last-word)
+  ;; disable `highlight-symbol` as it would make eshell lose all colors
+  (define-key eshell-mode-map (kbd "<double-mouse-1>") 'mouse-set-point)
   
   (setq outline-regexp "^.* $")
   (outline-minor-mode t)
