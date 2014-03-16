@@ -465,9 +465,6 @@ It is an enhanced version of `anything-for-buffers'."
 
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
 
-;; *** perspectives
-(autoload 'persp-mode  "persp-mode"
-  "Toggle perspective mode." t)
 
 ;; ** speedbar
 (autoload 'sr-speedbar-toggle "sr-speedbar"
