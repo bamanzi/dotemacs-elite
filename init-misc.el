@@ -61,13 +61,6 @@
   (with-current-buffer nc-active-nc-buffer
     (nc-display-new-dir dir)))
 
-;; *** nav
-(autoload 'nav "nav"
-  "Opens Nav in a new window to the left of the current one." t)
-
-(autoload 'nav-toggle "nav"
-  "Toggles the nav panel." t)
-
 
 ;; ** mark, copy & yank
 (idle-require 'mark-copy-something)
