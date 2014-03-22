@@ -555,7 +555,8 @@ It is an enhanced version of `anything-for-buffers'."
   "Toggle Local-Vim-Region mode in every possible buffer." t)
 
 (define-key global-map (kbd "<M-f6>") 'vim-region-mode)
-(define-key global-map (kbd "M-RET") 'vim-region-mode)
+(define-key global-map (kbd "C-`")    'vim-region-mode)
+(define-key global-map (kbd "C-c `")  'vim-region-mode)
 
 
 ;; ** misc
