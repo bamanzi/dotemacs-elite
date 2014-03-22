@@ -182,6 +182,8 @@
 
 (define-key goto-map (kbd "M-n") 'flymake-goto-next-error)
 (define-key goto-map (kbd "M-p") 'flymake-goto-prev-error)
+(define-key global-map (kbd "ESC <wheel-down>") 'flymake-goto-next-error)
+(define-key global-map (kbd "ESC <wheel-up>")   'flymake-goto-prev-error)
 
 ;; *** flycheck
 (autoload 'flycheck-mode "flycheck"
