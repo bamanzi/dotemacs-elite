@@ -257,6 +257,18 @@ That is, a string used to represent it on the tab bar."
                        (length (tabbar-view
                                 (tabbar-current-tabset)))))))))
 
+(defun tabbar-buffer-list-menu (event)
+  "List all buffers of current tabset in a popup menu, let use choose to switch."
+  (interactive "e")
+  (let* ((buffers (mapcar '(lambda (tab) (tabbar-tab-value tab))
+                          (tabbar-tabs (tabbar-current-tabset t))))
+         (alist   (mouse-buffer-menu-alist buffers))
+         (menu    (cons "Buffers in current tabset"
+                        (mouse-buffer-menu-split "Select Buffer" alist)))
+         (sel     (x-popup-menu event menu)))
+    (if sel
+        (switch-to-buffer sel))))
+
 (eval-after-load "tabbar"
   `(progn
      (tabbar-mode t)
@@ -270,6 +282,8 @@ That is, a string used to represent it on the tab bar."
      (define-key tabbar-mode-map (kbd "<f12> <right>") 'tabbar-forward)
      (define-key tabbar-mode-map (kbd "<f12> <left>")  'tabbar-backward)
      (define-key tabbar-mode-map (kbd "<f12> <up>")    'tabbar-press-home)
+
+     (define-key tabbar-mode-map (kbd "<header-line> <C-mouse-1>") 'tabbar-buffer-list-menu)
 
      (require 'color nil t)
      (unless (fboundp 'color-name-to-rgb)
