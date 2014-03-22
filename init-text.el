@@ -4,12 +4,6 @@
       ;; org-hide-leading-stars t
       org-use-sub-superscripts nil ;;don't use `_' for subscript
 
-      org-export-with-section-numbers nil ;; no numbers in export headings
-      org-export-with-toc nil ;; no ToC in export
-      org-export-with-author-info nil ;; no author info in export
-      org-export-with-creator-info nil ;; no creator info
-      org-export-htmlize-output-type 'css ;; separate css
-
       ;; org-list-indent-offset 4
       org-src-fontify-natively t
       )
@@ -58,6 +52,25 @@ If called with C-u prefix, it would archive to file \"%s_archive::\". "
 (define-key org-mode-map (kbd "C-c C-x C-a") 'org-archive-subtree-to-file)
 
 ;; ** export
+
+;; *** html
+(setq org-export-with-section-numbers t ;; no numbers in export headings (num:t)
+      org-export-with-toc 3 ;; no ToC in export (toc: 3)
+      org-export-with-author-info nil ;; no author info in export
+      org-export-with-creator-info nil ;; no creator info
+      ;; org-export-htmlize-output-type 'inline-css ;; use inline css for source code
+      )
+
+;; let ~foo~ generate "<kbd>foo</kbd>"
+(setq org-emphasis-alist
+  `(("*" bold "<b>" "</b>")
+    ("/" italic "<i>" "</i>")
+    ("_" underline "<span style=\"text-decoration:underline;\">" "</span>")
+    ("=" org-code "<code>" "</code>" verbatim)
+    ("~" org-verbatim "<kbd>" "</kbd>" verbatim)  ;;changed
+    ("+" ,(if (featurep 'xemacs) 'org-table '(:strike-through t))
+     "<del>" "</del>")
+    ))
 
 ;; *** markdown
 (eval-after-load "org"
