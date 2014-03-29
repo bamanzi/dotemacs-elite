@@ -229,10 +229,16 @@ See also: `kill-rectangle', `copy-to-register'."
 
 (eval-after-load "window-numbering"
   `(progn
+     ;; TODO: make sure new frame get the face correctly copied
+     (copy-face 'mode-line-buffer-id 'window-numbering-face)         
+     
      (window-numbering-mode 1)
      ;; make window number more clear on mode-line
      (defun window-numbering-get-number-string (&optional window)
-       (concat " □" (int-to-string (window-numbering-get-number window)) " "))
+       (let ((s (concat " "
+                        (int-to-string (window-numbering-get-number window))
+                        "□ ")))
+         (propertize s 'face 'window-numbering-face)))
      ))
 
 

@@ -1,12 +1,12 @@
-;;; window-numbering --- Numbered window shortcuts
+;;; window-numbering.el --- Numbered window shortcuts
 ;;
-;; Copyright (C) 2006-2007 Nikolaj Schumacher <bugs * nschum , de>
+;; Copyright (C) 2006-2007, 2013 Nikolaj Schumacher <bugs * nschum , de>
 ;;
 ;; Author: Nikolaj Schumacher <bugs * nschum de>
-;; Version: 1.1.1
+;; Version: 1.1.2
 ;; Keywords: faces, matching
 ;; URL: http://nschum.de/src/emacs/window-numbering-mode/
-;; Compatibility: GNU Emacs 22.x
+;; Compatibility: GNU Emacs 22.x, GNU Emacs 23.x, GNU Emacs 24.x
 ;;
 ;; This file is NOT part of GNU Emacs.
 ;;
@@ -21,8 +21,7 @@
 ;; GNU General Public License for more details.
 ;;
 ;; You should have received a copy of the GNU General Public License
-;; along with this program; if not, write to the Free Software
-;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ;;
 ;;; Commentary:
 ;;
@@ -37,6 +36,10 @@
 ;;       (lambda () (when (equal (buffer-name) "*Calculator*") 9)))
 ;;
 ;;; Changes Log:
+;;
+;; 2013-03-23 (1.1.2)
+;;    Fix numbering in terminal mode with menu bar visible.
+;;    Add face for window number.  (thanks to Chen Bin)
 ;;
 ;; 2008-04-11 (1.1.1)
 ;;    Added possibility to delete window with prefix arg.
@@ -80,6 +83,13 @@ return a number to have it assigned to the current-window, nil otherwise."
 (defconst window-numbering-mode-line-position 1
   "The position in the mode-line `window-numbering-mode' displays the number.")
 
+(defface window-numbering-face '()
+  "Face used for the number in the mode-line."
+  :group 'window-numbering)
+
+(defvar window-numbering-table nil
+  "table -> (window vector . number table)")
+
 (defun select-window-by-number (i &optional arg)
   "Select window given number I by `window-numbering-mode'.
 If prefix ARG is given, delete the window instead of selecting it."
@@ -99,9 +109,6 @@ If prefix ARG is given, delete the window instead of selecting it."
            ,(format "Select the window with number %i." i)
            (interactive "P")
            (select-window-by-number ,i arg))))
-
-(defvar window-numbering-table nil
-  "table -> (window vector . number table)")
 
 (defun window-numbering-calculate-left (windows)
   (let ((i 9) left)
@@ -150,7 +157,7 @@ windows to numbers."
   (when (and window-numbering-auto-assign-0-to-minibuffer
              (active-minibuffer-window))
     (window-numbering-assign (active-minibuffer-window) 0))
-  (let ((windows (window-list nil 0 (window-at 0 0))))
+  (let ((windows (window-list nil 0 (frame-first-window))))
     (run-hook-with-args 'window-numbering-before-hook windows)
     (when window-numbering-assign-func
       (mapc `(lambda (window)
@@ -164,7 +171,8 @@ windows to numbers."
       (window-numbering-assign window))))
 
 (defun window-numbering-get-number-string (&optional window)
-  (int-to-string (window-numbering-get-number window)))
+  (let ((s (int-to-string (window-numbering-get-number window))))
+    (propertize s 'face 'window-numbering-face)))
 
 (defun window-numbering-get-number (&optional window)
   (gethash (or window (selected-window))
