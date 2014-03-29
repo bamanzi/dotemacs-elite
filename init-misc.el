@@ -221,6 +221,19 @@ See also: `kill-rectangle', `copy-to-register'."
    
 (define-key search-map "ga" 'ack-on-dir)
 
+;; ** windows
+(autoload 'window-numbering-mode "window-numbering"
+  "A minor mode that assigns a number to each window." t)
+
+(idle-require 'window-numbering)
+
+(eval-after-load "window-numbering"
+  `(progn
+     (window-numbering-mode 1)
+     ;; make window number more clear on mode-line
+     (defun window-numbering-get-number-string (&optional window)
+       (concat " □" (int-to-string (window-numbering-get-number window)) " "))
+     ))
 
 
 ;; ** tabbar
