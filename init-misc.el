@@ -228,18 +228,26 @@ See also: `kill-rectangle', `copy-to-register'."
 (idle-require 'window-numbering)
 
 (eval-after-load "window-numbering"
-  `(progn
-     ;; TODO: make sure new frame get the face correctly copied
-     (copy-face 'mode-line-buffer-id 'window-numbering-face)         
-     
+  `(progn     
      (window-numbering-mode 1)
+
      ;; make window number more clear on mode-line
+     ;; TODO: make sure new frame get the face correctly copied
+     (copy-face 'mode-line-buffer-id 'window-numbering-face)              
      (defun window-numbering-get-number-string (&optional window)
        (let ((s (concat " "
                         (int-to-string (window-numbering-get-number window))
                         "□ ")))
          (propertize s 'face 'window-numbering-face)))
+
+     (define-key window-numbering-keymap (kbd "M-0") 'select-minibuffer-window)
      ))
+
+(defun select-minibuffer-window ()
+  "Focus the minibuffer window (if it is active)"
+  (interactive)
+  (if (active-minibuffer-window)
+      (select-window (active-minibuffer-window))))
 
 
 ;; ** tabbar
