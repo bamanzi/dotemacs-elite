@@ -63,12 +63,47 @@
 
 
 ;; ** mark, copy & yank
-(idle-require 'mark-copy-something)
-
 (autoload 'copy-from-above-command "misc"
   "Copy characters from previous nonblank line, starting just above point." t)
 
 (global-set-key (kbd "<M-insert>") 'copy-from-above-command)
+
+;; *** make/copy something
+;;(idle-require 'mark-copy-something)
+
+;; based on code stolen from https://github.com/m2ym/thingopt-el/blob/master/thingopt.el
+(setq mark-one-thing-map
+  '((?w . word)
+    (?e . sexp)
+    (?s . symbol)
+    (?S . sentence)
+    (?p . paragraph)
+    (?h . defun)
+    (?F . filename)
+    (?l . line)
+    (?L . list)
+    (?\" . string)
+    (?u . url)
+    (?P . page)))
+
+(defun mark-one-thing (c)
+  (interactive "cMark...")
+  (let* ((thing (assoc-default c kill-thing-map))
+         (bounds (if thing (bounds-of-thing-at-point thing))))
+    (cond
+     (bounds
+      ;;(funcall function (car bounds) (cdr bounds))
+      (goto-char (car bounds))
+      (push-mark (cdr bounds) nil transient-mark-mode)
+      (message "Markd %s." thing))
+     (thing
+      (message "There is no %s here." thing))
+     (t
+      (message "Nothing here.")))))
+
+(global-set-key (kbd "C-`") 'mark-one-thing)
+(global-set-key (kbd "C-c `") 'mark-one-thing) ;;for xterm
+
 
 ;; *** copy buffer filename
 (defun copy-buffer-file-name ()
