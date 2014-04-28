@@ -100,7 +100,9 @@
 
 (add-hook 'window-setup-hook 'maximize-frame t)    
 
-(run-with-idle-timer 2 nil 'maximize-frame)
+;;(run-with-idle-timer 2 nil 'maximize-frame)
+
+(global-set-key (kbd "<C-f11> <C-f11>") 'maximize-frame)
 
 
 ;; ** files & buffers
