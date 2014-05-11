@@ -86,23 +86,48 @@
     (?u . url)
     (?P . page)))
 
-(defun mark-one-thing (c)
-  (interactive "cMark...")
-  (let* ((thing (assoc-default c kill-thing-map))
-         (bounds (if thing (bounds-of-thing-at-point thing))))
-    (cond
-     (bounds
-      ;;(funcall function (car bounds) (cdr bounds))
-      (goto-char (car bounds))
-      (push-mark (cdr bounds) nil transient-mark-mode)
-      (message "Markd %s." thing))
-     (thing
-      (message "There is no %s here." thing))
-     (t
-      (message "Nothing here.")))))
+(defun do-with-one-thing (action)
+  (interactive)
+  (let (c
+        thing
+        bounds)
+    (while (progn
+             (setq c (read-char "Mark one thing..."))
+             (setq thing (assoc-default c mark-one-thing-map))
+             (setq bounds (if thing (bounds-of-thing-at-point thing)))
+             bounds)
+      (cond
+       (bounds
+        (funcall action bounds))
+       (thing
+        (message "There is no %s here." thing))
+       (t
+        (message "Nothing here."))))))
+
+(defun mark-one-thing ()
+  (interactive)
+  (do-with-one-thing #'(lambda (bounds)
+                         (if (and transient-mark-mode mark-active)
+                             (goto-char (car bounds)))
+                         (push-mark (cdr bounds) nil transient-mark-mode)
+                         (message "Markd %s." thing))))
 
 (global-set-key (kbd "C-`") 'mark-one-thing)
 (global-set-key (kbd "C-c `") 'mark-one-thing) ;;for xterm
+
+(defun goto-beginning-of-one-thing ()
+  (interactive)
+  (do-with-one-thing #'(lambda (bounds)
+                         (goto-char (car bounds)))))
+
+
+(defun goto-end-of-one-thing ()
+  (interactive)
+  (do-with-one-thing #'(lambda (bounds)
+                         (goto-char (cdr bounds)))))
+
+(global-set-key (kbd "M-g <") 'goto-beginning-of-one-thing)
+(global-set-key (kbd "M-g >") 'goto-end-of-one-thing)
 
 
 ;; *** copy buffer filename
@@ -631,8 +656,8 @@ It is an enhanced version of `anything-for-buffers'."
   "Toggle Local-Vim-Region mode in every possible buffer." t)
 
 (define-key global-map (kbd "<M-f6>") 'vim-region-mode)
-(define-key global-map (kbd "C-`")    'vim-region-mode)
-(define-key global-map (kbd "C-c `")  'vim-region-mode)
+(define-key global-map (kbd "M-`")    'vim-region-mode)
+;;(define-key global-map (kbd "ESC `")  'vim-region-mode)
 
 
 ;; ** misc
