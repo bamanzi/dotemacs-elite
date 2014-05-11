@@ -653,6 +653,15 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
 (defalias 'fdap 'find-function-at-point)
 (defalias 'fvap 'find-variable-at-point)
 
+(autoload 'find-symbol-at-point  "bmz-elisp-misc"
+  "Find the definiton of the SYMBOL near point." t)
+
+(eval-after-load "lisp-mode"
+  `(progn
+     (define-key emacs-lisp-mode-map (kbd "C-c .") 'find-symbol-at-point)
+     ))
+
+
 ;; ** utils
 (autoload 'ifas "bmz-elisp-misc"
   "Insert the first line of documentation of a function." t)
