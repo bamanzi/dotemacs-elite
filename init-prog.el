@@ -109,7 +109,7 @@
 ;; ** tags
 ;; *** etags
 (global-set-key (kbd "<f5> .") 'anything-c-etags-select)
-(global-set-key (kbd "C-c . <f5>") 'anything-c-etags-select)
+(global-set-key (kbd "C-c M-. <f5>") 'anything-c-etags-select)
 
 (defun anything-goto-etag ()
   "Show etags list, using current symbol as input to narrow the choices."
@@ -124,7 +124,7 @@
          )))
 
 (define-key goto-map "." 'anything-goto-etag)
-(global-set-key (kbd "C-c . M-g") 'anything-goto-etag)
+(global-set-key (kbd "C-c M-. M-g") 'anything-goto-etag)
 
 (autoload 'find-file-in-tags "find-file-in-tags"
   "find file in TAGS file.")
@@ -155,7 +155,7 @@
 (autoload 'tv-view-history "tags-view"
   "Open a buffer listing locations on the tag stack." t)
 
-(global-set-key (kbd "C-c . M-h") 'tv-view-history)
+(global-set-key (kbd "C-c M-. M-h") 'tv-view-history)
 
 ;; etags-stack.el works too, but it's a stack (you can't go forward once backward)
 ;; anything-etags+ also works. but it requires you bind M-. to its `anything-etags+-select`
