@@ -1,13 +1,4 @@
 ;; ** files
-
-(defun ido-find-file-at-point ()
-  (interactive)
-  (let ((ido-use-filename-at-point t)
-        (ido-use-url-at-point t))
-     (call-interactively 'ido-find-file)))
-
-(define-key search-map (kbd "C-f") 'ido-find-file-at-point)
-
 (defun revert-buffer-with-sudo ()
   (interactive)
   (let ((pt        (point)))
@@ -16,6 +7,52 @@
         (call-interactively 'find-alternate-file)
       (find-alternate-file (concat "/sudo::" buffer-file-name))
       (goto-char pt))))
+
+;; *** ffap
+(defun ido-find-file-at-point ()
+  (interactive)
+  (let ((ido-use-filename-at-point t)
+        (ido-use-url-at-point t))
+     (call-interactively 'ido-find-file)))
+
+(define-key search-map (kbd "C-f") 'ido-find-file-at-point)
+
+(global-set-key (kbd "<C-down-mouse-1>") nil)
+(global-set-key (kbd "<C-mouse-1>") 'ffap-at-mouse)
+;; in case `outline-minor-mode' turned on
+(define-key global-map (kbd "<C-M-down-mouse-1>") nil)
+(define-key global-map (kbd "<C-M-mouse-1>") 'ffap-at-mouse)
+
+;; **** make ffap support line number
+;;copied from http://www.emacswiki.org/emacs/FindFileAtPoint#toc6
+(defvar ffap-file-at-point-line-number nil
+  "Variable to hold line number from the last `ffap-file-at-point' call.")
+
+(defadvice ffap-file-at-point (after ffap-store-line-number activate)
+  "Search `ffap-string-at-point' for a line number pattern and
+save it in `ffap-file-at-point-line-number' variable."
+  (let* ((string (ffap-string-at-point)) ;; string/name definition copied from `ffap-string-at-point'
+         (name
+          (or (condition-case nil
+                  (and (not (string-match "//" string)) ; foo.com://bar
+                       (substitute-in-file-name string))
+                (error nil))
+              string))
+         (line-number-string 
+          (and (string-match ":[0-9]+" name)
+               (substring name (1+ (match-beginning 0)) (match-end 0))))
+         (line-number
+          (and line-number-string
+               (string-to-number line-number-string))))
+    (if (and line-number (> line-number 0)) 
+        (setq ffap-file-at-point-line-number line-number)
+      (setq ffap-file-at-point-line-number nil))))
+
+(defadvice find-file-at-point (after ffap-goto-line-number activate)
+  "If `ffap-file-at-point-line-number' is non-nil goto this line."
+  (when ffap-file-at-point-line-number
+    (goto-line ffap-file-at-point-line-number)
+    (setq ffap-file-at-point-line-number nil)))
 
 
 ;; *** dired-single
@@ -79,12 +116,14 @@
     (?S . sentence)
     (?p . paragraph)
     (?h . defun)
-    (?F . filename)
+    (?f . filename)
     (?l . line)
+    (?\( . list)
     (?L . list)
     (?\" . string)
     (?u . url)
-    (?P . page)))
+    (?P . page)
+    (?n . number)))
 
 (defun thing/read-thing (quick &optional prompt)
   "Ask user to select a THING name.
@@ -225,7 +264,8 @@ See also: `kill-rectangle', `copy-to-register'."
 (define-key minibuffer-local-map (kbd "<M-insert> M-s") 'minibuffer-insert-current-symbol)
 
 
-;; ** multi-occur extensions
+;; ** searching
+;; *** multi-occur extensions
 (defun moccur-all-buffers (regexp)
   (interactive "MRegexp: ")
   (multi-occur (buffer-list) regexp))
@@ -258,7 +298,7 @@ See also: `kill-rectangle', `copy-to-register'."
 (define-key search-map (kbd "M-o") 'moccur-in-same-mode)
 
 
-;; ** grin & ack: better grep replacement for source code project
+;; *** grin & ack: better grep replacement for source code project
 (defun grep-on-dir (dir)
   (interactive "DGrep on dir: ")
   (require 'grep)
@@ -300,6 +340,16 @@ See also: `kill-rectangle', `copy-to-register'."
 (define-key search-map "ga" 'ack-on-dir)
 
 ;; ** windows
+;; *** window splitting
+(autoload 'window-toggle-split-direction "bmz-window-misc"
+  "Switch window split from horizontally to vertically, or vice versa." t)
+
+(global-set-key (kbd "<f11> |") 'window-toggle-split-direction)
+
+
+(setq ediff-window-setup-function 'ediff-setup-windows-plain)
+
+;; *** window jumping
 (autoload 'window-numbering-mode "window-numbering"
   "A minor mode that assigns a number to each window." t)
 
@@ -491,8 +541,6 @@ It is an enhanced version of `anything-for-buffers'."
 
 
 
-
-
 ;; ** languages tools
 ;; *** spell
 (define-key global-map (kbd "ESC M-$") 'ispell-complete-word)
@@ -568,14 +616,6 @@ It is an enhanced version of `anything-for-buffers'."
 (define-key search-map " G" 'google-translate-query-translate)
 
 
-;; ** windows
-(autoload 'window-toggle-split-direction "bmz-window-misc"
-  "Switch window split from horizontally to vertically, or vice versa." t)
-
-(global-set-key (kbd "<f11> |") 'window-toggle-split-direction)
-
-
-(setq ediff-window-setup-function 'ediff-setup-windows-plain)
 
 
 ;; ** speedbar
@@ -704,8 +744,3 @@ It is an enhanced version of `anything-for-buffers'."
                                     (add-hook 'before-save-hook 'check-parens nil 'local)))
 
 ;--
-(global-set-key (kbd "<C-down-mouse-1>") nil)
-(global-set-key (kbd "<C-mouse-1>") 'ffap-at-mouse)
-;; in case `outline-minor-mode' turned on
-(define-key global-map (kbd "<C-M-down-mouse-1>") nil)
-(define-key global-map (kbd "<C-M-mouse-1>") 'ffap-at-mouse)
