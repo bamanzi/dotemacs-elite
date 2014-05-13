@@ -72,7 +72,7 @@
 ;;(idle-require 'mark-copy-something)
 
 ;; based on code stolen from https://github.com/m2ym/thingopt-el/blob/master/thingopt.el
-(setq mark-one-thing-map
+(setq thing/name-map
   '((?w . word)
     (?e . sexp)
     (?s . symbol)
@@ -86,48 +86,66 @@
     (?u . url)
     (?P . page)))
 
-(defun do-with-one-thing (action)
-  (interactive)
-  (let (c
-        thing
-        bounds)
-    (while (progn
-             (setq c (read-char "Mark one thing..."))
-             (setq thing (assoc-default c mark-one-thing-map))
-             (setq bounds (if thing (bounds-of-thing-at-point thing)))
-             bounds)
-      (cond
-       (bounds
-        (funcall action bounds))
-       (thing
-        (message "There is no %s here." thing))
-       (t
-        (message "Nothing here."))))))
+(defun thing/read-thing (quick &optional prompt)
+  "Ask user to select a THING name.
 
-(defun mark-one-thing ()
-  (interactive)
-  (do-with-one-thing #'(lambda (bounds)
-                         (if (and transient-mark-mode mark-active)
-                             (goto-char (car bounds)))
+When QUICK is true, it read in one char matching key of `thing/name-map'.
+Otherwise it requires user to input full thing name (value of `thing/name-map`)."
+  (if quick
+      (assoc-default (read-key (concat (or prompt "Thing")
+                                       " ["
+                                       (mapconcat #'(lambda (elem)
+                                                      (format "%c:%s" (car elem) (cdr elem)))
+                                                  thing/name-map " ")
+                                       "]: "))
+                     thing/name-map)
+    (let ((thing-name (ido-completing-read (or prompt "Thing: ")
+                                      (mapcar #'(lambda (elem)
+                                                  (format "%s" (cdr elem)))
+                                              thing/name-map)
+                                      nil
+                                      'match)))
+      (if thing-name
+          (intern thing-name)))))
+                  
+
+(defun thing/call-action (thing action &optional prompt)
+  (let ((bounds (bounds-of-thing-at-point thing)))
+    (cond
+     (bounds
+      (funcall action bounds))
+     (thing
+      (message "There is no %s here." thing))
+     (t
+      (message "Nothing here.")))))
+
+(defun thing/mark-one-thing (thing)
+  (interactive (list (thing/read-thing 'quick)))
+  (thing/call-action thing
+                     #'(lambda (bounds)
+                         (goto-char (car bounds))
                          (push-mark (cdr bounds) nil transient-mark-mode)
                          (message "Markd %s." thing))))
 
-(global-set-key (kbd "C-`") 'mark-one-thing)
-(global-set-key (kbd "C-c `") 'mark-one-thing) ;;for xterm
+(global-set-key (kbd "C-`") 'thing/mark-one-thing)
+(global-set-key (kbd "C-c `") 'thing/mark-one-thing) ;;for xterm
 
-(defun goto-beginning-of-one-thing ()
-  (interactive)
-  (do-with-one-thing #'(lambda (bounds)
-                         (goto-char (car bounds)))))
+(defun thing/goto-beginning (thing)
+  (interactive (list (thing/read-thing 'quick)))
+  (thing/call-action thing
+                     #'(lambda (bounds)
+                         (goto-char (car bounds)))
+                     "Go to thing begin "))
 
+(defun thing/goto-end (thing)
+  (interactive (list (thing/read-thing 'quick)))
+  (thing/call-action thing
+                     #'(lambda (bounds)
+                         (goto-char (cdr bounds)))
+                     "Go to thing end "))
 
-(defun goto-end-of-one-thing ()
-  (interactive)
-  (do-with-one-thing #'(lambda (bounds)
-                         (goto-char (cdr bounds)))))
-
-(global-set-key (kbd "M-g <") 'goto-beginning-of-one-thing)
-(global-set-key (kbd "M-g >") 'goto-end-of-one-thing)
+(global-set-key (kbd "M-g <") 'thing/goto-beginning)
+(global-set-key (kbd "M-g >") 'thing/goto-end)
 
 
 ;; *** copy buffer filename
