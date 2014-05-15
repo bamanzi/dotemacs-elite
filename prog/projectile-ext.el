@@ -9,6 +9,9 @@
 (require 'projectile)
 (require 'easymenu)
 
+(unless (fboundp 'projectile-get-project-root)
+  (defalias 'projectile-get-project-root 'projectile-project-root))
+
 (defun projectile-create-project (dir)
   "Create a projectile project (actually create an empty file named .projectile)."
   (interactive "Dproject root dir:")
