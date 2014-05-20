@@ -497,13 +497,16 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
      (global-set-key (kbd "<C-wheel-down>") 'outline-next-visible-heading)
      
      ;;for folding, `outline-minor-mode' must be turnned on
-     (define-key outline-mode-prefix-map (kbd "<left>")  'hide-subtree)
-     (define-key outline-mode-prefix-map (kbd "<right>") 'show-subtree)
+     (define-key outline-mode-prefix-map (kbd "<left>")      'hide-subtree)
+     (define-key outline-mode-prefix-map (kbd "<right>")     'show-subtree)
+     (define-key outline-mode-prefix-map (kbd "<M-up>")      'outline-move-subtree-up)
+     (define-key outline-mode-prefix-map (kbd "<M-down>")    'outline-move-subtree-down)
 
-     (define-key outline-minor-mode-map  (kbd "M-+")     'outline-toggle-children)
-     (define-key outline-minor-mode-map (kbd "<C-mouse-1>")    'outline-toggle-children)
-     (define-key outline-minor-mode-map (kbd "<C-mouse-3>")    'show-subtree)
-     (define-key outline-minor-mode-map (kbd "<C-mouse-2>")    'show-all)
+     (define-key outline-mode-prefix-map (kbd "<mouse-1>")   'outline-toggle-children)
+
+     (define-key outline-minor-mode-map  (kbd "M-+")          'outline-toggle-children)
+     (define-key outline-minor-mode-map (kbd "<C-mouse-3>")   'show-subtree)
+     (define-key outline-minor-mode-map (kbd "<C-mouse-2>")   'show-all)
   ))
 
 (define-key global-map (kbd "<f10> o l") 'outline-minor-mode)
