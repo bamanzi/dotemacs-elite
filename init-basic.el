@@ -241,11 +241,9 @@
 
 (global-set-key (kbd "C-x r RET") 'cua-set-rectangle-mark)
 
-(when window-system
-    (setq x-select-enable-clipboard t)
+(setq x-select-enable-clipboard t)
 ;;  (setq x-select-enable-primary t)
 ;;    (set-scroll-bar-mode 'right)
-    )
 
 (setq mouse-yank-at-point t) ;;rather than the click point
 

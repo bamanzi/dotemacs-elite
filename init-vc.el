@@ -38,11 +38,13 @@
   
 ;;(add-hook 'prog-mode-hook 'diff-hl-mode)
 
-(if window-system
-    (global-set-key (kbd "<f10> d h") 'diff-hl-mode)
-  (global-set-key (kbd "<f10> d h") 'diff-hl-margin-mode))
+(defun toggle-diff-hl-mode ()
+  (if window-system
+      (diff-hl-mode)
+    (diff-hl-margin-mode)))
 
-(global-set-key (kbd "<f10> D h") 'global-diff-hl-mode)
+(global-set-key (kbd "<f10> d h") 'toggle-diff-hl-mode)
+
 
 ;; *** git-gutter
 ;; https://github.com/syohex/emacs-git-gutter
