@@ -111,8 +111,10 @@
 (global-set-key (kbd "<f5> .") 'anything-c-etags-select)
 (global-set-key (kbd "C-c M-. <f5>") 'anything-c-etags-select)
 
-(defun anything-goto-etag ()
-  "Show etags list, using current symbol as input to narrow the choices."
+(defun anything-goto-definition-etags/imenu ()
+  "Show function/symbol list with etags & imenu.
+
+Current symbol would be used as input to narrow the choices."
   (interactive)
   (anything
    :prompt "Go to:"
@@ -123,8 +125,9 @@
          anything-c-source-imenu
          )))
 
-(define-key goto-map "." 'anything-goto-etag)
-(global-set-key (kbd "C-c M-. M-g") 'anything-goto-etag)
+(define-key goto-map "." 'anything-goto-definition-etags/imenu)
+(global-set-key (kbd "<f6> g d") 'anything-goto-definition-etags/imenu)
+
 
 (autoload 'find-file-in-tags "find-file-in-tags"
   "find file in TAGS file.")

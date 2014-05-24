@@ -169,6 +169,18 @@ Otherwise it requires user to input full thing name (value of `thing/name-map`).
 (global-set-key (kbd "C-`") 'thing/mark-one-thing)
 (global-set-key (kbd "C-c `") 'thing/mark-one-thing) ;;for xterm
 
+(defun thing/copy-one-thing (thing)
+  (interactive (list (thing/read-thing 'quick)))
+  (thing/call-action thing
+                     #'(lambda (bounds)
+                         (let ((begin (car bounds))
+                               (end   (cdr bounds)))
+                           (if (fboundp 'pulse-momentary-highlight-region)
+                               (pulse-momentary-highlight-region begin end))
+                           (copy-region-as-kill begin end)
+                           (message "Copied %s." thing)))))
+
+
 (defun thing/goto-beginning (thing)
   (interactive (list (thing/read-thing 'quick)))
   (thing/call-action thing
@@ -674,7 +686,8 @@ It is an enhanced version of `anything-for-buffers'."
 
 ;; ** vi(m) emulation
 ;; *** viper
-(global-set-key (kbd "<f6>") 'viper-mode)
+(global-unset-key (kbd "<f6>"))
+(global-set-key (kbd "<f6> <f6>") 'viper-mode)
 
 (setq viper-expert-level 3)
 (setq viper-inhibit-startup-message t)
@@ -683,14 +696,14 @@ It is an enhanced version of `anything-for-buffers'."
   `(progn
      (require 'vimpulse nil t)
 
-     (define-key viper-vi-global-user-map     (kbd "<f6>") 'viper-go-away)
-     (define-key viper-insert-global-user-map (kbd "<f6>") 'viper-go-away)
+     (define-key viper-vi-global-user-map     (kbd "<M-f6>") 'viper-go-away)
+     (define-key viper-insert-global-user-map (kbd "<M-f6>") 'viper-go-away)
 
      ;; fix some compartibility problems with CUA mode
      (define-key viper-vi-global-user-map [backspace] 'backward-delete-char-untabify)
      (define-key viper-vi-global-user-map "\C-d" 'delete-char)
      (define-key viper-insert-global-user-map [backspace] 'backward-delete-char-untabify)
-     (define-key viper-insert-global-user-map "\C-d" 'delete-char) 
+     (define-key viper-insert-global-user-map "\C-d" 'delete-char)
      ))
 
 
@@ -708,14 +721,65 @@ It is an enhanced version of `anything-for-buffers'."
      ))
 
 (define-key global-map (kbd "ESC ESC :") 'viper-ex)
+(define-key global-map (kbd "<f6> :") 'viper-ex)
 
 ;; *** vim-region
 (autoload 'vim-region-mode "vim-region"
   "Toggle Local-Vim-Region mode in every possible buffer." t)
 
-(define-key global-map (kbd "<M-f6>") 'vim-region-mode)
+(define-key global-map (kbd "<f6> v") 'vim-region-mode)
 (define-key global-map (kbd "M-`")    'vim-region-mode)
 ;;(define-key global-map (kbd "ESC `")  'vim-region-mode)
+
+;; *** misc vi(m) commands
+(define-key global-map (kbd "<f6> *")   'highlight-symbol-next)
+(define-key global-map (kbd "<f6> #")   'highlight-symbol-prev)
+
+;; http://www.emacswiki.org/emacs/ParenthesisMatching
+(defun goto-match-paren (arg)
+  "Go to the matching parenthesis if on parenthesis, otherwise insert %.
+vi style of % jumping to matching brace."
+  (interactive "p")
+  (cond ((looking-at "\\s\(") (forward-list 1) (backward-char 1))
+        ((looking-at "\\s\)") (forward-char 1) (backward-list 1))
+        (t (self-insert-command (or arg 1)))))
+
+(define-key global-map (kbd "<f6> %")   'goto-match-paren)
+(define-key global-map (kbd "M-g %")   'goto-match-paren)
+
+(defun join-line ()
+  "Join the following line with current line"
+  (interactive)
+  (delete-indentation 1))
+
+(define-key global-map (kbd "<f6> j") 'join-line)
+
+
+(autoload 'ex-set-visited-file-name "viper-ex" nil nil)
+(defun viper-describe-file ()
+  (interactive)
+  (ex-set-visited-file-name))
+ 
+(define-key global-map (kbd "<f6> C-g") 'viper-describe-file)
+
+
+(define-key global-map (kbd "<f6> y y")  #'(lambda ()
+                                      (interactive)
+                                      (thing/copy-one-thing 'line)))
+
+(define-key global-map (kbd "<f6> d w") 'kill-word)
+(define-key global-map (kbd "<f6> d t") 'zap-up-to-char)
+(define-key global-map (kbd "<f6> d f") 'zap-to-char)
+(define-key global-map (kbd "<f6> d d") 'kill-whole-line)
+
+(define-key global-map (kbd "<f6> g g") 'beginning-of-buffer)
+(define-key global-map (kbd "<f6> G")   'end-of-buffer)
+(define-key global-map (kbd "<f6> g f") 'find-file-at-point)
+
+;; FIXME: any better one?
+;; candicates:
+;;    `anything-goto-definition-etags/imenu' from file:init-prog.el
+(define-key global-map (kbd "<f6> g d") 'vimpulse-goto-definition)
 
 
 ;; ** misc
