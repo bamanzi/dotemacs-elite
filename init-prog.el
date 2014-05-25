@@ -74,6 +74,13 @@
      (add-to-list 'which-func-modes 'js-mode)
      ))
 
+(defun show-which-function ()
+  "Show current function's name in echo area."
+  (interactive)
+  (message "Current function: %s" (which-function)))
+  
+(define-key global-map (kbd "<f9> w") 'show-which-function)
+
 
 ;; **  imenu
 (autoload 'anything-imenu "anything-config"
@@ -81,8 +88,8 @@
 (autoload 'anything-browse-code "anythong-config"
   "Preconfigured anything to browse code. `imenu' + elisp/python improvements." t)
 
-(global-set-key (kbd "<f5> i") 'anything-imenu)
-(global-set-key (kbd "<f5> c") 'anything-browse-code)
+(global-set-key (kbd "<f9> i") 'anything-imenu)
+(global-set-key (kbd "<f9> c") 'anything-browse-code)
 
 (define-key goto-map "i" 'imenu)
 
@@ -90,7 +97,7 @@
     (add-hook 'prog-mode-hook 'imenu-add-menubar-index))
 
 
-(defun anything-goto-symbol ()
+(defun anything-goto-symbol-imenu ()
   "Show anything list, using current symbol as input to narrow the choices."
   (interactive)
   (anything
@@ -104,14 +111,13 @@
 ;;         anything-c-source-etags-select
          )))
 
-(define-key goto-map "s" 'anything-goto-symbol)
+(define-key global-map (kbd "<f9> g i") 'anything-goto-symbol-imenu)
 
 ;; ** tags
 ;; *** etags
-(global-set-key (kbd "<f5> .") 'anything-c-etags-select)
-(global-set-key (kbd "C-c M-. <f5>") 'anything-c-etags-select)
+(global-set-key (kbd "<f9> .") 'anything-c-etags-select)
 
-(defun anything-goto-definition-etags/imenu ()
+(defun anything-goto-definition-etags ()
   "Show function/symbol list with etags & imenu.
 
 Current symbol would be used as input to narrow the choices."
@@ -125,12 +131,15 @@ Current symbol would be used as input to narrow the choices."
          anything-c-source-imenu
          )))
 
-(define-key goto-map "." 'anything-goto-definition-etags/imenu)
-(global-set-key (kbd "<f6> g d") 'anything-goto-definition-etags/imenu)
+(define-key goto-map "." 'anything-goto-definition-etags)
+(global-set-key (kbd "<f9> g .") 'anything-goto-definition-etags)
+(global-set-key (kbd "<f9> g e") 'anything-goto-definition-etags)
 
 
 (autoload 'find-file-in-tags "find-file-in-tags"
-  "find file in TAGS file.")
+  "find file in TAGS file." t)
+
+(global-set-key (kbd "<f9> g f") 'find-file-in-tags)
 
 
 ;; *** ctags
@@ -150,7 +159,8 @@ Current symbol would be used as input to narrow the choices."
   `(add-to-list 'anything-c-ctags-modes 'ruby-mode)
   )
 
-(global-set-key (kbd "<f5> t") 'anything-ctags-current-file)
+(global-set-key (kbd "<f9> t") 'anything-ctags-current-file)
+(global-set-key (kbd "<f9> C-]") 'anything-ctags-current-file)
 
 
 ;; *** tags history
@@ -158,7 +168,7 @@ Current symbol would be used as input to narrow the choices."
 (autoload 'tv-view-history "tags-view"
   "Open a buffer listing locations on the tag stack." t)
 
-(global-set-key (kbd "C-c M-. M-h") 'tv-view-history)
+(global-set-key (kbd "<f9> g M-h") 'tv-view-history)
 
 ;; etags-stack.el works too, but it's a stack (you can't go forward once backward)
 ;; anything-etags+ also works. but it requires you bind M-. to its `anything-etags+-select`
@@ -172,8 +182,13 @@ Current symbol would be used as input to narrow the choices."
 (define-key global-map (kbd "<M-wheel-down>") 'next-error)
 (define-key global-map (kbd "<M-wheel-up>")   'previous-error)
 
+(define-key global-map (kbd "<f9> n") 'next-error)
+(define-key global-map (kbd "<f9> p") 'previous-error)
+
 (global-set-key (kbd "C-c <f9>") 'compilation-shell-minor-mode)
+
 (global-set-key (kbd "M-g <f9>") 'compile-goto-error)
+(global-set-key (kbd "<f9> G") 'compile-goto-error)
 
 
 ;; ** flymake
@@ -196,6 +211,9 @@ Current symbol would be used as input to narrow the choices."
 (idle-require 'flycheck)
 
 (global-set-key (kbd "<M-f9>") 'flycheck-mode)
+
+(define-key global-map (kbd "<f9> M-n") 'flymake-goto-next-error)
+(define-key global-map (kbd "<f9> M-p") 'flymake-goto-prev-error)
 
 ;;fix endless loop bug of `flycheck-find-file-in-tree' on Windows
 (eval-after-load "flycheck"
