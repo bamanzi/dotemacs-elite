@@ -267,3 +267,8 @@ found in DIRECTORY or any of its ancestors."
      ))
 
 
+;; ** documentation lookup
+(autoload 'keyword-help-lookup "bmz-keyword-help"
+  "Invoke documentation query backends for KEYWORD." t)
+
+(global-set-key (kbd "<M-f1>") 'keyword-help-lookup)
