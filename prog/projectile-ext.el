@@ -11,6 +11,9 @@
 
 (unless (fboundp 'projectile-get-project-root)
   (defalias 'projectile-get-project-root 'projectile-project-root))
+(unless (fboundp 'projectile-get-project-name)
+  (defalias 'projectile-get-project-name 'projectile-project-name))
+
 
 (defun projectile-create-project (dir)
   "Create a projectile project (actually create an empty file named .projectile)."
@@ -72,27 +75,33 @@
   (interactive)
   (projectile-eshell-cd default-directory))
 
-(defun projectile-ack ()
+(defun projectile-ack-on-dir (dir)
   "Use `ack' to grep text across source files."
-  (interactive)
+  (interactive
+   (list (read-directory-name "Ack on dir: "
+                              (projectile-get-project-root))))
   (unless (fboundp 'ack)
     (or (require 'ack)
         (require 'ack-and-a-half)))
-  (let ((default-directory (projectile-get-project-root)))
+  (let ((default-directory dir))
     (call-interactively 'ack)))
 
-(defun projectile-grin ()
+(defun projectile-grin-on-dir (dir)
   "Use `grin' to grep text across source files."
-  (interactive)
+  (interactive
+   (list (read-directory-name "Grin on dir: "
+                              (projectile-get-project-root))))   
   (require 'grin)
-  (let ((default-directory (projectile-get-project-root)))
+  (let ((default-directory dir))
     (call-interactively 'grin)))
 
-(defun projectile-grind ()
+(defun projectile-grind-on-dir (dir)
   "Use `grind' to find file by name."
-  (interactive)
+  (interactive
+   (list (read-directory-name "Grind on dir: "
+                              (projectile-get-project-root))))   
   (require 'grin)
-  (let ((default-directory (projectile-get-project-root)))
+  (let ((default-directory dir))
     (call-interactively 'grind)))
 
 
@@ -106,7 +115,7 @@
   (dired dir "-al"))
 
 (defun projectile-find-file- (file)
-  "If there is an EShell buffer, cd to DIR in that buffer."
+  "Similar to `projectile-find-file', but not building all files as candidates."
   (interactive
    (list (let ((default-directory (projectile-get-project-root)))
            (if (and (symbolp 'ido-mode) ido-mode)
@@ -120,31 +129,35 @@
     ["Find file" (if (fboundp 'projectile-find-file)
                      (projectile-find-file)
                    (projectile-jump-to-project-file))]
-    ["Find file (ack)" projectile-ack]
-    ["Find file (grind)" projectile-grind]
+    ["Find file (grind)" projectile-grind-on-dir]
     ["Dired" projectile-dired]
-    ["Switch buffer" projectile-switch-to-buffer]
+    ["Recent files" projectile-recentf]    
     "--"
     ["Grep in project" (if (fboundp 'projectile-grep)
                            (projectile-grep)
                          (projectile-grep-in-project))]
-    ["Grep in project (ack)"  projectile-ack]
-    ["Grep in project (grin)"  projectile-grin]
+    ["Grep in project (ack)"  projectile-ack-on-dir]
+    ["Grep in project (grin)"  projectile-grin-on-dir]
     ["Replace in project" (if (fboundp 'projectile-replace)
                               (projectile-replace)
                             (projectile-replace-in-project))]
     ["Multi-occur in project" projectile-multi-occur]
     "--"
-    ["Invalidate cache" (if (fboundp 'projectile-invalidate-cache)
-                            (projectile-invalidate-cache)
-                          (projectile-invalidate-project-cache))]
-    ["Regenerate etags" projectile-regenerate-tags]
+    ["Switch buffer" projectile-switch-to-buffer]
     ["Kill all buffers"  projectile-kill-buffers]
+    "--"
+    ["Find tag..."  projectile-find-tag]
+    ["Regenerate etags" projectile-regenerate-tags]
     "--"
     ["Eshell cd to project root" projectile-eshell-cd-root]
     ["Eshell cd to current folder" projectile-eshell-cd-current]
     "--"
-    ["Show project info" projectile-show-project-info]))     
+    ["Invalidate cache" (if (fboundp 'projectile-invalidate-cache)
+                            (projectile-invalidate-cache)
+                          (projectile-invalidate-project-cache))]
+    ["Show project info" projectile-show-project-info]
+    ["About" projectile-version]))
+
 
 ;;** integration with desktop-mode
 (defun projectile-save-desktop ()
