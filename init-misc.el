@@ -1,13 +1,4 @@
 ;; ** files
-(defun revert-buffer-with-sudo ()
-  (interactive)
-  (let ((pt        (point)))
-    (if (or (not buffer-file-name)
-            (string-match "^/sudo:" buffer-file-name))
-        (call-interactively 'find-alternate-file)
-      (find-alternate-file (concat "/sudo::" buffer-file-name))
-      (goto-char pt))))
-
 ;; *** ffap
 (defun ido-find-file-at-point ()
   (interactive)

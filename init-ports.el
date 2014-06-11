@@ -95,6 +95,18 @@ but not mapped by term/xterm.el"
 
 
 ;; ** sudo
+(defun revert-buffer-with-sudo ()
+  (interactive)
+  (let ((pt        (point)))
+    (if (or (not buffer-file-name)
+            (string-match "^/sudo:" buffer-file-name))
+        (call-interactively 'find-alternate-file)
+      (find-alternate-file (concat "/sudo::" buffer-file-name))
+      (goto-char pt))))
+
+(global-set-key (kbd "C-c C-x C-v") 'revert-buffer-with-sudo)
+
+;; *** sudo.el
 (autoload 'sudo-find-file "sudo"
   "Open a file, which may or may not be readable. If we can't" t)
 
