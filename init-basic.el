@@ -673,7 +673,22 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
 (global-set-key (kbd "M-X") 'load-and-execute)
 
 
+;; *** workaround for some display tweaking
+(defun bmz/init-frame ()
+  (interactive)
+  (run-hook-with-args 'after-make-frame-functions
+                      (selected-frame)))
+  
+;;put face-adjusting code to hook `after-make-frame-functions'
+;;then use this to call them
+(global-set-key (kbd "<f12> <f12>") 'bmz/init-frame)
+                
+(run-with-idle-timer 3 nil 'bmz/init-frame)
+
+
 ;; ** misc
 (column-number-mode t)
 
 (global-set-key (kbd "C-x C-j") 'dired-jump)
+
+
