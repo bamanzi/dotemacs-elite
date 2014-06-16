@@ -259,7 +259,7 @@ found in DIRECTORY or any of its ancestors."
 ;;     (require 'projectile-ext)
      (define-key projectile-mode-map (kbd "<M-f12> C-f") 'projectile-find-file-)
      (define-key projectile-mode-map (kbd "<M-f12> d") 'projectile-dired)     
-     (define-key projectile-mode-map (kbd "<M-f12> E") 'projectile-eshell-cd-current)
+     (define-key projectile-mode-map (kbd "<M-f12> e") 'projectile-eshell-cd-current)
      (define-key projectile-mode-map (kbd "<M-f12> E") 'projectile-eshell-cd-root)
      (define-key projectile-mode-map (kbd "<M-f12> G") 'projectile-grin)
      (define-key projectile-mode-map (kbd "<M-f12> a") 'projectile-ack)

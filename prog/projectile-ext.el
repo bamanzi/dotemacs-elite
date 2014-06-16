@@ -126,9 +126,7 @@
 (easy-menu-define projectile-mode-menu projectile-mode-map
   "Menu for Projectile mode"
   '("Projectile"
-    ["Find file" (if (fboundp 'projectile-find-file)
-                     (projectile-find-file)
-                   (projectile-jump-to-project-file))]
+    ["Find file" 'projectile-find-file-]
     ["Find file (grind)" projectile-grind-on-dir]
     ["Dired" projectile-dired]
     ["Recent files" projectile-recentf]    
