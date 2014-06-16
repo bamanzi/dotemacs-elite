@@ -18,6 +18,11 @@
 (global-set-key (kbd "<f12> s") 'shell-toggle-cd)
 (global-set-key (kbd "<f12> S") 'shell-toggle)
 
+(defun eshell-cd (dir)
+  (interactive "Dcd to: ")
+  (let ((default-directory dir))
+    (eshell-toggle-cd)))
+
 
 ;; *** some eshell command
 (defun eshell/edit (&rest args)
@@ -56,6 +61,10 @@ On Windows, baskslashes is substituted with slashes."
     (erase-buffer)))
 
 (defalias 'eshell/cls 'eshell/clear)
+
+(defun eshell/nc (&optional dir)
+  (interactive)
+  (nc-goto-dir (or dir default-directory)))
 
 
 ;; *** pcomplete for shell commands & args
