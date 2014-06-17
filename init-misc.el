@@ -767,6 +767,17 @@ vi style of % jumping to matching brace."
 (define-key global-map (kbd "<f6> G")   'end-of-buffer)
 (define-key global-map (kbd "<f6> g f") 'find-file-at-point)
 
+(unless (fboundp 'zap-up-to-char)
+    (defun zap-up-to-char (arg char)
+      "Kill up to the ARG'th occurence of CHAR, and leave CHAR.
+  The CHAR is replaced and the point is put before CHAR."
+      (interactive "p\ncZap to char: ")
+      (zap-to-char arg char)
+      (insert char)
+      (forward-char -1)))
+
+(global-set-key [remap zap-to-char] 'zap-up-to-char)
+    
 ;; FIXME: any better one?
 ;; candicates:
 ;;    `anything-goto-definition-etags/imenu' from file:init-prog.el
