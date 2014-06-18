@@ -174,3 +174,5 @@ If called with C-u prefix, it would archive to file \"%s_archive::\". "
 
 
 
+;; * general text-mode
+(add-hook 'text-mode-hook 'turn-on-auto-fill)
