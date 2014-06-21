@@ -161,6 +161,9 @@
 (setq split-width-threshold 120
       split-height-threshold 60)
 
+(global-set-key (kbd "<f11> <tab>") 'other-window)
+(global-set-key (kbd "<f11> <backtab>") (kbd "C-u -1 C-x o"))
+
 (global-set-key (kbd "<f11> 1 v") 'delete-other-windows-vertically)
 (global-set-key (kbd "<f11> 1 h") 'delete-other-windows-horizontally)
 
@@ -236,16 +239,25 @@
 (delete-selection-mode t)
 
 (setq cua-enable-cua-keys nil)
-;;(setq cua-rectangle-modifier-key 'hyper)  ;;leave C-RET
 (cua-mode t)
-
-(global-set-key (kbd "C-x r RET") 'cua-set-rectangle-mark)
 
 (setq x-select-enable-clipboard t)
 ;;  (setq x-select-enable-primary t)
 ;;    (set-scroll-bar-mode 'right)
 
 (setq mouse-yank-at-point t) ;;rather than the click point
+
+;; *** cua rectangle
+;;(setq cua-rectangle-modifier-key 'hyper)  ;;leave C-RET
+
+(global-set-key (kbd "C-x r RET") 'cua-set-rectangle-mark)
+
+(eval-after-load "cua-rect"
+  `(progn
+     ;; as `C-?' already used by `undo-tree-redo'
+     (define-key cua--rectangle-keymap (kbd "M-?") 'cua-help-for-rectangle)
+     ))
+
 
 ;; ***  tab key & indent
 (setq tab-always-indent t)
