@@ -179,6 +179,9 @@ Otherwise it requires user to input full thing name (value of `thing/name-map`).
 
 (global-set-key (kbd "<M-delete>") 'thing/kill-one-thing)
 
+(global-set-key (kbd "C-c m") 'thing/mark-one-thing)
+(global-set-key (kbd "C-c c") 'thing/copy-one-thing)
+(global-set-key (kbd "C-c k") 'thing/kill-one-thing)
 
 
 (defun thing/goto-beginning (thing)
@@ -532,7 +535,7 @@ It is an enhanced version of `anything-for-buffers'."
             :buffer "*anything tabs*"
             :keymap anything-c-buffer-map))
 
-(define-key global-map (kbd "<f11> TAB") 'anything-tab-list)
+(define-key global-map (kbd "<f11> g TAB") 'anything-tab-list)
 
 
 ;; ** color-theme
