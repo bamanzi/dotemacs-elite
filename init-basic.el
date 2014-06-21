@@ -284,7 +284,7 @@
 (define-key global-map (kbd "<f10> h c") 'highlight-changes-visible-mode)
 
 (setq diff-switches "-u")    ;;I prefer the unified format
-(global-set-key (kbd "C-c d") 'diff-buffer-with-file)
+(global-set-key (kbd "C-c =") 'diff-buffer-with-file)
 
 ;; ***  quickly swap lines
 (autoload 'drag-stuff-up "drag-stuff"

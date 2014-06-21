@@ -91,11 +91,6 @@ save it in `ffap-file-at-point-line-number' variable."
 
 
 ;; ** mark, copy & yank
-(autoload 'copy-from-above-command "misc"
-  "Copy characters from previous nonblank line, starting just above point." t)
-
-(global-set-key (kbd "<M-insert>") 'copy-from-above-command)
-
 ;; *** make/copy something
 ;;(idle-require 'mark-copy-something)
 
@@ -171,6 +166,20 @@ Otherwise it requires user to input full thing name (value of `thing/name-map`).
                            (copy-region-as-kill begin end)
                            (message "Copied %s." thing)))))
 
+(defun thing/kill-one-thing (thing)
+  (interactive (list (thing/read-thing 'quick)))
+  (thing/call-action thing
+                     #'(lambda (bounds)
+                         (let ((begin (car bounds))
+                               (end   (cdr bounds)))
+                           (if (fboundp 'pulse-momentary-highlight-region)
+                               (pulse-momentary-highlight-region begin end))
+                           (kill-region begin end)
+                           (message "Killed %s." thing)))))
+
+(global-set-key (kbd "<M-delete>") 'thing/kill-one-thing)
+
+
 
 (defun thing/goto-beginning (thing)
   (interactive (list (thing/read-thing 'quick)))
@@ -236,6 +245,13 @@ See also: `kill-rectangle', `copy-to-register'."
          (buffer-string) )) ) )
 
   (define-key global-map (kbd "C-x r M-w") 'copy-rectangle-to-clipboard))
+
+;; *** misc
+(autoload 'copy-from-above-command "misc"
+  "Copy characters from previous nonblank line, starting just above point." t)
+
+(global-set-key (kbd "<M-insert>") 'copy-from-above-command)
+
 
 
 ;; ** minibuffer
