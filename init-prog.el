@@ -266,6 +266,13 @@ found in DIRECTORY or any of its ancestors."
      (define-key projectile-mode-map (kbd "<M-f12> A") 'projectile-ack-find-file)  
      ))
 
+(defun eshell/cdprj ()
+  "cd to the project root"
+  (interactive)
+  (require 'projectile)
+  (let ((dir (projectile-get-project-root)))
+    (eshell/cd dir)))
+
 
 ;; ** documentation lookup
 (autoload 'keyword-help-lookup "bmz-keyword-help"
