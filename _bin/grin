@@ -1079,7 +1079,8 @@ def grind_main(argv=None):
 
 if __name__ == '__main__':
     import os.path
-    if os.path.basename(sys.argv[0])=='grind':
+    fn = os.path.splitext(os.path.basename(sys.argv[0]))    
+    if fn[0]=='grind':
         grind_main()
     else:
         grin_main()
