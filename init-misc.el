@@ -89,6 +89,14 @@ save it in `ffap-file-at-point-line-number' variable."
   (with-current-buffer nc-active-nc-buffer
     (nc-display-new-dir dir)))
 
+(defun nc-goto-dir-at-point ()
+  "Let NC show directory at point."
+  (interactive)
+  (let ((ffap-directory-finder 'nc-goto-dir))
+    (call-interactively 'dired-at-point)))
+
+(define-key search-map (kbd "g C") 'nc-goto-dir-at-point)
+
 
 ;; ** mark, copy & yank
 ;; *** make/copy something
