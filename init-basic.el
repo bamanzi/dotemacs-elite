@@ -136,6 +136,22 @@
        kept-old-versions 2)
  )
 
+;; **** make backup to a designated dir, mirroring the full path
+;; http://ergoemacs.org/emacs/emacs_set_backup_into_a_directory.html
+(defun my-backup-file-name (fpath)
+  "Return a new file path of a given file path.
+If the new path's directories does not exist, create them."
+  (let* (
+        (backupRootDir "~/.emacs.d/backups/")
+        (filePath (replace-regexp-in-string ":" "/" fpath )) ; remove Windows driver letter in path, e.g. "C:"
+        (backupFilePath (replace-regexp-in-string "//" "/" (concat backupRootDir filePath "~") ))
+        )
+    (make-directory (file-name-directory backupFilePath) (file-name-directory backupFilePath))
+    backupFilePath
+  )
+)
+
+(setq make-backup-file-name-function 'my-backup-file-name)
 
 ;; *** desktop
 (require 'desktop)
