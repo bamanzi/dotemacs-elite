@@ -215,6 +215,23 @@ The screen-shot tool is determined by `org-download-screenshot-method'."
                                       (interactive)
                                       (find-file org-default-notes-file)))
 
+(eval-after-load "org"
+  `(progn
+    (define-key org-mode-map (kbd "<f7>")   'org-toggle-checkbox)
+    (define-key org-mode-map (kbd "<S-f7>") 'org-toggle-checkbox-presence)
+
+    (define-key org-mode-map (kbd "C-c M-%") 'org-replace-markdown-link)
+    ))
+
+(defun org-toggle-checkbox-presence ()
+  (interactive)
+  (org-toggle-checkbox '(4)))
+ 
+(defun org-replace-markdown-link ()
+  "Replace markdown-style link '[desc](link)' to org-mode-style link '[[link][desc]]'."
+  (interactive)
+  (query-replace-regexp "\\[\\([^\]]*\\)\\](\\([^)]*\\))"
+                        "[[\\2][\\1]]"))
 
 
 ;; * markdown
@@ -236,7 +253,7 @@ The screen-shot tool is determined by `org-download-screenshot-method'."
      (set-face-attribute 'markdown-header-face-5 nil :inherit 'org-level-5)
      (set-face-attribute 'markdown-header-face-6 nil :inherit 'org-level-6)
 
-     (add-hook 'markdown-mode-hook 'buffer-face-mode) 
+     ;; (add-hook 'markdown-mode-hook 'buffer-face-mode) 
      ))
 
 ;; ** imenu

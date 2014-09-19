@@ -13,6 +13,7 @@
 (autoload 'shell-toggle-cd "sh-toggle"
   "Calls `shell-toggle' and let it cd to path of current buffer." t)
 
+(require 'esh-mode)
 (global-set-key (kbd "<f12> e") 'eshell-toggle-cd)
 (global-set-key (kbd "<f12> E") 'eshell-toggle)
 (global-set-key (kbd "<f12> s") 'shell-toggle-cd)
