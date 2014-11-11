@@ -490,6 +490,16 @@ That is, a string used to represent it on the tab bar."
   `(progn
      ;;reset my grouping funciton
      (setq tabbar-buffer-groups-function 'tabbar-buffer-groups/bmz)
+
+     ;; Emacs >= 24.4  would try to store frame configuration in `desktop-save-mode`
+     ;; but couldn't make `tabbar-cache` persistent correctly ("Unprintable entity" error)
+     (defun tabbar-ruler-remove-caches
+       (mapc #'(lambda (frame)
+                 (modify-frame-parameters frame '((tabbar-cache . nil))))
+             (frame-list)))
+
+     (if (fboundp 'desktop-save-mode)
+         (add-hook 'desktop-after-read-hook 'tabbar-ruler-remove-caches))     
      ))
 
 (idle-require 'tabbar)
