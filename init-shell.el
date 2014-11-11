@@ -122,13 +122,6 @@ On Windows, baskslashes is substituted with slashes."
     (progn
         (define-key eshell-mode-map (kbd "<up>")   'previous-line)
         (define-key eshell-mode-map (kbd "<down>") 'next-line))))
-          
-
-;; ** autojump
-(eval-after-load "eshell"
-  '(require 'eshell-autojump nil t))
-;;use command `j' to list your MRU path,
-;;use command `j regexp' to jump to one
 
 
 ;; ** misc
