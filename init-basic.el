@@ -561,6 +561,26 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
 
 (define-key search-map "O" 'highlight-symbol-occur)
 
+(eval-after-load "highlight-symbol"
+  `(progn
+     (unless (version< emacs-version "24.4")
+       ;; Emacs 24.4 has a built-in `highlight-symbol-at-point`.
+       ;; We want to use the one in `highlight-symbol.el`
+       (defalias 'highlight-symbol-at-point-built-in 'highlight-symbol-at-point)
+         
+       ;; copied from `highlight-symbol.el`
+       (defun highlight-symbol-at-point ()
+         "Toggle highlighting of the symbol at point.
+This highlights or unhighlights the symbol at point using the first
+element in of `highlight-symbol-faces'."
+         (interactive)
+         (let ((symbol (highlight-symbol-get-symbol)))
+           (unless symbol (error "No symbol at point"))
+           (if (highlight-symbol-symbol-highlighted-p symbol)
+               (highlight-symbol-remove-symbol symbol)
+             (highlight-symbol-add-symbol symbol))))
+       )))
+
 ;; *** idle-highlight
 (autoload 'idle-highlight "idle-highlight"
   "highlight the word the point is on" t)
