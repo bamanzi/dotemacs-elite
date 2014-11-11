@@ -69,15 +69,34 @@
 (if (fboundp 'scroll-bar-mode)
     (scroll-bar-mode -1))
 
+
+(global-set-key (kbd "<C-M-wheel-up>") 'text-scale-increase)
+(global-set-key (kbd "<C-M-wheel-down>") 'text-scale-decrease)
+
+;; *** frame title & modeline
 (setq frame-title-format '("%b%* (%m) - Emacs "
                            (:eval emacs-version)
                            (:eval (if buffer-file-name
                                       (format " - [%s]" buffer-file-name)
                                     ""))))
 
-(global-set-key (kbd "<C-M-wheel-up>") 'text-scale-increase)
-(global-set-key (kbd "<C-M-wheel-down>") 'text-scale-decrease)
+;; http://www.reddit.com/r/emacs/comments/1nihkt/how_to_display_full_charset_name_in_modeline_eg/
+(defvar my-mode-line-coding-format
+      '(:eval
+        (let* ((code (symbol-name buffer-file-coding-system))
+               (eol-type (coding-system-eol-type buffer-file-coding-system))
+               (eol (if (eq 0 eol-type) "UNIX"
+                      (if (eq 1 eol-type) "DOS"
+                        (if (eq 2 eol-type) "MAC"
+                          "???")))))
+          (concat " " code " " eol " "))))
 
+(put 'my-mode-line-coding-format 'risky-local-variable t)
+(if (require 'cl nil t)
+    (setq-default mode-line-format (substitute
+                                'my-mode-line-coding-format
+                                'mode-line-mule-info
+                                mode-line-format)))
 
 ;; *** maximize frame
 (defun maximize-frame (&optional frame)
