@@ -106,10 +106,12 @@ On Windows, baskslashes is substituted with slashes."
       (progn
         (define-key comint-mode-map (kbd "<up>")   'comint-previous-input)
         (define-key comint-mode-map (kbd "<down>") 'comint-next-input)
-        (message "up/down key now binding to `eshell-{previous,next}-input'."))
+        (message "up/down key now binding to `comint-{previous,next}-input'."))
     (progn
         (define-key comint-mode-map (kbd "<up>")   'previous-line)
-        (define-key comint-mode-map (kbd "<down>") 'next-line))))
+        (define-key comint-mode-map (kbd "<down>") 'next-line)
+        (message "Now up/down key now binding to `{previous,next}-line."))))
+        
 
 (defun eshell-toggle-cursor-keybinding (arg)
   "Toggle up/down key between {previous,next}-line and {previous,next}-input."
@@ -118,10 +120,12 @@ On Windows, baskslashes is substituted with slashes."
       (progn
         (define-key eshell-mode-map (kbd "<up>")   'eshell-previous-input)
         (define-key eshell-mode-map (kbd "<down>") 'eshell-next-input)
-        (message "up/down key now binding to `eshell-{previous,next}-input'."))
+        (message "Now up/down key now binding to `eshell-{previous,next}-input'."))
     (progn
         (define-key eshell-mode-map (kbd "<up>")   'previous-line)
-        (define-key eshell-mode-map (kbd "<down>") 'next-line))))
+        (define-key eshell-mode-map (kbd "<down>") 'next-line)
+        (message "Now up/down key now binding to `{previous,next}-line."))))
+        
 
 
 ;; ** misc
