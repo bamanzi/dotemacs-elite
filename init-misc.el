@@ -210,6 +210,28 @@ Otherwise it requires user to input full thing name (value of `thing/name-map`).
 (global-set-key (kbd "M-g >") 'thing/goto-end)
 
 
+(defun thing/copy-symbol-or-word ()
+  (interactive)
+  (let ((bounds (or (bounds-of-thing-at-point 'symbol)
+                    (bounds-of-thing-at-point 'word))))
+    (if bounds
+        (let* ((begin (car bounds))
+               (end   (cdr bounds))
+               (content (buffer-substring begin end)))
+          (if (fboundp 'pulse-momentary-highlight-region)
+              (pulse-momentary-highlight-region begin end))
+          (copy-region-as-kill begin end)
+          (message "Copied '%s'." content)))))
+
+(global-set-key (kbd "M-s M-w") 'thing/copy-symbol-or-word)
+
+(defun thing/kill-symbol-or-word ()
+  (interactive)
+  (thing/kill-one-thing 'symbol))
+
+(global-set-key (kbd "M-s C-w") 'thing/kill-symbol-or-word)
+
+
 ;; *** copy buffer filename
 (defun copy-buffer-file-name ()
   (interactive)
@@ -493,7 +515,7 @@ That is, a string used to represent it on the tab bar."
 
      ;; Emacs >= 24.4  would try to store frame configuration in `desktop-save-mode`
      ;; but couldn't make `tabbar-cache` persistent correctly ("Unprintable entity" error)
-     (defun tabbar-ruler-remove-caches
+     (defun tabbar-ruler-remove-caches ()
        (mapc #'(lambda (frame)
                  (modify-frame-parameters frame '((tabbar-cache . nil))))
              (frame-list)))
