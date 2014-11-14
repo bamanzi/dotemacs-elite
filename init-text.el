@@ -111,39 +111,6 @@ If called with C-u prefix, it would archive to file \"%s_archive::\". "
       )))
 
 
-;; ** fonts
-;; make sure Org table line could align well when English & Chinese used together
-(defun bmz/setup-font-for-org-table ()
-  (interactive)
-  (if (font-exists-p "Dejavu Sans Mono")
-        (set-default-font "Dejavu Sans Mono 10")
-    (if (font-exists-p "Inconsolata")
-        (set-default-font "Inconsolata 10")
-      (message "No suitable default font found. Please install `ttf-dejavu-core' or `ttf-inconsolata'")))
-            
-  (if (eq system-type 'windows-nt)
-      (set-fontset-font "fontset-default" 'unicode "宋体 12")
-    (if (font-exists-p "WenQuanYi Bitmap Song")
-        (set-fontset-font "fontset-default" 'unicode "WenQuanYi Bitmap Song 12")
-      (if (font-exists-p "WenQuanYi Micro Hei Mono")
-          (set-fontset-font "fontset-default" 'unicode "WenQuanYi Micro Hei Mono 12")
-        (message "No suitable font for. Please install `xfonts-wqy' or `ttf-wqy-microhei'"))))
-  )
-
-(defun font-exists-p (font)
-  "Test if FONT is available."
-   (if (null (list-fonts (font-spec :family font)))
-              ;; 2008-02-26 function of the new font backend (Emacs 23),
-              ;; instead of `x-list-fonts'
-       nil
-     t))
-
-(eval-after-load "org"
-  `(progn
-     (define-key org-mode-map (kbd "C-c <f12>") 'bmz/setup-font-for-org-table)
-     ))
-
-
 ;; ** attach images
 ;; insert image from local file or http
 (autoload 'org-download-image "org-download"

@@ -69,10 +69,6 @@
 (if (fboundp 'scroll-bar-mode)
     (scroll-bar-mode -1))
 
-
-(global-set-key (kbd "<C-M-wheel-up>") 'text-scale-increase)
-(global-set-key (kbd "<C-M-wheel-down>") 'text-scale-decrease)
-
 ;; *** frame title & modeline
 (setq frame-title-format '("%b%* (%m) - Emacs "
                            (:eval emacs-version)
@@ -122,6 +118,40 @@
 ;;(run-with-idle-timer 2 nil 'maximize-frame)
 
 (global-set-key (kbd "<C-f11> <C-f11>") 'maximize-frame)
+
+;; *** font
+(global-set-key (kbd "<C-M-wheel-up>") 'text-scale-increase)
+(global-set-key (kbd "<C-M-wheel-down>") 'text-scale-decrease)
+
+(defun bmz/frame-init-font (&optional frame)
+  (interactive (list (selected-frame)))
+  (when window-system
+    (with-selected-frame frame
+      (if (font-exists-p "Dejavu Sans Mono")
+          (set-frame-font "Dejavu Sans Mono" 'keep-frame-size)
+        (if (font-exists-p "Inconsolata")
+        (set-frame-font "Inconsolata" 'keep-frame-size)
+      (message "No suitable default font found. We recommend you install `ttf-dejavu-core' or `ttf-inconsolata'"))))))
+
+(defun font-exists-p (font)
+  "Test if FONT is available."
+   (if (null (list-fonts (font-spec :family font)))
+              ;; 2008-02-26 function of the new font backend (Emacs 23),
+              ;; instead of `x-list-fonts'
+       nil
+     t))
+
+(add-hook 'after-make-frame-functions 'bmz/frame-init-font)
+
+;; This is required to make sure tables in org-mode align well, even if
+;; Chinese & English chars used together.
+;; http://baohaojun.github.io/perfect-emacs-chinese-font.html
+;; If changed, maybe you need to restart Emacs (or `redraw-frame'?)
+(setq face-font-rescale-alist '(("宋体" . 1.25)
+                                ("新宋体" . 1.25)
+                                ("微软雅黑" . 1.25)
+                                ("Microsoft Yahei" . 1.25)
+                                ("WenQuanYi Zen Hei" . 1.25)))
 
 
 ;; ** files & buffers
