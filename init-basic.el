@@ -70,11 +70,17 @@
     (scroll-bar-mode -1))
 
 ;; *** frame title & modeline
-(setq frame-title-format '("%b%* (%m) - Emacs "
-                           (:eval emacs-version)
-                           (:eval (if buffer-file-name
-                                      (format " - [%s]" buffer-file-name)
-                                    ""))))
+(setq eol-mnemonic-dos "DOS"
+      eol-mnemonic-unix "UNIX"
+      eol-mnemonic-mac "MAC")
+
+(setq-default frame-title-format
+              '("%b - (%* "
+                (:eval (symbol-name buffer-file-coding-system))
+                " %m"
+                (:eval (format ") - Emacs %s" emacs-version))
+                (:eval (format " - [%s]" (or buffer-file-name default-directory)))
+                ))
 
 ;; http://www.reddit.com/r/emacs/comments/1nihkt/how_to_display_full_charset_name_in_modeline_eg/
 (defvar my-mode-line-coding-format
