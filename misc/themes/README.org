@@ -1,0 +1,33 @@
+** standalone themes
+
+gallery: http://pawelbx.github.io/emacs-theme-gallery/
+
+| theme          | emacs-23      | emacs-24   | term | bg           | homepage                                        |
+|                | (color-theme) | (deftheme) |      |              |                                                 |
+|----------------+---------------+------------+------+--------------+-------------------------------------------------|
+| molokai        | Y             | Y          |      | dark         | https://github.com/alloy-d/color-theme-molokai  |
+| monokai        |               | Y          |      | dark         | https://github.com/oneKelvinSmith/monokai-emacs |
+| subatomic256   |               | Y          |  256 | dark         | https://github.com/d11wtq/subatomic256          |
+| tangotango     | Y             | Y          |      | dark         | https://github.com/juba/color-theme-tangotango  |
+| *tango-plus*   |               | Y          |  256 | light        | https://github.com/tmalsburg/tango-plus-theme   |
+| zenburn        | Y [*]         | Y          |      | dark         | https://github.com/bbatsov/zenburn-emacs        |
+| *anti-zenburn* |               | Y          |      | light        | https://github.com/m00natic/anti-zenburn-theme  |
+| *ample*        |               | Y          |  256 | dark / light | https://github.com/jordonbiondo/ample-theme     |
+| +billc+        | Y             |            |      | dark         |                                                 |
+| +hober2+       | Y             |            |      | dark         |                                                 |
+| +naquadah+     |               | Y          |      | dark         | https://github.com/jd/naquadah-theme            |
+
+** goodies in color-theme-library
+
+gallery: https://code.google.com/p/gnuemacscolorthemetest/
+
+| color-theme-digital-ofs1 ()    | 492 | light |
+| color-theme-subtle-blue ()     | 423 |       |
+| color-theme-emacs-21 ()        | 370 | light |
+| color-theme-dark-blue2 ()      | 624 |       |
+| color-theme-whateveryouwant () | 399 | light |
+| color-theme-lethe ()           | 445 |       |
+| color-theme-emacs-nw ()        | 376 | light |
+| color-theme-matrix ()          | 670 |       |
+
+
