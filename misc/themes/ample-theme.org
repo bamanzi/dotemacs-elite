@@ -1,0 +1,25 @@
+* Ample Themes
+  - A Triplet of themey goodness.
+  - Full colored gui and modern 256 color terminal support only.
+** Installation
+    Ample Theme is on Melpa, ensure that Melpa is added to your package archives, then use M-x package-install ample-theme.
+    #+BEGIN_SRC emacs-lisp
+      ;; then in your init:
+      ;; do for either ample, ample-light, or ample-flat
+      (load-theme 'ample t)
+      (enable-theme 'ample)
+    #+END_SRC
+** If you get ugly colors in terminal:
+   #+BEGIN_SRC shell-script
+     # throw this in your ~/.bash_profile
+     export TERM="xterm-256color"
+   #+END_SRC
+** All Three Themes:
+   [[http://i.imgur.com/WZjJty6.png]]
+
+** Old Screenshots:
+*** Ample-theme in Emacs.app on osx
+    [[http://i.imgur.com/5AYS8EA.png]]
+
+*** Ample-theme in Terminal.app on osx
+    [[http://i.imgur.com/p15i1QM.png]]
