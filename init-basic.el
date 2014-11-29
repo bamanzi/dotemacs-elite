@@ -794,4 +794,4 @@ element in of `highlight-symbol-faces'."
 
 (global-set-key (kbd "C-x C-j") 'dired-jump)
 
-
+(global-set-key (kbd "ESC M-%") 'query-replace-regexp)

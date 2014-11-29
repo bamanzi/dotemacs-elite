@@ -1,3 +1,6 @@
+;; * general text-mode
+;;(add-hook 'text-mode-hook 'turn-on-auto-fill)
+
 ;; * org-mdoe
 
 (setq org-completion-use-ido t
@@ -207,8 +210,8 @@ The screen-shot tool is determined by `org-download-screenshot-method'."
 (autoload 'gfm-mode "markdown-mode"
   "Major mode for editing GitHub Flavored Markdown files." t)
 
-(add-to-list 'auto-mode-alist '("\\.mk?d" . markdown-mode))
-(add-to-list 'auto-mode-alist '("\\.markdown" . markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.mk?d" . gfm-mode))
+(add-to-list 'auto-mode-alist '("\\.markdown" . gfm-mode))
 
 ;; ** faces
 (eval-after-load "markdown-mode"
@@ -248,5 +251,3 @@ The screen-shot tool is determined by `org-download-screenshot-method'."
 
 
 
-;; * general text-mode
-(add-hook 'text-mode-hook 'turn-on-auto-fill)
