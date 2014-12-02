@@ -869,3 +869,8 @@ vi style of % jumping to matching brace."
                                     (add-hook 'before-save-hook 'check-parens nil 'local)))
 
 ;--
+(defun revert-buffer-keep-cursor-pos ()
+  (interactive)
+  (let ((pos (point)))
+    (find-alternate-file buffer-file-name)
+    (goto-char pos)))
