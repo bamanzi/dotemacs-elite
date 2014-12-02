@@ -132,14 +132,14 @@ Current symbol would be used as input to narrow the choices."
          )))
 
 (define-key goto-map "." 'anything-goto-definition-etags)
-(global-set-key (kbd "<f9> g .") 'anything-goto-definition-etags)
-(global-set-key (kbd "<f9> g e") 'anything-goto-definition-etags)
+(global-set-key (kbd "ESC M-. .") 'anything-goto-definition-etags)
+(global-set-key (kbd "ESC M-. C-]") 'anything-goto-definition-etags)
 
 
 (autoload 'find-file-in-tags "find-file-in-tags"
   "find file in TAGS file." t)
 
-(global-set-key (kbd "<f9> g f") 'find-file-in-tags)
+(global-set-key (kbd "ESC M-. f") 'find-file-in-tags)
 
 
 ;; *** ctags
@@ -159,8 +159,7 @@ Current symbol would be used as input to narrow the choices."
   `(add-to-list 'anything-c-ctags-modes 'ruby-mode)
   )
 
-(global-set-key (kbd "<f9> t") 'anything-ctags-current-file)
-(global-set-key (kbd "<f9> C-]") 'anything-ctags-current-file)
+(global-set-key (kbd "ESC M-. t") 'anything-ctags-current-file)
 
 
 ;; *** tags history
@@ -168,7 +167,7 @@ Current symbol would be used as input to narrow the choices."
 (autoload 'tv-view-history "tags-view"
   "Open a buffer listing locations on the tag stack." t)
 
-(global-set-key (kbd "<f9> g M-h") 'tv-view-history)
+(global-set-key (kbd "M-,") 'tv-view-history)
 
 ;; etags-stack.el works too, but it's a stack (you can't go forward once backward)
 ;; anything-etags+ also works. but it requires you bind M-. to its `anything-etags+-select`
