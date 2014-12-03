@@ -6768,6 +6768,6 @@ This can be added to `magit-mode-hook' for example"
 
 ;; rest of magit core
 (require 'magit-key-mode)
-(require 'magit-bisect)
+;;(require 'magit-bisect)
 
 ;;; magit.el ends here
