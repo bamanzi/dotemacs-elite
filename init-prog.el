@@ -278,3 +278,10 @@ found in DIRECTORY or any of its ancestors."
   "Invoke documentation query backends for KEYWORD." t)
 
 (global-set-key (kbd "<M-f1>") 'keyword-help-lookup)
+
+
+;; ** repl-toggle
+(autoload 'repl-toggle "bmz-repl-toggle"
+  "Toggle between the REPL buffer and the source buffer." t)
+
+(global-set-key (kbd "<f12> ~") 'repl-toggle)
