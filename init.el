@@ -26,12 +26,17 @@
 
   ;;for cl-lib, pcase
   (if (< emacs-major-version 24)
-      (add-to-list 'load-path (concat dotemacs-elite-dir "_extra/emacs-23")))
+      (add-to-list 'load-path (concat dotemacs-elite-dir "_extra/emacs-23"))
+    (if (and (version<= emacs-version "24.2")
+             (not (locate-library "cl-lib")))
+        ;; emacs 24.1/24.2 have pcase.el, but no cl-lib.el
+        (load-file (concat dotemacs-elite-dir "_extra/emacs-23/cl-lib.el"))))
 
+  
   (add-to-list 'Info-default-directory-list
                (concat dotemacs-elite-dir "_extra/info"))
+  ;; reset `Info-directory-list' to force `info' to re-init it
   (setq Info-directory-list nil)
-
   
   (setq idle-require-idle-delay 5
         idle-require-load-break 1)
