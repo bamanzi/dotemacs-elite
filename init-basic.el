@@ -344,7 +344,7 @@ If the new path's directories does not exist, create them."
 ;; ***  newline & line-wrap
 (setq require-final-newline 't)
 (setq-default truncate-lines t)
-(setq-default fill-column 100)
+
 ;;(auto-fill-mode t)
 
 (global-set-key (kbd "<f10> C-w") 'toggle-truncate-lines)

@@ -79,15 +79,6 @@ On Windows, baskslashes is substituted with slashes."
      (add-to-list 'ac-modes 'shell-mode)
      ))
 
-(eval-after-load "eshell"
-  `(progn
-     (if (executable-find "git")
-         (require 'pcmpl-git nil t))
-     (if (and (executable-find "hg")
-              (require 'pcase nil t))
-         (require 'pcmpl-args nil t))
-     ))
-
 (define-key global-map (kbd "C-. p") 'ac-complete-pcomplete)
 
 

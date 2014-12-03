@@ -100,7 +100,6 @@ save it in `ffap-file-at-point-line-number' variable."
 
 ;; ** mark, copy & yank
 ;; *** make/copy something
-;;(idle-require 'mark-copy-something)
 
 ;; based on code stolen from https://github.com/m2ym/thingopt-el/blob/master/thingopt.el
 (setq thing/name-map
@@ -868,9 +867,9 @@ vi style of % jumping to matching brace."
 (add-hook 'emacs-lisp-mode-hook #'(lambda ()
                                     (add-hook 'before-save-hook 'check-parens nil 'local)))
 
-;--
-(defun revert-buffer-keep-cursor-pos ()
-  (interactive)
-  (let ((pos (point)))
-    (find-alternate-file buffer-file-name)
-    (goto-char pos)))
+;;--
+;;(setq-default fill-column 72)
+
+(autoload 'fci-mode "fill-column-indicator"
+  "Toggle fci-mode on and off." t)
+
