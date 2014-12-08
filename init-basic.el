@@ -600,6 +600,30 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
 (define-key global-map (kbd "<f10> q o") 'qtmstr-outline-mode)
 
 
+;; *** outline-org-like (use org-like headings for outline)
+(autoload 'outline-org-mode  "outline-org-like"
+  "A special `outline-minor-mode' that use org-mode-style headings." t)
+
+(autoload 'outline-org-heading-mode "outline-org-like"
+  "org-mode like heading highlighting." t)
+
+;; ;; highlight header
+;; (defun highlight-outline-header/bmz ()
+;;   (interactive)
+;;   (highlight-lines-matching-regexp "^;;; \\w" 'hi-black-hb)
+;;   ;; highlight headers in this file
+;;   (highlight-lines-matching-regexp "^;; \\* "          'org-level-1)
+;;   (highlight-lines-matching-regexp "^;; \\*\\* "       'org-level-2)
+;;   (highlight-lines-matching-regexp "^;; \\*\\*\\* "    'org-level-3)
+;;   (highlight-lines-matching-regexp "^;; \\*\\*\\*\\* " 'org-level-4))
+  
+
+;; (eval-after-load "lisp-mode"
+;;   `(add-hook 'emacs-lisp-mode-hook 'highlight-outline-header/bmz))
+
+
+
+;; ** highlighting
 ;; ***  highlight-symbol
 (autoload 'highlight-symbol-at-point "highlight-symbol"
   "Toggle highlighting of the symbol at point." t)
@@ -711,21 +735,6 @@ element in of `highlight-symbol-faces'."
   )
 
 (add-hook 'find-file-hook 'highlight-todo/bmz)
-
-
-;; highlight header
-(defun highlight-outline-header/bmz ()
-  (interactive)
-  (highlight-lines-matching-regexp "^;;; \\w" 'hi-black-hb)
-  ;; highlight headers in this file
-  (highlight-lines-matching-regexp "^;; \\* "          'org-level-1)
-  (highlight-lines-matching-regexp "^;; \\*\\* "       'org-level-2)
-  (highlight-lines-matching-regexp "^;; \\*\\*\\* "    'org-level-3)
-  (highlight-lines-matching-regexp "^;; \\*\\*\\*\\* " 'org-level-4))
-  
-
-(eval-after-load "lisp-mode"
-  `(add-hook 'emacs-lisp-mode-hook 'highlight-outline-header/bmz))
 
 
 ;; ** buffer navigations
