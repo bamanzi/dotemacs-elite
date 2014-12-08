@@ -626,13 +626,14 @@ It is an enhanced version of `anything-for-buffers'."
 ;; *** sdcv
 (autoload 'sdcv-search-input "sdcv"
   "Search WORD through the `command-line' tool sdcv." t)
-(define-key search-map "D"  'sdcv-search-input)
+(global-set-key (kbd "M-S s SPC")  'sdcv-search-input)
 
 
 ;;(setq sdcv-dictionary-simple-list '("XDICT英汉辞典" "XDICT汉英辞典"))
 (autoload 'sdcv-search-pointer+ "sdcv"
   "Translate current point word with command-line tool `sdcv'." t)
-(define-key search-map "d"  'sdcv-search-pointer+)
+(global-set-key (kbd "M-S s s")  'sdcv-search-pointer+)
+(global-set-key (kbd "M-S S")    'sdcv-search-pointer+)
 
 (defun sdcv-search-word-at-pt-mouse (event)
   (interactive "e")
@@ -650,9 +651,11 @@ It is an enhanced version of `anything-for-buffers'."
 (autoload 'dictem-run-define  "dictem" nil t)
 
 (progn
-  (define-key search-map (kbd "M-d s") 'dictem-run-search)
-  (define-key search-map (kbd "M-d m") 'dictem-run-match)
-  (define-key search-map (kbd "M-d d") 'dictem-run-define)
+  (global-set-key (kbd "M-S d s") 'dictem-run-search)
+  (global-set-key (kbd "M-S d SPC") 'dictem-run-search)
+  (global-set-key (kbd "M-S d m") 'dictem-run-match)
+  (global-set-key (kbd "M-S d d") 'dictem-run-define)
+  (global-set-key (kbd "M-S D")   'dictem-run-define)
   )
 
 (eval-after-load "dictem"
@@ -673,10 +676,11 @@ It is an enhanced version of `anything-for-buffers'."
       google-translate-default-source-language "en"
       google-translate-default-target-language "zh-CN")
 
-(define-key search-map "G" 'google-translate-at-point)
-(define-key search-map " G" 'google-translate-query-translate)
-
-
+(progn
+  (global-set-key (kbd "M-S g g")   'google-translate-at-point)
+  (global-set-key (kbd "M-S G")     'google-translate-at-point)
+  (global-set-key (kbd "M-S g SPC") 'google-translate-query-translate)
+  )
 
 
 ;; ** speedbar
