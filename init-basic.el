@@ -743,9 +743,9 @@ element in of `highlight-symbol-faces'."
 ;; highlight todo
 (defun highlight-todo/bmz ()
   (interactive)
-  (highlight-lines-matching-regexp "\\<FIXME\\>:" 'font-lock-warning-face)
-  (highlight-lines-matching-regexp "\\<TODO\\>:" 'font-lock-warning-face)
-  (highlight-lines-matching-regexp "\\<WARN" 'font-lock-warning-face)
+  (highlight-regexp (concat comment-start "+[ \t]*FIXME[: \t].*$") 'font-lock-warning-face)
+  (highlight-regexp (concat comment-start "+[ \t]*TODO[: \t].*$") 'font-lock-warning-face)
+  (highlight-regexp (concat comment-start "+[ \t]*WARN\\(ING\\)?[: \t].*$") 'font-lock-warning-face)  
   )
 
 (add-hook 'find-file-hook 'highlight-todo/bmz)
