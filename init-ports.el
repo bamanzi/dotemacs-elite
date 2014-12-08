@@ -123,10 +123,31 @@ but not mapped by term/xterm.el"
 
   (setq find-program "gfind")
 
-  (if (executable-find "ggrep")
-      (setq grep-program "ggrep"))
-  
+  (when (executable-find "ggrep")
+      (setq grep-program "ggrep")
+      (setq ispell-grep-program "ggrep"))
+
   (setq ispell-program-name "hunspell"
-        ispell-extra-args '("-d" "en_US"))
+        ispell-dictionary "en_US")
+  ;; (setq ispell-extra-args '("-d" "en_US"))
+
+  (eval-after-load "ispell"
+    `(progn
+       ;; `flyspell-mode' needs this
+       (add-to-list 'ispell-local-dictionary-alist '("en_US"
+                                              "[[:alpha:]]"
+                                              "[^[:alpha:]]"
+                                              "[']"
+                                              t
+                                              ("-d" "en_US")
+                                              nil
+                                              iso-8859-1))
+       ;; `ispell-complete-word' needs this
+       (if (executable-find "hunspell")
+           (setq ispell-alternate-dictionary
+                 (concat (file-name-directory (executable-find "hunspell"))
+                         "..\\share\\hunspell\\en_US.dic")))
+    ))
+  
   )
    
