@@ -271,6 +271,10 @@ found in DIRECTORY or any of its ancestors."
   (let ((dir (projectile-get-project-root)))
     (eshell/cd dir)))
 
+(autoload 'nv-speedbar-open-current-buffer-in-tree "projectile-speedbar"
+  "Undocumented." t)
+(defalias 'projectile-speedbar 'nv-speedbar-open-current-buffer-in-tree)
+
 
 ;; ** documentation lookup
 (autoload 'keyword-help-lookup "bmz-keyword-help"
