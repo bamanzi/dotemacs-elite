@@ -133,11 +133,14 @@
   (interactive (list (selected-frame)))
   (when window-system
     (with-selected-frame frame
-      (if (font-exists-p "Dejavu Sans Mono")
-          (set-frame-font "Dejavu Sans Mono" 'keep-frame-size)
-        (if (font-exists-p "Inconsolata")
-        (set-frame-font "Inconsolata" 'keep-frame-size)
-      (message "No suitable default font found. We recommend you install `ttf-dejavu-core' or `ttf-inconsolata'"))))))
+      (let ((font (cl-find-if 'font-exists-p
+                              '("Source Code Pro"
+                                "DejaVu Sans Mono"
+                                "Inconsolata"
+                                "Ubuntu Mono"))))
+        (if font
+            (set-frame-font (concat font " 11" 'keep-frame-size))
+          (message "No suitable default font found. We recommend you install `ttf-dejavu-core' or `ttf-inconsolata'"))))))
 
 (defun font-exists-p (font)
   "Test if FONT is available."
