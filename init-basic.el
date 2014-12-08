@@ -23,6 +23,7 @@
 (define-key key-translation-map (kbd "<left-fringe> <C-mouse-4>") (kbd "<left-fringe> <C-wheel-up>"))
 (define-key key-translation-map (kbd "<left-fringe> <C-mouse-5>") (kbd "<left-fringe> <C-wheel-down>"))
 
+(global-unset-key (kbd "M-h"))
 
 ;; ** emacs environment
 (global-set-key (kbd "ESC ESC e r") 'eval-region)
@@ -441,7 +442,7 @@ If the new path's directories does not exist, create them."
        
        ;;(global-set-key (kbd "M-x") 'anything-M-x)
 
-       (define-key minibuffer-local-map (kbd "<f5> <f5>") 'anything-minibuffer-history)
+       (define-key minibuffer-local-map (kbd "<f5> M-h") 'anything-minibuffer-history)
       ))
 
 

@@ -150,7 +150,7 @@ On Windows, baskslashes is substituted with slashes."
   (define-key eshell-mode-map (kbd "<scroll>") 'eshell-toggle-cursor-keybinding)
 
   (define-key eshell-mode-map (kbd "<f5> M-h") 'anything-eshell-history)
-  (define-key eshell-mode-map (kbd "<f5> TAB")  'anything-esh-pcomplete)
+  (define-key eshell-mode-map (kbd "<f5> TAB") 'anything-esh-pcomplete)
   
   (define-key eshell-mode-map (kbd "<M-up>")   'eshell-previous-matching-input)
   (define-key eshell-mode-map (kbd "<M-down>") 'eshell-next-matching-input)
