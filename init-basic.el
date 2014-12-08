@@ -604,8 +604,24 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
 (autoload 'outline-org-mode  "outline-org-like"
   "A special `outline-minor-mode' that use org-mode-style headings." t)
 
-(autoload 'outline-org-heading-mode "outline-org-like"
+(autoload 'outline-org-headings-mode "outline-org-like"
   "org-mode like heading highlighting." t)
+
+(autoload 'anything-outline-org-headings "outline-org-like"
+  "Preconfigured anything to show org-mode-like headings." t)
+
+(global-set-key (kbd "<f5> C-z") 'anything-outline-org-headings)
+
+(idle-require 'outline-org-like)
+
+(eval-after-load "outline-org-like"
+  `(progn
+     (if (boundp 'prog-mode-hook)
+         (add-hook 'prog-mode-hook 'outline-org-headings-mode)
+       (add-hook 'find-file-hook 'outline-org-headings-mode))
+     
+     (define-key outline-mode-prefix-map (kbd "<f5>") 'outline-org-headings-mode)
+     ))
 
 ;; ;; highlight header
 ;; (defun highlight-outline-header/bmz ()
@@ -616,11 +632,9 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
 ;;   (highlight-lines-matching-regexp "^;; \\*\\* "       'org-level-2)
 ;;   (highlight-lines-matching-regexp "^;; \\*\\*\\* "    'org-level-3)
 ;;   (highlight-lines-matching-regexp "^;; \\*\\*\\*\\* " 'org-level-4))
-  
 
 ;; (eval-after-load "lisp-mode"
 ;;   `(add-hook 'emacs-lisp-mode-hook 'highlight-outline-header/bmz))
-
 
 
 ;; ** highlighting
