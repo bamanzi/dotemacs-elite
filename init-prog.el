@@ -167,11 +167,10 @@ Current symbol would be used as input to narrow the choices."
 (autoload 'tv-view-history "tags-view"
   "Open a buffer listing locations on the tag stack." t)
 
-(global-set-key (kbd "M-,") 'tv-view-history)
+(global-set-key (kbd "M-h .") 'tv-view-history)
 
 ;; etags-stack.el works too, but it's a stack (you can't go forward once backward)
 ;; anything-etags+ also works. but it requires you bind M-. to its `anything-etags+-select`
-
 
 
 ;; **  compilation
@@ -277,7 +276,7 @@ found in DIRECTORY or any of its ancestors."
 (autoload 'keyword-help-lookup "bmz-keyword-help"
   "Invoke documentation query backends for KEYWORD." t)
 
-(global-set-key (kbd "<M-f1>") 'keyword-help-lookup)
+(global-set-key (kbd "M-s <f1>") 'keyword-help-lookup)
 
 
 ;; ** repl-toggle
