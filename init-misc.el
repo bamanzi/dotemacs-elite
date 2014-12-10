@@ -878,3 +878,28 @@ vi style of % jumping to matching brace."
 (autoload 'fci-mode "fill-column-indicator"
   "Toggle fci-mode on and off." t)
 
+;;--
+(defun revert-buffer-keep-cursor-pos ()
+  "revert bufer with close & reopen the file, so local variable would be re-inited."
+  (interactive)
+  (let ( (file-name (buffer-file-name))
+         (pt        (point)) )
+    (when (kill-buffer (current-buffer))
+        (find-file file-name)
+        (goto-char pt))))
+
+(global-set-key (kbd "C-x M-r") 'revert-buffer-keep-cursor-pos)
+
+;;--
+;;goto-line with line number
+;;stolen from http://whattheemacsd.com/key-bindings.el-01.html
+(global-set-key [remap goto-line] 'goto-line-with-feedback)
+
+(defun goto-line-with-feedback ()
+  "Show line numbers temporarily, while prompting for the line number input"
+  (interactive)
+  (unwind-protect
+      (progn
+        (linum-mode 1)
+        (goto-line (read-number "Goto line: ")))
+    (linum-mode -1)))
