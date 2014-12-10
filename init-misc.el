@@ -869,9 +869,6 @@ vi style of % jumping to matching brace."
 (global-set-key (kbd "<f10> ws") 'whitespace-mode)
 
 ;;--
-(global-set-key (kbd "<C-f4>") 'kill-buffer)
-
-;;--
 (add-hook 'emacs-lisp-mode-hook #'(lambda ()
                                     (add-hook 'before-save-hook 'check-parens nil 'local)))
 
