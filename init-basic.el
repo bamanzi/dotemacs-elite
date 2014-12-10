@@ -176,6 +176,8 @@
 (global-set-key (kbd "<f12> <left>")    'previous-buffer)
 (global-set-key (kbd "<f12> <right>")   'next-buffer)
 
+(global-set-key (kbd "<C-f4>") 'kill-this-buffer)
+
 (global-set-key (kbd "<f12> *")  (kbd "C-x b *scratch* RET"))
 
 (idle-require 'uniquify)
