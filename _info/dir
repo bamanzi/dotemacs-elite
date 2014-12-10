@@ -19,3 +19,6 @@ Emacs
 * Monky: (monky).               An emacs extension providing an interactive 
                                   interface for Hg.
 * Org Mode Guide: (orgguide).   Abbreviated Org-mode Manual
+
+GNU Emacs Lisp
+* Emacs-w3m: (emacs-w3m).       An Emacs interface to w3m
