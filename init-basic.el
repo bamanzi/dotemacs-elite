@@ -140,8 +140,9 @@
                                 "Inconsolata"
                                 "Ubuntu Mono"))))
         (if font
-            (set-frame-font (concat font " 11" 'keep-frame-size))
-          (message "No suitable default font found. We recommend you install `ttf-dejavu-core' or `ttf-inconsolata'"))))))
+            (set-frame-font (concat font " 11") 'keep-frame-size)
+          (message "No suitable default font found. %s"
+		   "We recommend you install `ttf-dejavu-core' or `ttf-inconsolata'"))))))
 
 (defun font-exists-p (font)
   "Test if FONT is available."
