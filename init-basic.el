@@ -168,6 +168,9 @@
 ;; ** files & buffers
 (define-key search-map (kbd "C-f") 'ffap)
 
+(global-set-key (kbd "<C-down-mouse-1>") nil)
+(global-set-key (kbd "<C-mouse-1>") 'ffap-at-mouse)
+
 (global-set-key (kbd "C-x C-b") 'electric-buffer-list)
 (global-set-key (kbd "C-c C-b") 'ibuffer)
 (global-set-key (kbd "C-c b") 'ibuffer)
