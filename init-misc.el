@@ -8,11 +8,16 @@
 
 (define-key search-map (kbd "C-f") 'ido-find-file-at-point)
 
+(defun ffap-at-mouse-other-window (e)
+  (interactive)
+  (let ((ffap-file-finder 'ffap-other-window))
+    (ffap-at-mouse e)))
+
 (global-set-key (kbd "<C-down-mouse-1>") nil)
-(global-set-key (kbd "<C-mouse-1>") 'ffap-at-mouse)
+(global-set-key (kbd "<C-mouse-1>") 'ffap-at-mouse-other-window)
 ;; in case `outline-minor-mode' turned on
 (define-key global-map (kbd "<C-M-down-mouse-1>") nil)
-(define-key global-map (kbd "<C-M-mouse-1>") 'ffap-at-mouse)
+(define-key global-map (kbd "<C-M-mouse-1>") 'ffap-at-mouse-other-window)
 
 ;; **** make ffap support line number
 ;;copied from http://www.emacswiki.org/emacs/FindFileAtPoint#toc6
@@ -283,7 +288,6 @@ See also: `kill-rectangle', `copy-to-register'."
   "Copy characters from previous nonblank line, starting just above point." t)
 
 (global-set-key (kbd "<M-insert>") 'copy-from-above-command)
-
 
 
 ;; ** minibuffer
