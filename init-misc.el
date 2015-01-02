@@ -434,20 +434,23 @@ See also: `kill-rectangle', `copy-to-register'."
 
 
 ;; ** tabbar
-(defun tabbar-buffer-groups/bmz ()
-  "Return the list of group names the current buffer belongs to.
- Return a list of one element based on major mode."
-  (list
-   (cond
-    ((or (memq major-mode '(dired-mode ibuffer-mode grep-mode occur-mode
-                                       shell-mode eshell-mode lisp-interaction-mode))
-         (get-buffer-process (current-buffer)))
-     "Utils")
-    ((= (aref (buffer-name) 0) ?*)
-     "*temp*")
-    (t
-     "User"
-     ))))
+(idle-require 'tabbar)
+
+(eval-after-load "tabbar"
+  `(progn
+     (tabbar-mode t)
+     
+     (define-key tabbar-mode-map (kbd "<C-tab>")     'tabbar-forward)
+     (define-key tabbar-mode-map (kbd "<C-S-tab>")   'tabbar-backward)
+     (define-key tabbar-mode-map (kbd "<C-M-tab>")   'tabbar-forward-group)
+     (define-key tabbar-mode-map (kbd "<C-S-M-tab>") 'tabbar-backward-group)
+
+     (define-key tabbar-mode-map (kbd "<f12> <right>") 'tabbar-forward)
+     (define-key tabbar-mode-map (kbd "<f12> <left>")  'tabbar-backward)
+     (define-key tabbar-mode-map (kbd "<f12> <up>")    'tabbar-press-home)
+
+     (define-key tabbar-mode-map (kbd "<header-line> <C-mouse-1>") 'tabbar-buffer-list-menu)
+     ))
 
 
 ;;add extra leading & ending space to tab label
@@ -479,21 +482,44 @@ That is, a string used to represent it on the tab bar."
     (if sel
         (switch-to-buffer sel))))
 
+
+;; *** grouping
+(defun tabbar-group-by-major-modes ()
+  "Use tabbar.el's default grouping method: group major-mode grouping of buffers."
+  (interactive)
+  (setq tabbar-buffer-groups-function 'tabbar-buffer-groups))
+
+(defun tabbar-buffer-groups/bmz ()
+  "Return the list of group names the current buffer belongs to.
+ Return a list of one element based on major mode."
+  (list
+   (cond
+    ((or (memq major-mode '(dired-mode ibuffer-mode grep-mode occur-mode
+                                       shell-mode eshell-mode lisp-interaction-mode))
+         (get-buffer-process (current-buffer)))
+     "Utils")
+    ((= (aref (buffer-name) 0) ?*)
+     "*temp*")
+    (t
+     "User"
+     ))))
+
+(defun tabbar-group-by-nothing ()
+  (interactive)
+  (setq tabbar-buffer-groups-function 'tabbar-buffer-groups/bmz))
+
+
+;; *** tabbar-ruler
 (eval-after-load "tabbar"
+  `(progn         
+     (if (display-graphic-p)
+         (require 'tabbar-ruler nil t))
+     ))
+       
+(eval-after-load "tabbar-ruler"
   `(progn
-     (tabbar-mode t)
+     ;;reset my grouping funciton
      (setq tabbar-buffer-groups-function 'tabbar-buffer-groups/bmz)
-     
-     (define-key tabbar-mode-map (kbd "<C-tab>")     'tabbar-forward)
-     (define-key tabbar-mode-map (kbd "<C-S-tab>")   'tabbar-backward)
-     (define-key tabbar-mode-map (kbd "<C-M-tab>")   'tabbar-forward-group)
-     (define-key tabbar-mode-map (kbd "<C-S-M-tab>") 'tabbar-backward-group)
-
-     (define-key tabbar-mode-map (kbd "<f12> <right>") 'tabbar-forward)
-     (define-key tabbar-mode-map (kbd "<f12> <left>")  'tabbar-backward)
-     (define-key tabbar-mode-map (kbd "<f12> <up>")    'tabbar-press-home)
-
-     (define-key tabbar-mode-map (kbd "<header-line> <C-mouse-1>") 'tabbar-buffer-list-menu)
 
      (require 'color nil t)
      (unless (fboundp 'color-name-to-rgb)
@@ -505,23 +531,12 @@ That is, a string used to represent it on the tab bar."
            (let ((valmax (float (car (color-values "#ffffff")))))
              (mapcar (lambda (x) (/ x valmax)) (color-values color frame))))
        )
-         
-     (if (display-graphic-p)
-         (require 'tabbar-ruler nil t)
-       (setq tabbar-tab-label-function 'tabbar-buffer-tab-label/xterm))
+
+     (tabbar-ruler-remove-caches)
      ))
+       
 
-
-(eval-after-load "tabbar-ruler"
-  `(progn
-     ;;reset my grouping funciton
-     (setq tabbar-buffer-groups-function 'tabbar-buffer-groups/bmz)
-
-     ))
-
-(idle-require 'tabbar)
-
-;; *** workaround for a bug
+;; **** workaround for a bug
 ;; Emacs >= 24.4  would try to store frame configuration in `desktop-save-mode`
 ;; but couldn't make `tabbar-cache` persistent correctly ("Unprintable entity" error)
 (defun tabbar-ruler-remove-caches ()
