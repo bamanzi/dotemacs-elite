@@ -174,7 +174,10 @@
     (message "Current directory is not in a project.")))
 
 ;;** tabbar: group by project name
-
+(defvar tabbar-buffer-projectile-project nil
+  "project name. used as cache in `tabbar-buffer-groups-by-projectile'")
+(make-variable-buffer-local 'tabbar-buffer-projectile-project)
+  
 (defun tabbar-buffer-groups-by-projectile ()
   "Return the list of group names the current buffer belongs to.
 Return a list of one element based on projectile's project."
@@ -183,7 +186,9 @@ Return a list of one element based on projectile's project."
                (or
                 (buffer-file-name)
                 (memq major-mode '(dired-mode comint-mode occur-mode grep-mode compilation-mode eshell-mode shell-mode))))
-          (projectile-get-project-name))
+          (or tabbar-buffer-projectile-project
+              (setq tabbar-buffer-projectile-project
+                    (projectile-get-project-name))))
          ((= (aref (buffer-name) 0) ?*)
             (if (or (member (buffer-name) '("*scratch*" "*Buffer List*" "*Help*"))
                     (memq major-mode '()))
@@ -194,7 +199,10 @@ Return a list of one element based on projectile's project."
 
 (defun tabbar-group-by-project ()
   (interactive)
-  (setq tabbar-buffer-groups-function 'tabbar-buffer-groups-by-projectile)
+  (when (or projectile-mode
+          (yes-or-no-p "Projectile-mode seems not turned-on yet. Continue to enable it?"))
+    (projectile-global-on)
+    (setq tabbar-buffer-groups-function 'tabbar-buffer-groups-by-projectile))
   )
 
 
