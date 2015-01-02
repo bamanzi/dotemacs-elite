@@ -9,8 +9,8 @@
 (define-key search-map (kbd "C-f") 'ido-find-file-at-point)
 
 (defun ffap-at-mouse-other-window (e)
-  (interactive)
-  (let ((ffap-file-finder 'ffap-other-window))
+  (interactive "e")
+  (let ((ffap-file-finder 'find-file-other-window))
     (ffap-at-mouse e)))
 
 (global-set-key (kbd "<C-down-mouse-1>") nil)
