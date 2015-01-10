@@ -115,7 +115,11 @@
 
 ;; ** tags
 ;; *** etags
+(global-unset-key (kbd "M-,"))
+(global-set-key (kbd "M-, >") 'tags-loop-continue)
+
 (global-set-key (kbd "<f9> .") 'anything-c-etags-select)
+(global-set-key (kbd "M-, SPC") 'anything-c-etags-select)
 
 (defun anything-goto-definition-etags ()
   "Show function/symbol list with etags & imenu.
@@ -131,35 +135,13 @@ Current symbol would be used as input to narrow the choices."
          anything-c-source-imenu
          )))
 
-(define-key goto-map "." 'anything-goto-definition-etags)
-(global-set-key (kbd "ESC M-. .") 'anything-goto-definition-etags)
-(global-set-key (kbd "ESC M-. C-]") 'anything-goto-definition-etags)
+(global-set-key (kbd "<f9> g .") 'anything-goto-definition-etags)
 
 
 (autoload 'find-file-in-tags "find-file-in-tags"
   "find file in TAGS file." t)
 
-(global-set-key (kbd "ESC M-. f") 'find-file-in-tags)
-
-
-;; *** ctags
-;;similar to 'taglist' plugin of vim, you don't need to create tags file by yourself to use `anything-c-source-ctags'
-(defun anything-ctags-current-file ()
-  "Show ctags list of current file, using current symbol as input to narrow the choices."
-  (interactive)
-  (anything
-   :prompt "ctags:"
-   :input (thing-at-point 'symbol)
-   :sources
-      '( anything-c-source-ctags
-         anything-c-source-imenu
-         )))
-
-(eval-after-load "anything-config"
-  `(add-to-list 'anything-c-ctags-modes 'ruby-mode)
-  )
-
-(global-set-key (kbd "ESC M-. t") 'anything-ctags-current-file)
+(global-set-key (kbd "M-, f") 'find-file-in-tags)
 
 
 ;; *** tags history
@@ -167,10 +149,28 @@ Current symbol would be used as input to narrow the choices."
 (autoload 'tv-view-history "tags-view"
   "Open a buffer listing locations on the tag stack." t)
 
-(global-set-key (kbd "M-h .") 'tv-view-history)
+(global-set-key (kbd "M-, M-h") 'tv-view-history)
 
 ;; etags-stack.el works too, but it's a stack (you can't go forward once backward)
 ;; anything-etags+ also works. but it requires you bind M-. to its `anything-etags+-select`
+
+;; *** ctags
+;; similar to 'taglist' plugin of vim, to use `anything-c-source-ctags'
+;; you don't need to create tags file by yourself
+
+;; (defun anything-ctags-current-file ()
+;;   "Show ctags list of current file, using current symbol as input to narrow the choices."
+;;   (interactive)
+;;   (anything
+;;    :prompt "ctags:"
+;;    :input (thing-at-point 'symbol)
+;;    :sources
+;;       '( anything-c-source-ctags
+;;          anything-c-source-imenu
+;;          )))
+
+(global-set-key (kbd "<f9> t") 'anything-ctags-current-file)
+
 
 
 ;; **  compilation
