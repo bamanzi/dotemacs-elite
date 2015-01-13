@@ -46,27 +46,28 @@
 (require 'org)           ;; for face org-level-1..6
 
 ;;** we'll use an internal `outline-regexp' value
-(defun outline-org/get-outline-regexp ()
+(defun outline-org/get-heading-regexp ()
   "Calculate the outline regexp for the current mode."
-  (let ((comment-starter (replace-regexp-in-string
-						  "[[:space:]]+" "" comment-start)))
-    (if (eq 'emacs-lisp-mode major-mode)
-        ;; both ';; ***' and ';;;; ' would work
-        "^;; ?[*;]"
-      ;; e.g. for python: '# * title ...'
-      (concat "^" comment-starter " [*]+"))))
+  (when comment-start
+    (let ((comment-starter (replace-regexp-in-string
+                            "[[:space:]]+" "" comment-start)))
+      (if (eq 'emacs-lisp-mode major-mode)
+          ;; both ';; ***' and ';;;; ' would work
+          "^;; ?[*;]"
+        ;; e.g. for python: '# * title ...'
+        (concat "^" comment-starter " [*]+")))))
 
 ;;** heading highlighting
 (defun outline-org/get-heading-font-lock-keywords ()
-  (let ( (outline-regexp (outline-org/get-outline-regexp)) )
+  (let ( (heading-regexp (outline-org/get-heading-regexp)) )
     (let ( (heading-1-regexp   
-            (concat outline-regexp "\\{1\\} \\(.*\\)"))
+            (concat heading-regexp "\\{1\\} \\(.*\\)"))
            (heading-2-regexp
-            (concat outline-regexp "\\{2\\} \\(.*\\)"))
+            (concat heading-regexp "\\{2\\} \\(.*\\)"))
            (heading-3-regexp
-            (concat outline-regexp "\\{3\\} \\(.*\\)"))
+            (concat heading-regexp "\\{3\\} \\(.*\\)"))
            (heading-4-regexp
-            (concat outline-regexp "\\{4,\\} \\(.*\\)")) )
+            (concat heading-regexp "\\{4,\\} \\(.*\\)")) )
       `((,heading-1-regexp 1 'org-level-1 t)
         (,heading-2-regexp 1 'org-level-2 t)
         (,heading-3-regexp 1 'org-level-3 t)
@@ -77,12 +78,15 @@
   nil
   :group 'outline
   (let ( (keywords (outline-org/get-heading-font-lock-keywords)) )
-    (if outline-org-headings-mode
-      (font-lock-add-keywords nil keywords)
-    (font-lock-remove-keywords nil keywords)))
-  (font-lock-mode -1) ;;FIXME: any better way?
-  (font-lock-mode 1)
-  )
+    (when keywords
+      (if outline-org-headings-mode
+          ;; turn off
+          (font-lock-remove-keywords nil keywords)
+        ;; turn on
+        (font-lock-add-keywords nil keywords))
+      (font-lock-mode -1) ;;FIXME: any better way?
+      (font-lock-mode 1)
+      )))
 
 ;;** outline commands wrapper without changing user `outline-regexp'
 
@@ -95,16 +99,18 @@ settings.  For example, if you bind `C-S-z' to this command, you
 can use `C-S-z C-u' to go to parent heading in org-mode style, but
 `C-c @ C-u' remains the default `outline-up-heading'."
   (interactive "KOutline operation: ")
-  (let ( (outline-regexp (outline-org/get-outline-regexp))
+  (let ( (outline-regexp (outline-org/get-heading-regexp))
          (command (lookup-key outline-mode-prefix-map key)) )
-    (if (or (equal key (kbd "<f1>"))
-            (equal key (kbd "<f1> <f1>")))  
-          (describe-variable 'outline-mode-prefix-map)
-      (if (and command (commandp command))
-          (progn
-            (message "%s" command)
-            (call-interactively command))
-      (message "no command for that key in `outlint-mode-prefix-map'.")))))
+    (if comment-start
+        (if (or (equal key (kbd "<f1>"))
+                (equal key (kbd "<f1> <f1>")))  
+            (describe-variable 'outline-mode-prefix-map)
+          (if (and command (commandp command))
+              (progn
+                (message "%s" command)
+                (call-interactively command))
+            (message "no command for that key in `outlint-mode-prefix-map'.")))
+      (message "Can't determine `outline-regexp' according to `comment-start'."))))
 
 ;; default keybindings: C-c @ C-z
 (define-key outline-mode-prefix-map (kbd "C-z") 'outline-org/outline-command-dispatcher)
@@ -113,7 +119,7 @@ can use `C-S-z C-u' to go to parent heading in org-mode style, but
 ;;*** our new `outline-cycle'
 (defun outline-org/outline-cycle ()
   (interactive)
-  (let ( (outline-regexp (outline-org/get-outline-regexp)) )
+  (let ( (outline-regexp (outline-org/get-heading-regexp)) )
     (if (and (not outline-minor-mode) (not (eq major-mode 'outline-mode)))
         (outline-minor-mode t))
     (if (not outline-org-headings-mode)
@@ -130,7 +136,7 @@ can use `C-S-z C-u' to go to parent heading in org-mode style, but
 (defvar anything-c-source-outline-org-headings
   '((name . "Org-like Headline")
     (headline . (lambda ()
-                  (outline-org/get-outline-regexp)))
+                  (outline-org/get-heading-regexp)))
     (condition . (memq 'outline-minor-mode minor-mode-list))
     (migemo)
     (persistent-action . (lambda (elm)
@@ -168,7 +174,7 @@ See (find-library \"outline-org.el\") ")
           (if (not outline-minor-mode)
               (outline-minor-mode t))
           (set (make-local-variable 'outline-regexp-old) outline-regexp)
-          (setq outline-regexp (outline-org/get-outline-regexp))
+          (setq outline-regexp (outline-org/get-heading-regexp))
           (if (not outline-org-headings-mode)
               (outline-org-headings-mode t))
           (hide-body))
