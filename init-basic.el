@@ -76,10 +76,8 @@
       eol-mnemonic-mac "MAC")
 
 (setq-default frame-title-format
-              '("%b - (%* "
-                (:eval (symbol-name buffer-file-coding-system))
-                " %m"
-                (:eval (format ") - Emacs %s" emacs-version))
+              '("%b - (%m)"
+                (:eval (format " - Emacs %s" emacs-version))
                 (:eval (format " - [%s]" (or buffer-file-name default-directory)))
                 ))
 
@@ -207,6 +205,15 @@ By default, describe the current buffer."
                           (and file  (format "File/directory:\t%s\n" file))
                           (format "Mode:\t\t%s\n"
                                   (with-current-buffer buf (format-mode-line mode-name)))
+                          (format "Encoding:\t\t%s\n" buffer-file-coding-system)
+                          (format "Line-ending:\t\t%s\n"
+                                (with-current-buffer buf
+                                  (let ((eol-type (coding-system-eol-type buffer-file-coding-system)))
+                                    (cond
+                                     ((eq 0 eol-type) "UNIX")
+                                     ((eq 1 eol-type) "DOS")
+                                     ((eq 2 eol-type) "MAC")
+                                     (t "???")))))                        
                           (format "Size in chars:\t%g\n" (buffer-size buf))
                           (format "Modified:\t%s\n" (if (buffer-modified-p buf) "yes" "no"))
                           (with-current-buffer buf
