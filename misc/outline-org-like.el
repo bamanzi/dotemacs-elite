@@ -13,33 +13,54 @@
 ;; http://www.cnblogs.com/bamanzi/archive/2011/10/09/emacs-outline-org-like.html
 ;;
 ;; Features:
-;; 1. org-mode style heading highlighting
-;; 2. org-mode style cycling heading visibilities with just one key
-;;    (`H-tab' by default)
-;; 3. org-mode style move-up/down/promote/demote heading (you need
-;;    package `outline-magic'
-;; 4. other outline operations proxied via another prefix key
-;;    (`C-S-z' by default)
-;; 5. `anything' source to list all org-mode style headings
+;;   1. org-mode style heading highlighting
+;;   2. org-mode style cycling heading visibilities with just one key
+;;      (`H-tab' by default)
+;;   3. org-mode style move-up/down/promote/demote heading (you need
+;;      package `outline-magic'
+;;   4. other outline operations proxied via another prefix key
+;;      (`C-S-z' by default)
+;;   5. `anything' source to list all org-mode style headings
 ;;
 ;; Usage:
-;;   Use `*' `**' `***' in comments as outline heading in any major
-;;   modes.
+;; 
+;;   First, put `*' `**' `***' (with a leading space) in comments as
+;;   outline headings:
 ;;
-;;   Then you can either:
+;;     # * heading 1
+;;     # ** heading 2
+;;     class Object1:
+;;         # *** heading 1.2.1
+;;         def method_2(a, b):
+;;             ...
+;;     # ** heading 2
 ;;
-;;      1. To leave you own `outline-regexp' setting untouched, use
-;;         `outline-org-headings-mode' to turn on the heading
-;;         highlighting, and use
-;;         `outline-org/outline-command-dispatcher' to navigate/fold
-;;         the org-mode-style headings (and your original keybindings
-;;         for `outline-minor-mode' could be used.)
-;;         
-;;      2. For convinience, you can turn on `outline-org-mode', this
-;;         would change your default `outline-regexp' settings. But
-;;         you can use `outline-minor-mode' keybindings to navigate/
-;;         fold/unfold the org-mode-style headings.
+;;   Then use `outline-org-mode' to turn on a tweaked
+;;   `outline-minor-mode'.  (Note: it would change current buffer's
+;;   `outline-regexp'.) You can use all `outline-minor-mode' commands
+;;   (such as `hide-all', `hide-entry', `hide-all', `hide-entry' etc)
+;;   to navigate/fold these sections.
 ;;
+;; Advanced usage:
+;;
+;;   1. To leave you own `outline-regexp' setting untouched, you use
+;;      `outline-org-headings-mode' to turn on the heading
+;;      highlighting, and use `outline-org/outline-command-dispatcher'
+;;      to navigate/fold the org-mode-style headings.
+;;
+;;      for example, if you bind
+;;      `outline-org/outline-command-dispatcher' to `C-z', then you
+;;      can use:
+;;
+;; 	      C-z C-a  show-all
+;; 	      C-z C-c  hide-entry
+;; 	      C-z C-f  outline-forward-same-level
+;; 	      C-z C-t  hide-body
+;;
+;;   2. To get an overview of all headings, you can use
+;;   
+;;     - `outline-org/cycle' (package `outline-magic' needed)
+;;     - or, `anything-outline-org-headings' (package `anything' needed)
 
 ;;; Code:
 
