@@ -24,8 +24,10 @@
 ;;
 ;; Usage:
 ;;   Use `*' `**' `***' in comments as outline heading in any major
-;;   modes. Then you can either:
-
+;;   modes.
+;;
+;;   Then you can either:
+;;
 ;;      1. To leave you own `outline-regexp' setting untouched, use
 ;;         `outline-org-headings-mode' to turn on the heading
 ;;         highlighting, and use
@@ -80,10 +82,10 @@
   (let ( (keywords (outline-org/get-heading-font-lock-keywords)) )
     (when keywords
       (if outline-org-headings-mode
-          ;; turn off
-          (font-lock-remove-keywords nil keywords)
-        ;; turn on
-        (font-lock-add-keywords nil keywords))
+          ;; turn on
+          (font-lock-add-keywords nil keywords)
+        ;; turn off
+      (font-lock-remove-keywords nil keywords))
       (font-lock-mode -1) ;;FIXME: any better way?
       (font-lock-mode 1)
       )))
