@@ -187,6 +187,46 @@
 (idle-require 'uniquify)
 (setq uniquify-buffer-name-style 'post-forward-angle-brackets)
 
+;; *** describe-buffer
+;; based on `describe-buffer' from http://www.emacswiki.org/emacs/download/help-fns%2b.el
+(defun describe-buffer- (&optional buffer-name)
+    "Describe the existing buffer named BUFFER-NAME.
+By default, describe the current buffer."
+    ;; (interactive "bDescribe buffer: ")
+    (interactive "@")
+    (unless buffer-name (setq buffer-name  (buffer-name)))
+    (help-setup-xref `(describe-buffer- ,buffer-name) (called-interactively-p 'interactive))
+    (let ((buf  (get-buffer buffer-name)))
+      (unless (and buf  (buffer-live-p buf))  (error(format "No such live buffer `%s'" buffer-name)))
+      (let* ((file       (or (buffer-file-name buf)
+                             (with-current-buffer buf
+                               (and (eq major-mode 'dired-mode)  default-directory))))
+             (help-text  (concat
+                          (format "Buffer `%s'\n%s\n\n" buffer-name (make-string
+                                                                     (+ 9 (length buffer-name)) ?-))
+                          (and file  (format "File/directory:\t%s\n" file))
+                          (format "Mode:\t\t%s\n"
+                                  (with-current-buffer buf (format-mode-line mode-name)))
+                          (format "Size in chars:\t%g\n" (buffer-size buf))
+                          (format "Modified:\t%s\n" (if (buffer-modified-p buf) "yes" "no"))
+                          (with-current-buffer buf
+                            (format "Read-only:\t%s\n\n\n" (if buffer-read-only "yes" "no")))
+                          (with-current-buffer buf
+                            (if (not buffer-display-time)
+                                "Never displayed\n"
+                              (format "Last displayed:\t%s\n"
+                                      (format-time-string
+                                       ;; Could use this, for short format: "%02H:%02M:%02S"
+                                       ;; Or this, for a bit longer: "%_3a %_2l:%02M:%02S %_2p"
+                                       "%a %b %e %T %Y (%z)"
+                                       buffer-display-time)))))))
+        
+        (with-help-window (help-buffer)
+          (with-current-buffer (help-buffer)
+            (insert help-text))))))
+
+(global-set-key (kbd "C-h B") 'describe-buffer-)
+
 ;; *** backups
 (setq make-backup-files t) ;;to disable backup, set it to nil
 (setq backup-directory-alist '(("." . "~/.emacs.d/backups")))
