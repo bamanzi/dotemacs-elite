@@ -146,8 +146,13 @@ If called with C-u prefix, it would archive to file \"%s_archive::\". "
      (set-face-attribute 'markdown-header-face-5 nil :inherit 'org-level-5)
      (set-face-attribute 'markdown-header-face-6 nil :inherit 'org-level-6)
 
-     ;; (add-hook 'markdown-mode-hook 'buffer-face-mode) 
-     ))
+     ;; (add-hook 'markdown-mode-hook 'buffer-face-mode)
+
+     ;; something like org-mode
+     (define-key markdown-mode-map (kbd "M-RET")     'markdown-insert-list-item)
+     (define-key markdown-mode-map (kbd "C-c C-l")   'markdown-insert-uri)
+     (define-key markdown-mode-map (kbd "C-c C-x f") 'markdown-insert-footnote)
+    ))
 
 ;; ** imenu
 ;;stolen from http://tychoish.com/rhizome/imenu-for-markdown-and-writing/
