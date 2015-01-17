@@ -157,10 +157,9 @@ can use `C-S-z C-u' to go to parent heading in org-mode style, but
   (hide-other))
 
 (defvar anything-c-source-outline-org-headings
-  '((name . "Org-like Headline")
+  '((name . "Org-like Headings")
     (headline . (lambda ()
                   (outline-org/get-heading-regexp)))
-    (condition . (memq 'outline-minor-mode minor-mode-list))
     (migemo)
     (persistent-action . (lambda (elm)
                            (anything-c-action-line-goto elm)
