@@ -95,13 +95,13 @@ On Windows, baskslashes is substituted with slashes."
   (interactive "P")
   (if (or arg (eq (key-binding (kbd "<up>")) 'previous-line))
       (progn
-        (define-key comint-mode-map (kbd "<up>")   'comint-previous-input)
-        (define-key comint-mode-map (kbd "<down>") 'comint-next-input)
-        (message "up/down key now binding to `comint-{previous,next}-input'."))
+        (local-set-key (kbd "<up>")   'comint-previous-input)
+        (local-set-key (kbd "<down>") 'comint-next-input)
+        (message "Now up/down key bound to `comint-{previous,next}-input'."))
     (progn
-        (define-key comint-mode-map (kbd "<up>")   'previous-line)
-        (define-key comint-mode-map (kbd "<down>") 'next-line)
-        (message "Now up/down key now binding to `{previous,next}-line."))))
+        (local-set-key (kbd "<up>")   'previous-line)
+        (local-set-key (kbd "<down>") 'next-line)
+        (message "Now up/down key bound to `{previous,next}-line."))))
         
 
 (defun eshell-toggle-cursor-keybinding (arg)
