@@ -735,7 +735,7 @@ It is an enhanced version of `anything-for-buffers'."
 (autoload 'highlight-indentation-current-column-mode "highlight-indentation"
   "Hilight Indentation minor mode displays" t)
 
-(global-set-key (kbd "<f10> hi") 'highlight-indentation-mode)
+(global-set-key (kbd "<f10> hi") 'highlight-indentation-current-column-mode)
 
 
 ;;`indent-guide-mode' only show guides on current section.
