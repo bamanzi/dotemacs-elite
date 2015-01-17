@@ -185,20 +185,22 @@ This is a front-end function for `describe-function', `describe-variable',
   (interactive
    (list (intern-soft (read-string "Symbol: "
                                    (thing-at-point 'symbol)))))
-  (cond
-   ((fboundp symbol)
-    (describe-function symbol))
-   ((boundp symbol)
-    (describe-variable symbol))
-   ((facep symbol)
-    (describe-face symbol))
-   ((featurep symbol)
-    ;;not accurate (if package name is different than feature name), but in most cases that's enough
-    (if (fboundp 'describe-package) ;; emacs-24 provides this
-        (describe-package (symbol-name symbol))
-      (finder-commentary (symbol-file symbol))))
-   (t
-    (message "Unknown symbol: %s" symbol))))
+  (let ((ffap-file-finder 'find-file-other-window))
+    (cond
+     ((fboundp symbol)
+      (describe-function symbol))
+     ((boundp symbol)
+      (describe-variable symbol))
+     ((facep symbol)
+      (describe-face symbol))
+     ((featurep symbol)
+      ;;not accurate (if package name is different than feature name), but in most cases that's enough
+      (if (fboundp 'describe-package) ;; emacs-24 provides this
+          (describe-package (symbol-name symbol))
+        (finder-commentary (symbol-file symbol))))
+     (t
+      (message "Unknown symbol: %s" symbol))))
+  )
   
 
 (eval-after-load "lisp-mode"
