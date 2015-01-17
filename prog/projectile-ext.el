@@ -128,8 +128,11 @@
   '("Projectile"
     ["Find file" 'projectile-find-file-]
     ["Find file (grind)" projectile-grind-on-dir]
+    ["Recent files" projectile-recentf]
+    "--"
     ["Dired" projectile-dired]
-    ["Recent files" projectile-recentf]    
+    ["Find directory" projectile-find-dir]
+    ["Find file in directory" projectile-find-file-in-directory]    
     "--"
     ["Grep in project" (if (fboundp 'projectile-grep)
                            (projectile-grep)
