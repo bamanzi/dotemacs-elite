@@ -12,13 +12,26 @@
   "Anything source definition for projectile files.")
 
 (defun anything-with-projectile-files ()
-  "Example function for calling anything with the projectile file source.
-
-Use this function as example and create your own list of anything sources.
-"
+  "Call `anything' with the projectile file source."
   (interactive)
   (cd (projectile-project-root))
   (anything :sources '(anything-c-source-projectile-files)))
+
+;;; project dirs
+(defvar anything-c-source-projectile-dirs
+  `((name . "Projectile Dirs")
+    (candidates . projectile-current-project-dirs)
+    (type . file)
+    (match . anything-c-match-on-basename)
+    (mode-line . "Projectile Dirs")
+    )
+  "Anything source definition for projectile dirs.")
+
+(defun anything-with-projectile-dirs ()
+  "Call `anything' with the projectile dir source."
+  (interactive)
+  (cd (projectile-project-root))
+  (anything :sources '(anything-c-source-projectile-dirs)))
 
 ;;; project buffers 
 (defvar anything-c-source-projectile-buffers
@@ -30,7 +43,7 @@ Use this function as example and create your own list of anything sources.
   "Anything source definition for projectile buffers")
 
 (defun anything-with-projectile-buffers ()
-  "Call anything with the projectile buffer source."
+  "Call `anything' with the projectile buffer source."
   (interactive)
   (anything :sources '(anything-c-source-projectile-buffers)))
 
