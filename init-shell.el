@@ -1,4 +1,14 @@
-;; ** shell toggle
+;; ** shell
+(autoload 'shell-toggle "sh-toggle"
+  "Toggles between the *shell* buffer and the current buffer." t)
+(autoload 'shell-toggle-cd "sh-toggle"
+  "Calls `shell-toggle' and let it cd to path of current buffer." t)
+
+(global-set-key (kbd "<f12> s") 'shell-toggle-cd)
+(global-set-key (kbd "<f12> S") 'shell-toggle)
+
+;; ** eshell
+;; *** shell toggle
 
 ;;(idle-require 'esh-toggle)
 ;;(idle-require 'sh-toggle)
@@ -8,16 +18,9 @@
 (autoload 'eshell-toggle-cd "esh-toggle"
   "Calls `eshell-toggle' and let it cd to path of current buffer." t)
 
-(autoload 'shell-toggle "sh-toggle"
-  "Toggles between the *shell* buffer and the current buffer." t)
-(autoload 'shell-toggle-cd "sh-toggle"
-  "Calls `shell-toggle' and let it cd to path of current buffer." t)
-
 (require 'esh-mode)
 (global-set-key (kbd "<f12> e") 'eshell-toggle-cd)
 (global-set-key (kbd "<f12> E") 'eshell-toggle)
-(global-set-key (kbd "<f12> s") 'shell-toggle-cd)
-(global-set-key (kbd "<f12> S") 'shell-toggle)
 
 (defun eshell-cd (dir)
   (interactive "Dcd to: ")
@@ -82,27 +85,8 @@ On Windows, baskslashes is substituted with slashes."
 (define-key global-map (kbd "C-. p") 'ac-complete-pcomplete)
 
 
-;; ** compilation-shell-minor-mode (also for grep/grin in shell)
-(global-set-key (kbd "C-c <f9>") 'compilation-shell-minor-mode)
 
-(global-set-key (kbd "M-g <f9>") 'compile-goto-error)
-
-
-;; ** cursor keys
-
-(defun comint-toggle-cursor-keybinding (arg)
-  "Toggle up/down key between {previous,next}-line and {previous,next}-input."
-  (interactive "P")
-  (if (or arg (eq (key-binding (kbd "<up>")) 'previous-line))
-      (progn
-        (local-set-key (kbd "<up>")   'comint-previous-input)
-        (local-set-key (kbd "<down>") 'comint-next-input)
-        (message "Now up/down key bound to `comint-{previous,next}-input'."))
-    (progn
-        (local-set-key (kbd "<up>")   'previous-line)
-        (local-set-key (kbd "<down>") 'next-line)
-        (message "Now up/down key bound to `{previous,next}-line."))))
-        
+;; *** history
 
 (defun eshell-toggle-cursor-keybinding (arg)
   "Toggle up/down key between {previous,next}-line and {previous,next}-input."
@@ -116,16 +100,6 @@ On Windows, baskslashes is substituted with slashes."
         (define-key eshell-mode-map (kbd "<up>")   'previous-line)
         (define-key eshell-mode-map (kbd "<down>") 'next-line)
         (message "Now up/down key now binding to `{previous,next}-line."))))
-        
-
-
-;; ** misc
-(defun eshell-maybe-bol ()
-  (interactive)
-  (let ((p (point)))
-    (eshell-bol)
-    (if (= p (point))
-        (beginning-of-line))))
 
 ;;stolen from http://comments.gmane.org/gmane.emacs.help/7319
 (defun kai-eshell-insert-last-word (n)
@@ -139,11 +113,22 @@ On Windows, baskslashes is substituted with slashes."
   "Preconfigured anything for eshell history." t)
 (autoload 'anything-esh-pcomplete  "anything-config"
   "Preconfigured anything to provide anything completion in eshell." t)
+
+
+
+;; *** misc
+(defun eshell-maybe-bol ()
+  (interactive)
+  (let ((p (point)))
+    (eshell-bol)
+    (if (= p (point))
+        (beginning-of-line))))
+
+
 (defun bmz/eshell-mode-init ()
   ;; swap <home> and C-a
   (define-key eshell-mode-map (kbd "C-a")    'eshell-maybe-bol)
   (define-key eshell-mode-map (kbd "<home>") 'eshell-maybe-bol)  
-
 
   (eshell-toggle-cursor-keybinding 1)
   (define-key eshell-mode-map (kbd "<Scroll_Lock>") 'eshell-toggle-cursor-keybinding)
@@ -179,3 +164,37 @@ On Windows, baskslashes is substituted with slashes."
                                 (propertize (eshell/pwd) 'face 'font-lock-keyword-face)
                                 (propertize " $ " 'face  'font-lock-type-face))))
 (setq eshell-highlight-prompt nil)
+
+;; ** comint general
+
+(defun comint-toggle-cursor-keybinding (arg)
+  "Toggle up/down key between {previous,next}-line and {previous,next}-input."
+  (interactive "P")
+  (if (or arg (eq (key-binding (kbd "<up>")) 'previous-line))
+      (progn
+        (local-set-key (kbd "<up>")   'comint-previous-input)
+        (local-set-key (kbd "<down>") 'comint-next-input)
+        (message "Now up/down key bound to `comint-{previous,next}-input'."))
+    (progn
+        (local-set-key (kbd "<up>")   'previous-line)
+        (local-set-key (kbd "<down>") 'next-line)
+        (message "Now up/down key bound to `{previous,next}-line."))))
+
+;; stolen from http://emacsredux.com/blog/2015/01/18/clear-comint-buffers/
+(defun comint-clear-buffer ()
+  (interactive)
+  (let ((comint-buffer-maximum-size 0))
+    (comint-truncate-buffer)))
+
+(eval-after-load "comint"
+  `(progn
+     ;; let's bind the new command to a keycombo
+     (define-key comint-mode-map "\C-c\M-o" #'comint-clear-buffer)))
+
+;; ** misc
+;; *** compilation-shell-minor-mode (also for grep/grin in shell)
+(global-set-key (kbd "C-c <f9>") 'compilation-shell-minor-mode)
+
+(global-set-key (kbd "M-g <f9>") 'compile-goto-error)
+
+
