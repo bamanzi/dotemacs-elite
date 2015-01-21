@@ -116,8 +116,42 @@ but not mapped by term/xterm.el"
 (global-set-key (kbd "C-x M-f") 'sudo-find-file)
 (global-set-key (kbd "C-x M-s") 'sudo-unset-ro-or-save)
 
+;; ** key modifiers
+;; *** win32
+(setq w32-pass-lwindow-to-system nil)   ; prevent a single keypress on
+                                        ; LWIN poping up the Start Menu
+(setq w32-lwindow-modifier 'super)      ; s-o, s-i, s-y etc available, but
+                                        ; not s-1..9, s-r, s-l, s-p etc
+(setq w32-apps-modifier 'super)
 
-;; ** win32
+;; *** linux
+;; **** <lwindow> & <rwindow>: by default they're bound to `super'.
+
+;; (for Cygwin/X & Xming, option `-keyhook' should be used when starting X server.
+;;  http://thread.gmane.org/gmane.os.cygwin.xfree/22869/focus=22869 )
+
+;; **** <menu> key
+
+;; a) the non-sticky way (e.g. to get `s-o', you can press `<menu>'
+;;    and `o' at the same time):
+(defun x-map-menu-key-to-super ()
+  "Call `setxkbmap -option altwin:alt_super_win' to map <menu> key `super' modifier.
+
+NOTE: this would also change LWIN to Super_L, and RWIN to
+ALT_R/META_R. Refer [[file:/usr/share/X11/xkb/symbols/altwin]] for detail info."
+  (interactive)
+  (let ((result (shell-command-to-string "setxkbmap -option altwin:alt_super_win")))
+    (if (> (length result) 0)
+        (error result))))
+
+(when (eq window-system x)
+  (x-map-menu-key-to-super))
+
+;; b) the sticky way (e.g. to get `s-o', you need to press `<menu>'
+;;    and release it, then press `o')
+; (define-key key-translation-map (kbd "<menu>") 'event-apply-super-modifier)
+
+;; ** win32 programs
 (when (memq system-type '(windows-nt ms-dos))
   ;;http://sourceforge.net/projects/ezwinports/files/
 
