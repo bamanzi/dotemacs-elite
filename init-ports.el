@@ -118,11 +118,17 @@ but not mapped by term/xterm.el"
 
 ;; ** key modifiers
 ;; *** win32
-(setq w32-pass-lwindow-to-system nil)   ; prevent a single keypress on
-                                        ; LWIN poping up the Start Menu
-(setq w32-lwindow-modifier 'super)      ; s-o, s-i, s-y etc available, but
-                                        ; not s-1..9, s-r, s-l, s-p etc
-(setq w32-apps-modifier 'super)
+;; prevent a single keypress on LWIN poping up the Start Menu
+(setq w32-pass-lwindow-to-system nil)
+
+;; this would let us bind win+o, win+i, win+y etc to emacs commands
+;; but not system registered hot keys (such as win+1..9, win+r, win+l etc)
+(setq w32-lwindow-modifier 'super)
+;; (if you want to disable most system win+? hotkeys, follow this guide
+;;  http://www.askvg.com/tip-how-to-disable-all-win-keyboard-shortcuts-hotkeys-in-windows/
+;;  it would disable win+1..9, win+r, win+m etc, but not win+l, win+u, win+arrow)
+
+(setq w32-apps-modifier 'super) ;; the same effect with linux (alt_super_win)
 
 ;; *** linux
 ;; **** <lwindow> & <rwindow>: by default they're bound to `super'.
@@ -144,7 +150,7 @@ ALT_R/META_R. Refer [[file:/usr/share/X11/xkb/symbols/altwin]] for detail info."
     (if (> (length result) 0)
         (error result))))
 
-(when (eq window-system x)
+(when (eq window-system 'x)
   (x-map-menu-key-to-super))
 
 ;; b) the sticky way (e.g. to get `s-o', you need to press `<menu>'
