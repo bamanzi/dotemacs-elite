@@ -289,7 +289,14 @@ See also: `kill-rectangle', `copy-to-register'."
 
 (global-set-key (kbd "<M-insert>") 'copy-from-above-command)
 
+(defun backward-kill-line ()
+  "Kill backward to the beginning of the line."
+  (interactive)
+  (kill-line 0))
 
+(global-set-key (kbd "C-c C-u") 'backward-kill-line)
+
+                
 ;; ** minibuffer
 ;; *** easily insert buffer name (useful for `shell-command', `compile' etc)
 (defun minibuffer-insert-buffer-filename (arg)
