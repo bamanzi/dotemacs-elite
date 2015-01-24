@@ -2,9 +2,13 @@
 (require 'anything)
 
 ;;; project files
+(defun anything-c-projectile-files-candidates ()
+  (with-anything-current-buffer
+    (projectile-current-project-files)))
+
 (defvar anything-c-source-projectile-files
   `((name . "Projectile Files")
-    (candidates . projectile-current-project-files)
+    (candidates . anything-c-projectile-files-candidates)
     (type . file)
     (match . anything-c-match-on-basename)
     (mode-line . "Projectile Files")
@@ -18,9 +22,13 @@
   (anything :sources '(anything-c-source-projectile-files)))
 
 ;;; project dirs
+(defun anything-c-projectile-dirs-candidates ()
+  (with-anything-current-buffer
+    (projectile-current-project-dirs)))
+
 (defvar anything-c-source-projectile-dirs
   `((name . "Projectile Dirs")
-    (candidates . projectile-current-project-dirs)
+    (candidates . anything-c-projectile-dirs-candidates)
     (type . file)
     (match . anything-c-match-on-basename)
     (mode-line . "Projectile Dirs")
@@ -33,10 +41,14 @@
   (cd (projectile-project-root))
   (anything :sources '(anything-c-source-projectile-dirs)))
 
-;;; project buffers 
+;;; project buffers
+(defun anything-c-projectile-buffers-candidates ()
+  (with-anything-current-buffer
+    (projectile-project-buffer-names)))
+
 (defvar anything-c-source-projectile-buffers
   `((name . "Projectile buffers")
-    (candidates . projectile-project-buffer-names)
+    (candidates . anything-c-projectile-buffers-candidates)
     (type . buffer)
     (mode-line . "Projectile Buffers")
     )
