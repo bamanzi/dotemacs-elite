@@ -115,11 +115,7 @@
 
 ;; ** tags
 ;; *** etags
-(global-unset-key (kbd "M-,"))
-(global-set-key (kbd "M-, >") 'tags-loop-continue)
-
-(global-set-key (kbd "<f9> .") 'anything-c-etags-select)
-(global-set-key (kbd "M-, SPC") 'anything-c-etags-select)
+(global-set-key (kbd "<f9> . SPC") 'anything-c-etags-select)
 
 (defun anything-goto-definition-etags ()
   "Show function/symbol list with etags & imenu.
@@ -136,23 +132,31 @@ Current symbol would be used as input to narrow the choices."
          )))
 
 (global-set-key (kbd "<f9> g .") 'anything-goto-definition-etags)
-
+(global-set-key (kbd "<f9> M-.") 'anything-c-etags-select)
 
 (autoload 'find-file-in-tags "find-file-in-tags"
   "find file in TAGS file." t)
 
 (global-set-key (kbd "M-, f") 'find-file-in-tags)
 
+;; *** anything-etags+
+(autoload 'anything-etags+-select-at-point "anything-etags+"
+  "Tag jump with current symbol using etags and `anything'." t)
+(autoload 'anything-etags+-select "anything-etags+"
+  "Tag jump using etags and `anything'." t)
 
-;; *** tags history
-;; tags-view works with etags.el & gtags.el
-(autoload 'tv-view-history "tags-view"
-  "Open a buffer listing locations on the tag stack." t)
+(eval-after-load "anything-etags+"
+  `(progn
+     (global-set-key (kbd "<f9> g .") 'anything-etags+-select-at-point)
+     (global-set-key (kbd "<f9> M-.") 'anything-etags+-select-at-point)
 
-(global-set-key (kbd "M-, M-h") 'tv-view-history)
+     (global-set-key (kbd "ESC M-.")  'anything-etags+-select)
 
-;; etags-stack.el works too, but it's a stack (you can't go forward once backward)
-;; anything-etags+ also works. but it requires you bind M-. to its `anything-etags+-select`
+     (global-set-key (kbd "<f9> . M-h") 'anything-etags+-history)
+
+     (global-set-key (kbd "<f9> . <") 'anything-etags+-history-go-back)
+     (global-set-key (kbd "<f9> . >") 'anything-etags+-history-go-forward)
+     ))
 
 ;; *** ctags
 ;; similar to 'taglist' plugin of vim, to use `anything-c-source-ctags'
@@ -170,7 +174,6 @@ Current symbol would be used as input to narrow the choices."
 ;;          )))
 
 (global-set-key (kbd "<f9> t") 'anything-ctags-current-file)
-
 
 
 ;; **  compilation
