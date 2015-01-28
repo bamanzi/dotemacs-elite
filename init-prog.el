@@ -250,18 +250,22 @@ found in DIRECTORY or any of its ancestors."
 
 (eval-after-load "projectile"
   `(progn
-     (require 'anything-projectile)
-
      (delete ".projectile" projectile-project-root-files)
-     (add-to-list 'projectile-project-root-files ".projectile")     
-;;     (require 'projectile-ext)
+     (add-to-list 'projectile-project-root-files ".projectile")
+
+     (require 'projectile-ext nil t)
      (define-key projectile-mode-map (kbd "<M-f12> C-f") 'projectile-find-file-)
      (define-key projectile-mode-map (kbd "<M-f12> d") 'projectile-dired)     
      (define-key projectile-mode-map (kbd "<M-f12> e") 'projectile-eshell-cd-current)
      (define-key projectile-mode-map (kbd "<M-f12> E") 'projectile-eshell-cd-root)
      (define-key projectile-mode-map (kbd "<M-f12> G") 'projectile-grin)
      (define-key projectile-mode-map (kbd "<M-f12> a") 'projectile-ack)
-     (define-key projectile-mode-map (kbd "<M-f12> A") 'projectile-ack-find-file)  
+     (define-key projectile-mode-map (kbd "<M-f12> A") 'projectile-ack-find-file)
+
+     (require 'anything-projectile nil t)
+     (define-key projectile-mode-map (kbd "<M-f12> B") 'anything-with-projectile-buffers)
+     (define-key projectile-mode-map (kbd "<M-f12> F") 'anything-with-projectile-files)
+     (define-key projectile-mode-map (kbd "<M-f12> D") 'anything-with-projectile-dirs)     
      ))
 
 (defun eshell/cdprj ()
