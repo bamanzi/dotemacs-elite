@@ -1,7 +1,8 @@
 ;;; projectile-ext.el -- some extensions for projectile
 
 ;; Author: Ba Manzi <bamanzi@gmail.com>
-;; URL:    http://github.com/bamanzi/projectile
+;; URL:    http://bitbucket.org/bamanzi/dotemacs-elite/src/default/prog/projectile-ext.el
+;; Keywords: project tabbar
 ;;
 
 ;;; Code
@@ -154,7 +155,7 @@
     ["Eshell cd to current folder" projectile-eshell-cd-current]
     "--"
     ["Invalidate cache" (if (fboundp 'projectile-invalidate-cache)
-                            (projectile-invalidate-cache)
+                            (projectile-invalidate-cache nil)
                           (projectile-invalidate-project-cache))]
     ["Show project info" projectile-show-project-info]
     ["About" projectile-version]))
