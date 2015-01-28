@@ -134,11 +134,6 @@ Current symbol would be used as input to narrow the choices."
 (global-set-key (kbd "<f9> g .") 'anything-goto-definition-etags)
 (global-set-key (kbd "<f9> M-.") 'anything-c-etags-select)
 
-(autoload 'find-file-in-tags "find-file-in-tags"
-  "find file in TAGS file." t)
-
-(global-set-key (kbd "M-, f") 'find-file-in-tags)
-
 ;; *** anything-etags+
 (autoload 'anything-etags+-select-at-point "anything-etags+"
   "Tag jump with current symbol using etags and `anything'." t)
