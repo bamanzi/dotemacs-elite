@@ -528,10 +528,17 @@ If the new path's directories does not exist, create them."
       (define-key ac-completing-map (kbd "ESC ESC") 'ac-stop)
       (define-key ac-completing-map (kbd "C-s") 'ac-isearch) 
       
-      ;;(add-hook 'lisp-interaction-mode 'ac-emacs-lisp-mode-setup)
-
       (setq ac-quick-help-prefer-pos-tip t)
       (require 'pos-tip nil t)
+      
+      ;;redefine it to remove `ac-source-yasnippet'
+      (defun ac-emacs-lisp-mode-setup ()
+        (setq ac-sources (append '(ac-source-features
+                                   ac-source-functions
+                                   ;; ac-source-yasnippet
+                                   ac-source-variables
+                                   ac-source-symbols)
+                                 ac-sources)))      
       ))
 
 (define-key global-map (kbd "<f10> a c") 'auto-complete-mode)
