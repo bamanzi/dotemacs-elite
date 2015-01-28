@@ -134,6 +134,16 @@ Current symbol would be used as input to narrow the choices."
 (global-set-key (kbd "<f9> g .") 'anything-goto-definition-etags)
 (global-set-key (kbd "<f9> M-.") 'anything-c-etags-select)
 
+;; *** tags history
+;; tags-view works with etags.el & gtags.el
+;; and for etags, it make use `find-tag-marker-ring' 
+(autoload 'tv-view-history "tags-view"
+  "Open a buffer listing locations on the tag stack." t)
+
+(global-set-key (kbd "M-h .") 'tv-view-history)
+
+(defalias 'find-tag-history 'tv-view-history)
+
 ;; *** anything-etags+
 (autoload 'anything-etags+-select-at-point "anything-etags+"
   "Tag jump with current symbol using etags and `anything'." t)
@@ -147,6 +157,8 @@ Current symbol would be used as input to narrow the choices."
 
      (global-set-key (kbd "ESC M-.")  'anything-etags+-select)
 
+     ;; 'anything-etags+-history' has its own marker-ring. thus could
+     ;; not be used with `find-tag'
      (global-set-key (kbd "<f9> . M-h") 'anything-etags+-history)
 
      (global-set-key (kbd "<f9> . <") 'anything-etags+-history-go-back)
