@@ -167,6 +167,7 @@ Otherwise it requires user to input full thing name (value of `thing/name-map`).
 (global-set-key (kbd "C-`") 'thing/mark-one-thing)
 (global-set-key (kbd "C-c `") 'thing/mark-one-thing) ;;for xterm
 
+(idle-require 'pulse) ;; for `pulse-momentary-highlight-region'
 (defun thing/copy-one-thing (thing)
   (interactive (list (thing/read-thing 'quick)))
   (thing/call-action thing
@@ -489,13 +490,14 @@ That is, a string used to represent it on the tab bar."
          (get-buffer-process (current-buffer))
          (member (buffer-name) '("*scratch*" "*messages*" "*Help*")))
      "Utils")
-    ((= (aref (buffer-name) 0) ?*)
+    ((or (= (aref (buffer-name) 0) ?*)
+         (= (aref (buffer-name) 0) ? ))
      "*temp*")
     (t
      "Files"
      ))))
 
-(defun tabbar-group-by-nothing ()
+(defun tabbar-group-by-my-rules ()
   (interactive)
   (setq tabbar-buffer-groups-function 'tabbar-buffer-groups/bmz))
 
