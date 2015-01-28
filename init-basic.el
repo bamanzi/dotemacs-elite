@@ -336,23 +336,27 @@ If the new path's directories does not exist, create them."
 (defun golden-ratio+ ()
   "Enlarge current window, more than command `golden-ratio'."
   (interactive)
-  (let ((-golden-ratio-value 1.3))
+  (require 'golden-ratio)
+  (let ((-golden-ratio-value 1.25))
     (call-interactively 'golden-ratio)))
 
 (global-set-key (kbd "<f11> x") 'golden-ratio)
 (global-set-key (kbd "<f11> X") 'golden-ratio+)
 
+(eval-after-load "golden-ratio"
+  `(progn
+     (defun anything-enlarge-window ()
+       (interactive)
+       (with-anything-window
+         (call-interactively 'golden-ratio)))
 
-(defun anything-enlarge-window ()
-  (interactive)
-  (with-anything-window
-      (call-interactively 'golden-ratio)))
-
-(defun anything-enlarge-window+ ()
-  (interactive)
-  (with-anything-window
-    (let ((-golden-ratio-value 1.3))
-      (call-interactively 'golden-ratio))))
+     (defun anything-enlarge-window+ ()
+       (interactive)
+       (require 
+        (with-anything-window
+          (let ((-golden-ratio-value 1.3))
+            (call-interactively 'golden-ratio))))
+       )))
 
 (eval-after-load "anything"
   `(progn
