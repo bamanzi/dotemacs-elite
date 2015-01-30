@@ -16,6 +16,7 @@
 (global-unset-key (kbd "<f5>"))
 (global-unset-key (kbd "<f11>"))
 (global-unset-key (kbd "<f12>"))
+(global-unset-key (kbd "M-u"))
 
 ;; *** misc
 (define-key key-translation-map (kbd "<left-fringe> <mouse-4>")   (kbd "<left-fringe> <wheel-up>"))
@@ -26,10 +27,16 @@
 (global-unset-key (kbd "M-h"))
 
 ;; ** emacs environment
-(global-set-key (kbd "ESC ESC e r") 'eval-region)
-(global-set-key (kbd "ESC ESC e b") 'eval-buffer)
-(global-set-key (kbd "ESC ESC l l") 'load-library)
-(global-set-key (kbd "ESC ESC f l") 'find-library)
+(progn
+  (global-set-key (kbd "<M-f10> e r") 'eval-region)
+  (global-set-key (kbd "<M-f10> e b") 'eval-buffer)
+  (global-set-key (kbd "<M-f10> l l") 'load-library)
+  (global-set-key (kbd "<M-f10> f l") 'find-library)
+  (global-set-key (kbd "<M-f10> f f") 'find-function)
+  (global-set-key (kbd "<M-f10> f v") 'find-variable)
+  (global-set-key (kbd "<M-f10> d f") 'describe-function)
+  (global-set-key (kbd "<M-f10> d v") 'describe-variable)
+  )
 
 ;; *** help
 (define-key help-map "F" 'describe-face)
@@ -454,6 +461,13 @@ If the new path's directories does not exist, create them."
 
 (global-set-key (kbd "C-c ;") 'comment-or-uncomment-region)
 
+(progn
+  (global-unset-key (kbd "M-c"))
+  (global-set-key (kbd "M-c c") 'capitalize-word)
+  (global-set-key (kbd "M-c l") 'downcase-word)
+  (global-set-key (kbd "M-c u") 'upcase-word)
+  )
+
 
 ;; ** minibuffer
 
@@ -575,13 +589,10 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
 										"disabled"))))
 
 (progn
-  (define-key global-map (kbd "C-. f") 'ac-complete-filename)
-  (define-key global-map (kbd "C-. i") 'ac-complete-imenu)
-  (define-key global-map (kbd "C-. a") 'ac-complete-scite-api)
-  (define-key global-map (kbd "C-. y") 'ac-complete-yasnippet)
-
-  ;; C-. not availiable on xterm, use C-^ instead
-  (define-key key-translation-map (kbd "C-^") (kbd "C-."))
+  (define-key global-map (kbd "M-u , f") 'ac-complete-filename)
+  (define-key global-map (kbd "M-u , i") 'ac-complete-imenu)
+  (define-key global-map (kbd "M-u , a") 'ac-complete-scite-api)
+  (define-key global-map (kbd "M-u , y") 'ac-complete-yasnippet)
   )
 
 
@@ -830,7 +841,7 @@ element in of `highlight-symbol-faces'."
 
 (global-set-key (kbd "M-`")   'set-mark-command)
 ;;(global-set-key (kbd "M-`")   'cua-exchange-point-and-mark)
-(global-set-key (kbd "ESC M-`") 'pop-to-mark-command)
+(global-set-key (kbd "M-g `") 'pop-to-mark-command)
 
 
 ;; ** major modes

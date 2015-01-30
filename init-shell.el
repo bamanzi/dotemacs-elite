@@ -82,7 +82,7 @@ On Windows, baskslashes is substituted with slashes."
      (add-to-list 'ac-modes 'shell-mode)
      ))
 
-(define-key global-map (kbd "C-. p") 'ac-complete-pcomplete)
+(define-key global-map (kbd "M-u , p") 'ac-complete-pcomplete)
 
 
 

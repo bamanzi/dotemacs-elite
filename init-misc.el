@@ -245,7 +245,7 @@ Otherwise it requires user to input full thing name (value of `thing/name-map`).
        (file-name-nondirectory (buffer-file-name))
      (buffer-file-name))))
 
-(define-key global-map (kbd "ESC M-w %") 'copy-buffer-file-name)
+(define-key global-map (kbd "M-u c %") 'copy-buffer-file-name)
 
 ;; *** copy/cut current line if nothing selected
 ;; http://ergoemacs.org/emacs/emacs_copy_cut_current_line.html
@@ -710,7 +710,7 @@ It is an enhanced version of `anything-for-buffers'."
      (setq speedbar-verbosity-level 1)
      
      (speedbar-disable-update)
-     (global-set-key (kbd "ESC <M-f11>") 'speedbar-update-contents) ;;
+     (global-set-key (kbd "M-u <M-f11>") 'speedbar-update-contents) ;;
      
      (setq speedbar-show-unknown-files t)
      (speedbar-add-supported-extension ".org")
