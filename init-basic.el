@@ -757,11 +757,10 @@ element in of `highlight-symbol-faces'."
        )))
 
 ;; *** idle-highlight
-(autoload 'idle-highlight "idle-highlight"
-  "highlight the word the point is on" t)
+(autoload 'idle-highlight-mode "idle-highlight-mode"
+  "Idle-Highlight Minor Mode" t)
 
-
-(define-key global-map (kbd "<f10> i h") 'idle-highlight)
+(define-key global-map (kbd "<f10> i h") 'idle-highlight-mode)
 
 ;; *** iedit
 (autoload 'iedit-mode "iedit"
