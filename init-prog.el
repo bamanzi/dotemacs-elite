@@ -39,21 +39,22 @@
 (progn
   ;; (add-hook 'prog-mode-hook 'whitespace-mode)
   ;; (add-hook 'prog-mode-hook 'flyspell-prog-mode)
-  (if (fboundp 'bmz/turn-on-hideshow)
-      (add-hook 'prog-mode-hook 'bmz/turn-on-hideshow))
+  (if (fboundp 'turn-on-hideshow/bmz)
+      (add-hook 'prog-mode-hook 'turn-on-hideshow/bmz))
   ;; (if (fboundp 'qtmstr-outline-mode)
   ;;     (add-hook 'prog-mode-hook 'qtmstr-outline-mode))
   )
 
 ;; ** automatically highlight current symbol
-(eval-after-load "idle-highlight"
+(eval-after-load "idle-highlight-mode"
   `(progn
-     (if (fboundp 'idle-highlight)
-         (add-hook 'prog-mode-hook 'idle-highlight)
-       (add-hook 'prog-mode-hook 'idle-highlight-mode))
+     (when (boundp  'prog-mode-hook)
+       (if (fboundp 'idle-highlight)
+           (add-hook 'prog-mode-hook 'idle-highlight)
+         (add-hook 'prog-mode-hook 'idle-highlight-mode)))
      ))
 
-(idle-require 'idle-highlight)
+(idle-require 'idle-highlight-mode)
 
 
 ;; ** which-func-mode
