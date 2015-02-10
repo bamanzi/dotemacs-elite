@@ -660,25 +660,6 @@ It is an enhanced version of `anything-for-buffers'."
 ;;(global-set-key (kbd "<C-down-mouse-1>") 'sdcv-search-word-at-pt-mouse)
 
 
-;; *** dict protocol
-(setq dictem-server "localhost")
-(autoload 'dictem-run-search  "dictem" nil t)
-(autoload 'dictem-run-match   "dictem" nil t)
-(autoload 'dictem-run-define  "dictem" nil t)
-
-(progn
-  (global-set-key (kbd "M-S d s") 'dictem-run-search)
-  (global-set-key (kbd "M-S d SPC") 'dictem-run-search)
-  (global-set-key (kbd "M-S d m") 'dictem-run-match)
-  (global-set-key (kbd "M-S d d") 'dictem-run-define)
-  (global-set-key (kbd "M-S D")   'dictem-run-define)
-  )
-
-(eval-after-load "dictem"
-  `(progn
-     (dictem-initialize)
-     ))
-
 ;; *** google-translate
 (autoload 'google-translate-at-point "google-translate"
   "Translate the word at point or the words in the active region." t)
