@@ -24,14 +24,8 @@
                 (normal-top-level-add-subdirs-to-load-path))))
         (directory-files dotemacs-elite-dir 'full "^[a-z][^\\.]+"))
 
-  ;;for cl-lib, pcase
-  (if (< emacs-major-version 24)
-      (add-to-list 'load-path (concat dotemacs-elite-dir "_emacs-23"))
-    (if (and (version<= emacs-version "24.2")
-             (not (locate-library "cl-lib")))
-        ;; emacs 24.1/24.2 have pcase.el, but no cl-lib.el
-        (load-file (concat dotemacs-elite-dir "_emacs-23/cl-lib.el"))))
-
+  ;;for cl-lib, pcase etc
+  (add-to-list 'load-path (concat dotemacs-elite-dir "_libs") 'append)
   
   (add-to-list 'Info-default-directory-list
                (concat dotemacs-elite-dir "_info"))
