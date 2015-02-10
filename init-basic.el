@@ -286,6 +286,7 @@ If the new path's directories does not exist, create them."
 
 ;; ***  recentf
 (require 'recentf)
+(setq recentf-save-file (locate-user-emacs-file "recentf" ".recentf"))  ;; ~/.emacs.d/recentf rather than ~/.recentf
 (setq recentf-max-saved-items 100)
 (setq recentf-menu-path '("File"))
 (recentf-mode t)
@@ -899,3 +900,5 @@ element in of `highlight-symbol-faces'."
 (global-set-key (kbd "C-x C-j") 'dired-jump)
 
 (global-set-key (kbd "ESC M-%") 'query-replace-regexp)
+
+(setq bookmark-save-flag 1) ;; save every time we make or delete a bookmark
