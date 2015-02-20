@@ -1,11 +1,11 @@
 ;;; auto-complete.el --- Auto Completion for GNU Emacs
 
-;; Copyright (C) 2008, 2009, 2010, 2011, 2012  Tomohiro Matsuyama
+;; Copyright (C) 2008, 2009, 2010, 2011, 2012, 2013  Tomohiro Matsuyama
 
 ;; Author: Tomohiro Matsuyama <m2ym.pub@gmail.com>
 ;; URL: http://cx4a.org/software/auto-complete
 ;; Keywords: completion, convenience
-;; Version: 1.4
+;; Version: 1.4.0
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -42,6 +42,8 @@
 ;;; Code:
 
 
+
+(defconst ac-version "1.4.0")
 
 (eval-when-compile
   (require 'cl))
@@ -190,12 +192,13 @@
     java-mode malabar-mode clojure-mode clojurescript-mode  scala-mode
     scheme-mode
     ocaml-mode tuareg-mode coq-mode haskell-mode agda-mode agda2-mode
-    perl-mode cperl-mode python-mode ruby-mode lua-mode
+    perl-mode cperl-mode python-mode ruby-mode lua-mode tcl-mode
     ecmascript-mode javascript-mode js-mode js2-mode php-mode css-mode
     makefile-mode sh-mode fortran-mode f90-mode ada-mode
     xml-mode sgml-mode
     ts-mode
-    sclang-mode)
+    sclang-mode
+    verilog-mode)
   "Major modes `auto-complete-mode' can run on."
   :type '(repeat symbol)
   :group 'auto-complete)
@@ -207,7 +210,8 @@
   :group 'auto-complete)
 
 (defcustom ac-non-trigger-commands
-  '(*table--cell-self-insert-command)
+  '(*table--cell-self-insert-command
+    electric-buffer-list)
   "Commands that can't be used as triggers of `auto-complete'."
   :type '(repeat symbol)
   :group 'auto-complete)
@@ -285,7 +289,7 @@ a prefix doen't contain any upper case letters."
   :group 'auto-complete)
 
 (defcustom ac-use-overriding-local-map nil
-  "Non-nil means `overriding-local-map' will be used to hack for overriding key events on auto-copletion."
+  "Non-nil means `overriding-local-map' will be used to hack for overriding key events on auto-completion."
   :type 'boolean
   :group 'auto-complete)
 
@@ -294,23 +298,35 @@ a prefix doen't contain any upper case letters."
   :type 'boolean
   :group 'auto-complete)
 
+(defcustom ac-candidate-menu-min 1
+  "Number of candidates required to display menu"
+  :type 'integer
+  :group 'auto-complete)
+
+(defcustom ac-max-width nil
+  "Maximum width for auto-complete menu to have"
+  :type '(choice (const :tag "No limit" nil)
+                 (const :tag "Character Limit" 25)
+                 (const :tag "Window Ratio Limit" 0.5))
+  :group 'auto-complete)
+
 (defface ac-completion-face
   '((t (:foreground "darkgray" :underline t)))
   "Face for inline completion"
   :group 'auto-complete)
 
 (defface ac-candidate-face
-  '((t (:background "lightgray" :foreground "black")))
+  '((t (:inherit popup-face)))
   "Face for candidate."
   :group 'auto-complete)
 
 (defface ac-candidate-mouse-face
-  '((t (:background "blue" :foreground "white")))
+  '((t (:inherit popup-menu-mouse-face)))
   "Mouse face for candidate."
   :group 'auto-complete)
 
 (defface ac-selection-face
-  '((t (:background "steelblue" :foreground "white")))
+  '((t (:inherit popup-menu-selection-face)))
   "Face for selected candidate."
   :group 'auto-complete)
 
@@ -426,7 +442,7 @@ If there is no common part, this will be nil.")
     (define-key map "\C-\M-p" 'ac-quick-help-scroll-up)
 
     (dotimes (i 9)
-      (let ((symbol (intern (format "ac-complete-%d" (1+ i)))))
+      (let ((symbol (intern (format "ac-complete-select-%d" (1+ i)))))
         (fset symbol
               `(lambda ()
                  (interactive)
@@ -688,6 +704,10 @@ If there is no common part, this will be nil.")
   (let ((point (re-search-backward "[\"<>' \t\r\n]" nil t)))
     (if point (1+ point))))
 
+(defsubst ac-windows-remote-file-p (file)
+  (and (memq system-type '(ms-dos windows-nt cygwin))
+       (string-match-p "\\`\\(?://\\|\\\\\\\\\\)" file)))
+
 (defun ac-prefix-valid-file ()
   "Existed (or to be existed) file prefix."
   (let* ((line-beg (line-beginning-position))
@@ -700,7 +720,8 @@ If there is no common part, this will be nil.")
                       (and (setq file (and (string-match "^[^/]*/" file)
                                            (match-string 0 file)))
                            (file-directory-p file))))
-        start)))
+        (unless (ac-windows-remote-file-p file)
+          start))))
 
 (defun ac-prefix-c-dot ()
   "C-like languages dot(.) prefix."
@@ -760,20 +781,19 @@ You can not use it in source definition like (prefix . `NAME')."
         if (ac-source-available-p source)
         do
         (setq source (ac-source-entity source))
-        (flet ((add-attribute (name value &optional append) (add-to-list 'source (cons name value) append)))
-          ;; prefix
-          (let* ((prefix (assoc 'prefix source))
-                 (real (assoc-default (cdr prefix) ac-prefix-definitions)))
-            (cond
-             (real
-              (add-attribute 'prefix real))
-             ((null prefix)
-              (add-attribute 'prefix 'ac-prefix-default))))
-          ;; match
-          (let ((match (assq 'match source)))
-            (cond
-             ((eq (cdr match) 'substring)
-              (setcdr match 'ac-match-substring)))))
+        ;; prefix
+        (let* ((prefix (assoc 'prefix source))
+               (real (assoc-default (cdr prefix) ac-prefix-definitions)))
+          (cond
+           (real
+            (add-to-list 'source (cons 'prefix real)))
+           ((null prefix)
+            (add-to-list 'source (cons 'prefix 'ac-prefix-default)))))
+        ;; match
+        (let ((match (assq 'match source)))
+          (cond
+           ((eq (cdr match) 'substring)
+            (setcdr match 'ac-match-substring))))
         and collect source))
 
 (defun ac-compiled-sources ()
@@ -789,6 +809,7 @@ You can not use it in source definition like (prefix . `NAME')."
         (popup-create point width height
                       :around t
                       :face 'ac-candidate-face
+                      :max-width ac-max-width
                       :mouse-face 'ac-candidate-mouse-face
                       :selection-face 'ac-selection-face
                       :symbol t
@@ -895,8 +916,7 @@ You can not use it in source definition like (prefix . `NAME')."
   (unless ac-prefix-overlay
     (let (newline)
       ;; Insert newline to make sure that cursor always on the overlay
-      (when (and (eq ac-point (point-max))
-                 (eq ac-point (point)))
+      (when (eobp)
         (popup-save-buffer-state
           (insert "\n"))
         (setq newline t))
@@ -1079,7 +1099,7 @@ You can not use it in source definition like (prefix . `NAME')."
     (ac-inline-update))
   (popup-set-list ac-menu ac-candidates)
   (if (and (not ac-fuzzy-enable)
-           (<= (length ac-candidates) 1))
+           (<= (length ac-candidates) ac-candidate-menu-min))
       (popup-hide ac-menu)
     (if ac-show-menu
         (popup-draw ac-menu))))
@@ -1148,7 +1168,10 @@ You can not use it in source definition like (prefix . `NAME')."
   "Expand `STRING' into the buffer and update `ac-prefix' to `STRING'.
 This function records deletion and insertion sequences by `undo-boundary'.
 If `remove-undo-boundary' is non-nil, this function also removes `undo-boundary'
-that have been made before in this function."
+that have been made before in this function.  When `buffer-undo-list' is
+`t', `remove-undo-boundary' has no effect."
+  (when (eq buffer-undo-list t)
+    (setq remove-undo-boundary nil))
   (when (not (equal string (buffer-substring ac-point (point))))
     (undo-boundary)
     ;; We can't use primitive-undo since it undoes by
@@ -1164,7 +1187,7 @@ that have been made before in this function."
           (setq buffer-undo-list
                 (nthcdr 2 buffer-undo-list)))
       (delete-region ac-point (point)))
-    (insert string)
+    (insert (substring-no-properties string))
     ;; Sometimes, possible when omni-completion used, (insert) added
     ;; to buffer-undo-list strange record about position changes.
     ;; Delete it here:
@@ -1211,6 +1234,7 @@ that have been made before in this function."
                 (and (> (popup-direction ac-menu) 0)
                      (ac-menu-at-wrapper-line-p)))
         (ac-inline-hide) ; Hide overlay to calculate correct column
+        (ac-remove-quick-help)
         (ac-menu-delete)
         (ac-menu-create ac-point preferred-width ac-menu-height)))
     (ac-update-candidates 0 0)
@@ -1286,7 +1310,7 @@ that have been made before in this function."
                           (and menu
                                (popup-child-point menu parent-offset))
                           (point))
-                      nil 0
+                      nil 300
                       popup-tip-max-width
                       nil nil
                       (and (not around) 0))
@@ -1339,7 +1363,7 @@ that have been made before in this function."
           (point (marker-position (car ac-last-completion))))
       (when (stringp doc)
         (if (ac-quick-help-use-pos-tip-p)
-            (with-no-warnings (pos-tip-show doc nil point nil 0))
+            (with-no-warnings (pos-tip-show doc nil point nil 300))
           (popup-tip doc
                      :point point
                      :around t
@@ -1373,26 +1397,31 @@ that have been made before in this function."
   (interactive)
   (when (ac-menu-live-p)
     (ac-cancel-show-menu-timer)
-    (ac-cancel-quick-help-timer)
     (ac-show-menu)
-    (popup-isearch ac-menu :callback 'ac-isearch-callback)))
+    (if ac-use-quick-help
+        (let ((popup-menu-show-quick-help-function
+               (if (ac-quick-help-use-pos-tip-p)
+                   'ac-pos-tip-show-quick-help
+                 'popup-menu-show-quick-help)))
+          (popup-isearch ac-menu
+                         :callback 'ac-isearch-callback
+                         :help-delay ac-quick-help-delay))
+      (popup-isearch ac-menu :callback 'ac-isearch-callback))))
 
 
 
 ;;;; Auto completion commands
 
-;;;###autoload
-(defun auto-complete (&optional sources)
-  "Start auto-completion at current point."
-  (interactive)
+(defun* auto-complete-1 (&key sources (triggered 'command))
   (let ((menu-live (ac-menu-live-p))
-        (inline-live (ac-inline-live-p)))
+        (inline-live (ac-inline-live-p))
+        started)
     (ac-abort)
     (let ((ac-sources (or sources ac-sources)))
       (if (or ac-show-menu-immediately-on-auto-complete
               inline-live)
           (setq ac-show-menu t))
-      (ac-start :triggered 'explicit))
+      (setq started (ac-start :triggered triggered)))
     (when (ac-update-greedy t)
       ;; TODO Not to cause inline completion to be disrupted.
       (if (ac-inline-live-p)
@@ -1405,12 +1434,20 @@ that have been made before in this function."
                             (ac-expand-common))))
                  ac-use-fuzzy
                  (null ac-candidates))
-        (ac-fuzzy-complete)))))
+        (ac-fuzzy-complete)))
+    started))
+
+;;;###autoload
+(defun auto-complete (&optional sources)
+  "Start auto-completion at current point."
+  (interactive)
+  (auto-complete-1 :sources sources))
 
 (defun ac-fuzzy-complete ()
   "Start fuzzy completion at current point."
   (interactive)
-  (when (require 'fuzzy nil t)
+  (if (not (require 'fuzzy nil t))
+      (message "Please install fuzzy.el if you use fuzzy completion")
     (unless (ac-menu-live-p)
       (ac-start))
     (let ((ac-match-function 'fuzzy-all-completions))
@@ -1428,8 +1465,9 @@ that have been made before in this function."
   "Select next candidate."
   (interactive)
   (when (ac-menu-live-p)
+    (when (popup-hidden-p ac-menu)
+      (ac-show-menu))
     (popup-next ac-menu)
-    (setq ac-show-menu t)
     (if (eq this-command 'ac-next)
         (setq ac-dwim-enable t))))
 
@@ -1437,8 +1475,9 @@ that have been made before in this function."
   "Select previous candidate."
   (interactive)
   (when (ac-menu-live-p)
+    (when (popup-hidden-p ac-menu)
+      (ac-show-menu))
     (popup-previous ac-menu)
-    (setq ac-show-menu t)
     (if (eq this-command 'ac-previous)
         (setq ac-dwim-enable t))))
 
@@ -1513,7 +1552,7 @@ that have been made before in this function."
       (if (or (null point)
               (progn
                 (setq prefix (buffer-substring-no-properties point (point)))
-                (and (not (eq triggered 'explicit))
+                (and (not (eq triggered 'command))
                      (ac-stop-word-p prefix))))
           (prog1 nil
             (ac-abort))
@@ -1532,7 +1571,8 @@ that have been made before in this function."
         (ac-set-timer)
         (ac-set-show-menu-timer)
         (ac-set-quick-help-timer)
-        (ac-put-prefix-overlay)))))
+        (ac-put-prefix-overlay)
+        t))))
 
 (defun ac-stop ()
   "Stop completiong."
@@ -1559,9 +1599,11 @@ that have been made before in this function."
 
 (defun ac-trigger-key-command (&optional force)
   (interactive "P")
-  (if (or force (ac-trigger-command-p last-command))
-      (auto-complete)
-    (ac-fallback-command 'ac-trigger-key-command)))
+  (let (started)
+    (when (or force (ac-trigger-command-p last-command))
+      (setq started (auto-complete-1 :triggered 'trigger-key)))
+    (unless started
+      (ac-fallback-command 'ac-trigger-key-command))))
 
 
 
@@ -1638,7 +1680,8 @@ that have been made before in this function."
                                           (ac-trigger-command-p this-command)
                                           (and ac-completing
                                                (memq this-command ac-trigger-commands-on-completing)))
-                                      (not (ac-cursor-on-diable-face-p))))
+                                      (not (ac-cursor-on-diable-face-p))
+                                      (or ac-triggered t)))
               (ac-compatible-package-command-p this-command))
           (progn
             (if (or (not (symbolp this-command))
@@ -1657,8 +1700,8 @@ that have been made before in this function."
                  (not isearch-mode))
         (setq ac-last-point (point))
         (ac-start :requires (unless ac-completing ac-auto-start))
-	(unless ac-disable-inline
-	  (ac-inline-update)))
+        (unless ac-disable-inline
+          (ac-inline-update)))
     (error (ac-error var))))
 
 (defun ac-setup ()
@@ -1674,6 +1717,7 @@ that have been made before in this function."
           ad-do-it))
     (ad-disable-advice 'flymake-on-timer-event 'around 'ac-flymake-stop-advice)))
 
+;;;###autoload
 (define-minor-mode auto-complete-mode
   "AutoComplete mode"
   :lighter " AC"
@@ -1697,6 +1741,7 @@ that have been made before in this function."
            (memq major-mode ac-modes))
       (auto-complete-mode 1)))
 
+;;;###autoload
 (define-global-minor-mode global-auto-complete-mode
   auto-complete-mode auto-complete-mode-maybe
   :group 'auto-complete)
@@ -1730,8 +1775,11 @@ completion menu. This workaround stops that annoying behavior."
   "Source definition macro. It defines a complete command also."
   (declare (indent 1))
   `(progn
-     (defvar ,(intern (format "ac-source-%s" name))
-       ,source)
+     (defvar ,(intern (format "ac-source-%s" name)))
+     ;; Use `setq' to reset ac-source-NAME every time
+     ;; `ac-define-source' is called.  This is useful, for example
+     ;; when evaluating `ac-define-source' using C-M-x (`eval-defun').
+     (setq ,(intern (format "ac-source-%s" name)) ,source)
      (defun ,(intern (format "ac-complete-%s" name)) ()
        (interactive)
        (auto-complete '(,(intern (format "ac-source-%s" name)))))))
