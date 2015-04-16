@@ -28,6 +28,7 @@
 
 ;; ** emacs environment
 (progn
+  (global-unset-key (kbd "<M-f10>"))
   (global-set-key (kbd "<M-f10> e r") 'eval-region)
   (global-set-key (kbd "<M-f10> e b") 'eval-buffer)
   (global-set-key (kbd "<M-f10> l l") 'load-library)
@@ -722,15 +723,15 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
 
 ;; ** highlighting
 ;; ***  highlight-symbol
-(autoload 'highlight-symbol-at-point "highlight-symbol"
+(autoload 'highlight-symbol-at-point-ext "highlight-symbol"
   "Toggle highlighting of the symbol at point." t)
 (idle-require 'highlight-symbol)
 
-(define-key search-map (kbd "j")     'highlight-symbol-at-point)
+(define-key search-map (kbd "j")     'highlight-symbol-at-point-ext)
 (define-key search-map (kbd "#")     'highlight-symbol-prev)
 (define-key search-map (kbd "*")     'highlight-symbol-next)
 
-(global-set-key (kbd "<double-mouse-1>")  'highlight-symbol-at-point)
+(global-set-key (kbd "<double-mouse-1>")  'highlight-symbol-at-point-ext)
 (global-set-key (kbd "<S-wheel-up>")      'highlight-symbol-prev)
 (global-set-key (kbd "<S-wheel-down>")    'highlight-symbol-next)
 (global-set-key (kbd "<S-mouse-3>")       'highlight-symbol-occur)
@@ -739,13 +740,15 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
 
 (eval-after-load "highlight-symbol"
   `(progn
-     (unless (version< emacs-version "24.4")
+     (if (version< emacs-version "24.4")
+         ;; add an alias
+         (defalias 'highlight-symbol-at-point-ext 'highlight-symbol-at-point)
+       
        ;; Emacs 24.4 has a built-in `highlight-symbol-at-point`.
-       ;; We want to use the one in `highlight-symbol.el`
        (defalias 'highlight-symbol-at-point-built-in 'highlight-symbol-at-point)
          
-       ;; copied from `highlight-symbol.el`
-       (defun highlight-symbol-at-point ()
+       ;; we have to 'reimplemented' it (copied from `highlight-symbol.el`)
+       (defun highlight-symbol-at-point-ext ()
          "Toggle highlighting of the symbol at point.
 This highlights or unhighlights the symbol at point using the first
 element in of `highlight-symbol-faces'."
