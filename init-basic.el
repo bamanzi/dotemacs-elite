@@ -352,20 +352,18 @@ If the new path's directories does not exist, create them."
 (global-set-key (kbd "<f11> x") 'golden-ratio)
 (global-set-key (kbd "<f11> X") 'golden-ratio+)
 
-(eval-after-load "golden-ratio"
-  `(progn
-     (defun anything-enlarge-window ()
-       (interactive)
-       (with-anything-window
-         (call-interactively 'golden-ratio)))
+(defun anything-enlarge-window ()
+  (interactive)
+  (require 'golden-ratio)
+  (with-anything-window
+    (call-interactively 'golden-ratio)))
 
-     (defun anything-enlarge-window+ ()
-       (interactive)
-       (require 
-        (with-anything-window
-          (let ((-golden-ratio-value 1.3))
-            (call-interactively 'golden-ratio))))
-       )))
+(defun anything-enlarge-window+ ()
+  (interactive)
+  (require 'golden-ratio)
+  (with-anything-window
+    (let ((-golden-ratio-value 1.3))
+      (call-interactively 'golden-ratio))))
 
 (eval-after-load "anything"
   `(progn
@@ -473,12 +471,14 @@ If the new path's directories does not exist, create them."
 
 ;; ** minibuffer
 
-;; ***  icomplete
-(icomplete-mode t)  ;; completion for minibuffer
-                                        ; commands (M-x)
-                                        ; variables (C-h v, customize-variable)
-                                        ; functions (C-h f)
-                                        ; customize-group
+;; *** icomplete
+;; completion for minibuffer
+;; - commands (M-x, where-is)
+;; - variables (describe-variable, set-variable, customize-variable, find-variable)
+;; - functions (describe-function, find-function)
+;; - groups (customize-group)
+;; - libraries (find-library)
+(icomplete-mode t)
 
 ;; ***  ido
 (require 'ido)
