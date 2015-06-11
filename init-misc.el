@@ -639,26 +639,6 @@ It is an enhanced version of `anything-for-buffers'."
 
 (define-key global-map (kbd "C-. $") 'ac-complete-ispell-word)
 
-;; *** sdcv
-(autoload 'sdcv-search-input "sdcv"
-  "Search WORD through the `command-line' tool sdcv." t)
-(global-set-key (kbd "M-S s SPC")  'sdcv-search-input)
-
-
-;;(setq sdcv-dictionary-simple-list '("XDICT英汉辞典" "XDICT汉英辞典"))
-(autoload 'sdcv-search-pointer+ "sdcv"
-  "Translate current point word with command-line tool `sdcv'." t)
-(global-set-key (kbd "M-S s s")  'sdcv-search-pointer+)
-(global-set-key (kbd "M-S S")    'sdcv-search-pointer+)
-
-(defun sdcv-search-word-at-pt-mouse (event)
-  (interactive "e")
-  (mouse-set-point event)
-  (require 'sdcv)
-  (call-interactively 'sdcv-search-pointer+))
-
-;;(global-set-key (kbd "<C-down-mouse-1>") 'sdcv-search-word-at-pt-mouse)
-
 
 ;; *** google-translate
 (autoload 'google-translate-at-point "google-translate"
