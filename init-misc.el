@@ -640,25 +640,6 @@ It is an enhanced version of `anything-for-buffers'."
 (define-key global-map (kbd "C-. $") 'ac-complete-ispell-word)
 
 
-;; *** google-translate
-(autoload 'google-translate-at-point "google-translate"
-  "Translate the word at point or the words in the active region." t)
-(autoload 'google-translate-query-translate "google-translate"
-  "Interactively translate text with Google Translate." t)
-
-(defalias 'gtap 'google-translate-at-point)
-(defalias 'gtqt 'google-translate-query-translate)
-
-(setq google-translate-enable-ido-completion t
-      google-translate-default-source-language "en"
-      google-translate-default-target-language "zh-CN")
-
-(progn
-  (global-set-key (kbd "M-S g g")   'google-translate-at-point)
-  (global-set-key (kbd "M-S G")     'google-translate-at-point)
-  (global-set-key (kbd "M-S g SPC") 'google-translate-query-translate)
-  )
-
 
 ;; ** speedbar
 (autoload 'sr-speedbar-toggle "sr-speedbar"
