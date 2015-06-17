@@ -780,19 +780,6 @@ vi style of % jumping to matching brace."
 
 
 ;; ** misc
-
-;;info+.el: more colors (and other enhancements) 
-(eval-after-load "info"
-  `(require 'info+)
-  )
-
-(eval-after-load "info+"
-  `(progn
-     (defvar Info-next-link-keymap (make-sparse-keymap))
-     (defvar Info-prev-link-keymap (make-sparse-keymap))
-     (defvar Info-up-link-keymap   (make-sparse-keymap))
-     (defvar Info-down-link-keymap   (make-sparse-keymap))))
-
 ;;--
 ;;(global-unset-key (kbd "<f10>"))
 (global-set-key (kbd "<f10> ws") 'whitespace-mode)
