@@ -45,3 +45,10 @@
 
 (global-set-key (kbd "<f10> d h") 'toggle-diff-hl-mode)
 
+
+;; *** smeargle
+(autoload 'smeargle "smeargle"
+  "Highlight regions by last updated time." t)
+
+(autoload 'smeargle-commits "smeargle"
+  "Highlight regions by age of commits." t)
