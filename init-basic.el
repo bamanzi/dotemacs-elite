@@ -470,6 +470,27 @@ If the new path's directories does not exist, create them."
 
 
 ;; ** minibuffer
+;; *** ivy-mode
+;; better replacement for icomplete + ido + ido-vertical + ido-ubiquitous
+;; - commands (M-x, where-is)
+;; - variables (describe-variable, set-variable, customize-variable, find-variable)
+;; - functions (describe-function, find-function)
+;; - groups (customize-group)
+;; - libraries (find-library)
+;; - packages (describe-package, package-install)
+;; - tags (find-tag)
+;; - info nodes (Info-goto-node, info-lookup-symbol)
+
+(autoload 'ivy-mode "ivy"
+  "Toggle Ivy mode on or off." t)
+
+(unless (fboundp 'setq-local)
+  ;; emacs <= 24.2 doesn't have `setq-local'
+  (defmacro setq-local (var val)
+    "Set variable VAR to value VAL in current buffer."
+    ;; Can't use backquote here, it's too early in the bootstrap.
+    (list 'set (list 'make-local-variable (list 'quote var)) val)))
+  
 
 ;; *** icomplete
 ;; completion for minibuffer
@@ -478,7 +499,7 @@ If the new path's directories does not exist, create them."
 ;; - functions (describe-function, find-function)
 ;; - groups (customize-group)
 ;; - libraries (find-library)
-(icomplete-mode t)
+;(icomplete-mode t) ;; disabled in favor of `ivy-mode'
 
 ;; ***  ido
 (require 'ido)
@@ -489,7 +510,7 @@ If the new path's directories does not exist, create them."
 (setq ido-use-url-at-point 'guess)
 ;;disable the merging (the "looking in other directories" in ido vulgo) 
 (setq ido-auto-merge-work-directories-length -1)
-(ido-mode 'buffers)
+;(ido-mode 'buffers)  ;; disabled in favor of `ivy-mode'
 
 ;; ***  anything
 (autoload 'anything-recentf "anything-config"
