@@ -17,6 +17,7 @@
 (global-unset-key (kbd "<f11>"))
 (global-unset-key (kbd "<f12>"))
 (global-unset-key (kbd "M-u"))
+(define-key key-translation-map (kbd "M-u") (kbd "<apps>"))
 
 ;; *** misc
 (define-key key-translation-map (kbd "<left-fringe> <mouse-4>")   (kbd "<left-fringe> <wheel-up>"))
@@ -612,10 +613,10 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
 										"disabled"))))
 
 (progn
-  (define-key global-map (kbd "M-u , f") 'ac-complete-filename)
-  (define-key global-map (kbd "M-u , i") 'ac-complete-imenu)
-  (define-key global-map (kbd "M-u , a") 'ac-complete-scite-api)
-  (define-key global-map (kbd "M-u , y") 'ac-complete-yasnippet)
+  (define-key global-map (kbd "<apps> , f") 'ac-complete-filename)
+  (define-key global-map (kbd "<apps> , i") 'ac-complete-imenu)
+  (define-key global-map (kbd "<apps> , a") 'ac-complete-scite-api)
+  (define-key global-map (kbd "<apps> , y") 'ac-complete-yasnippet)
   )
 
 
