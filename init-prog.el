@@ -153,15 +153,15 @@ Current symbol would be used as input to narrow the choices."
 
 (eval-after-load "anything-etags+"
   `(progn
-     (global-set-key (kbd "M-u M-.")   'anything-etags+-select-at-point)
-     (global-set-key (kbd "M-u . SPC") 'anything-etags+-select)
+     (global-set-key (kbd "<apps> M-.")   'anything-etags+-select-at-point)
+     (global-set-key (kbd "<apps> . SPC") 'anything-etags+-select)
 
      ;; 'anything-etags+-history' has its own marker-ring. thus could
      ;; not be used with `find-tag'
-     (global-set-key (kbd "M-u .  M-h") 'anything-etags+-history)
+     (global-set-key (kbd "<apps> .  M-h") 'anything-etags+-history)
 
-     (global-set-key (kbd "M-u . <") 'anything-etags+-history-go-back)
-     (global-set-key (kbd "M-u . >") 'anything-etags+-history-go-forward)
+     (global-set-key (kbd "<apps> . <") 'anything-etags+-history-go-back)
+     (global-set-key (kbd "<apps> . >") 'anything-etags+-history-go-forward)
      ))
 
 ;; *** ctags
