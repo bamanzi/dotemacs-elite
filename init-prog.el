@@ -98,7 +98,7 @@
 (global-set-key (kbd "<f9> i") 'anything-imenu)
 (global-set-key (kbd "<f9> c") 'anything-browse-code)
 
-(defun anything-goto-symbol-imenu ()
+(defun anything-goto-symbol--imenu ()
   "Show anything list, using current symbol as input to narrow the choices."
   (interactive)
   (anything
@@ -112,7 +112,7 @@
 ;;         anything-c-source-etags-select
          )))
 
-(define-key global-map (kbd "<f9> g i") 'anything-goto-symbol-imenu)
+(define-key global-map (kbd "<f9> g i") 'anything-goto-symbol--imenu)
 
 ;; *** imenu-anywhere: imenu tags across all buffers
 (autoload 'imenu-anywhere "imenu-anywhere"
@@ -130,7 +130,7 @@
 ;; *** etags
 (global-set-key (kbd "<f9> . SPC") 'anything-c-etags-select)
 
-(defun anything-goto-definition-etags ()
+(defun anything-goto-definition--etags ()
   "Show function/symbol list with etags & imenu.
 
 Current symbol would be used as input to narrow the choices."
@@ -144,7 +144,7 @@ Current symbol would be used as input to narrow the choices."
          anything-c-source-imenu
          )))
 
-(global-set-key (kbd "<f9> g .") 'anything-goto-definition-etags)
+(global-set-key (kbd "<f9> g .") 'anything-goto-definition--etags)
 (global-set-key (kbd "<f9> M-.") 'anything-c-etags-select)
 
 ;; *** tags history
@@ -177,6 +177,7 @@ Current symbol would be used as input to narrow the choices."
      ))
 
 ;; *** ctags
+;; **** anything-ctags-current-file
 ;; similar to 'taglist' plugin of vim, to use `anything-c-source-ctags'
 ;; you don't need to create tags file by yourself
 
@@ -194,7 +195,7 @@ Current symbol would be used as input to narrow the choices."
 (global-set-key (kbd "<f9> t") 'anything-ctags-current-file)
 
 
-;; **  compilation
+;; ** compilation
 (setq compilation-error-regexp-alist '(gnu java))
 (global-set-key (kbd "<C-f9>") 'compile)
 
