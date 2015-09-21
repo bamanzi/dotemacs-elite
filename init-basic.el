@@ -707,6 +707,7 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
 
 
 ;; *** outline-org-like (use org-like headings for outline)
+;; FIXME: switch to orgstruct-mode of org-8.x?
 (autoload 'outline-org-mode  "outline-org-like"
   "A special `outline-minor-mode' that use org-mode-style headings." t)
 
