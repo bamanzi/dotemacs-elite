@@ -83,7 +83,13 @@
 (define-key global-map (kbd "<f9> w") 'show-which-function)
 
 
-;; **  imenu
+;; ** imenu
+(define-key goto-map "i" 'imenu)
+
+(if (boundp 'prog-mode-hook)
+    (add-hook 'prog-mode-hook 'imenu-add-menubar-index))
+
+;; *** anything-imenu
 (autoload 'anything-imenu "anything-config"
   "Preconfigured `anything' for `imenu'." t)
 (autoload 'anything-browse-code "anything-config"
@@ -91,12 +97,6 @@
 
 (global-set-key (kbd "<f9> i") 'anything-imenu)
 (global-set-key (kbd "<f9> c") 'anything-browse-code)
-
-(define-key goto-map "i" 'imenu)
-
-(if (boundp 'prog-mode-hook)
-    (add-hook 'prog-mode-hook 'imenu-add-menubar-index))
-
 
 (defun anything-goto-symbol-imenu ()
   "Show anything list, using current symbol as input to narrow the choices."
@@ -113,6 +113,18 @@
          )))
 
 (define-key global-map (kbd "<f9> g i") 'anything-goto-symbol-imenu)
+
+;; *** imenu-anywhere: imenu tags across all buffers
+(autoload 'imenu-anywhere "imenu-anywhere"
+  "Switch to a buffer-local tag from Imenu via Ido." t)
+
+(define-key goto-map "I" 'imenu-anywhere)
+
+(autoload 'helm-imenu-anywhere  "imenu-anywhere"
+  "`helm' source for `imenu-anywhere'." t)
+
+(global-set-key (kbd "<f9> I") 'helm-imenu-anywhere)
+
 
 ;; ** tags
 ;; *** etags
