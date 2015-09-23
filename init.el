@@ -48,4 +48,11 @@
   (if (fboundp 'idle-require-mode)
       (idle-require-mode 1)))
       
-      
+
+
+;; TIPS: Sometimes you want to find out where a particular error,
+;; warning or just plain annoying message in Messages is coming from.
+;;
+;; - [[http://www.emacswiki.org/emacs/DebugMessages][Debug Messages - EmacsWiki]]
+;; - [[http://emacs.stackexchange.com/questions/5302/find-elisp-origin-of-warning/5306#530][debugging - Find elisp origin of warning - Emacs Stack Exchange]]
+
