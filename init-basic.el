@@ -622,7 +622,7 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
 
 ;; ** code folding
 
-;; ***  hideshow
+;; *** hideshow
 (autoload 'hideshowvis-enable "hideshowvis"
   "Will enable hideshowvis minor mode" t)
 
@@ -668,8 +668,41 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
   (mouse-set-point e)
   (call-interactively 'hs-hide-level))
 
+;; *** hideshow within view-mode
+(defun toggle-view-mode-with-outline ()
+  "Toggle `view-mode'. And `hs-minor-mode' always turned on."
+  (interactive)
+  (if view-mode
+      (progn
+        (view-mode -1) ;; quit `view-mode'
+        (read-only-mode -1)) ;; switch `read-only' off
+    (view-mode 1))
+  (unless hs-minor-mode
+    (hideshowvis-enable)) ;;enable `hs-minor-mode' with fringe indicator
+  )
 
-;; ***  outline
+(global-set-key (kbd "<f10> V") 'toggle-view-mode-with-outline)
+
+(eval-after-load "view"
+  `(progn
+
+     (define-key view-mode-map "s" 'hs-show-block)
+     (define-key view-mode-map "h" 'hs-hide-hook)
+
+     (define-key view-mode-map "S" 'hs-show-all)
+     (define-key view-mode-map "H" 'hs-hide-all)
+
+     ;;(define-key view-mode-map "z" 'hs-toggle-hiding)
+     (define-key view-mode-map (kbd "TAB") 'hs-toggle-hiding)
+
+     ;; hideshow doesn't support jumping to next/previous, we use outline here
+     ;; (`outline-minor-mode' doesn't need to be turned on if we don't need folding operations)
+     (define-key view-mode-map (kbd "n") 'outline-next-visible-heading)
+     (define-key view-mode-map (kbd "p") 'outline-previous-visible-heading)
+     (define-key view-mode-map (kbd "u") 'outline-up-heading)
+     ))
+
+;; *** outline
 (idle-require 'outline)
 (global-unset-key (kbd "C-z"))
 (global-set-key (kbd "<C-up>")   'outline-previous-visible-heading)
