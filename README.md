@@ -19,7 +19,7 @@ Main configuration & packages for my emacs environment.
 - highlight-symbol
 - highlight-indentation & indent-guide
 - iedit
-- magit & monkey
+- magit & monky
 - markdown-mode
 - nc
 - projectile
@@ -32,12 +32,11 @@ Main configuration & packages for my emacs environment.
 ## Links
 
 For packages not very important (but still useful in some cases), I'll add into another repo
-[dotemacs-extra](http://bitbucket.org/bamanzi/dotemacs-extra).
+[dotemacs-extra](http://bitbucket.org/bamanzi/dotemacs-extra ).
 
-For Ruby & Rails development, refer to [dotemacs-rails](http://bitbucket.org/bamanzi/dotemacs-rails).
+For Python development, refer to [dotemacs-py](http://bitbucket.org/bamanzi/dotemacs-py ).
+For Ruby & Rails development, refer to [dotemacs-rails](http://bitbucket.org/bamanzi/dotemacs-rails ).
 
-### Other useful packages:
 
-- [eim](https://github.com/wenbinye/emacs-eim) (input methods for Chinese, 支持联想、词频调整)
-- [realgud](https://github.com/rocky/emacs-dbgr/) (Emacs front-end for gdb, pdb/pydb/pydbgr, rdebugger, perldb, bashdb...)
-- [w3m](http://w3m.sourceforge.net/index.en.html) and [emacs-w3m](http://emacs-w3m.namazu.org/)
+
+

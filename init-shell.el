@@ -7,6 +7,11 @@
 (global-set-key (kbd "<f12> s") 'shell-toggle-cd)
 (global-set-key (kbd "<f12> S") 'shell-toggle)
 
+;;TIP: init file for shells in emacs
+;;    ~/.emacs_SHELLNAME   (e.g. ~/.emacs_bash)
+;;    ~/.emacs.d/init_SHELLNAME.sh  (e.g. ~/.emacs.d/init_bash.sh)
+;; (info "(emacs) Interactive Shell")
+
 ;; ** eshell
 ;; *** shell toggle
 
@@ -136,6 +141,7 @@ On Windows, baskslashes is substituted with slashes."
 
   (define-key eshell-mode-map (kbd "<f5> M-h") 'anything-eshell-history)
   (define-key eshell-mode-map (kbd "<f5> TAB") 'anything-esh-pcomplete)
+  (define-key eshell-mode-map (kbd "<M-TAB>")  'complete-symbol)
   
   (define-key eshell-mode-map (kbd "<M-up>")   'eshell-previous-matching-input)
   (define-key eshell-mode-map (kbd "<M-down>") 'eshell-next-matching-input)
