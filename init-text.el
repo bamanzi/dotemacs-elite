@@ -100,6 +100,16 @@ If called with C-u prefix, it would archive to file \"%s_archive::\". "
       ))
 
 
+;; ** org-babel
+(setq org-confirm-babel-evaluate nil)
+(eval-after-load "ob"
+  `(progn
+     (org-babel-do-load-languages 'org-babel-load-languages
+                                  '((sh . t)
+                                    (emacs-lisp . t)
+                                    (python . t)
+                                    (ruby . t)))
+     ))
 
 
 ;; ** misc
