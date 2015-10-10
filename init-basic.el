@@ -633,7 +633,7 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
            (hideshowvis-symbols)))
      
      (define-key hs-minor-mode-map (kbd "M-+")  'hs-toggle-hiding)
-     (define-key hs-minor-mode-map (kbd "<C-mouse-1>") 'hs-mouse-toggle-hiding)
+;;     (define-key hs-minor-mode-map (kbd "<C-mouse-1>") 'hs-mouse-toggle-hiding)
      ))
 
 (define-key global-map (kbd "<f10> h s") 'hs-minor-mode)
@@ -669,6 +669,8 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
   (call-interactively 'hs-hide-level))
 
 ;; *** hideshow within view-mode
+(setq view-read-only t) ;; open read-only file in view-mode
+
 (defun toggle-view-mode-with-outline ()
   "Toggle `view-mode'. And `hs-minor-mode' always turned on."
   (interactive)
@@ -685,6 +687,7 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
 
 (eval-after-load "view"
   `(progn
+     (define-key view-mode-map "i"  'view-exit)
 
      (define-key view-mode-map "s" 'hs-show-block)
      (define-key view-mode-map "h" 'hs-hide-hook)
