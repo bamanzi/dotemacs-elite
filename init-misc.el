@@ -440,6 +440,9 @@ See also: `kill-rectangle', `copy-to-register'."
      (define-key tabbar-mode-map (kbd "<f12> <up>")    'tabbar-press-home)
 
      (define-key tabbar-mode-map (kbd "<header-line> <C-mouse-1>") 'tabbar-buffer-list-menu)
+
+     (unless window-system
+       (defalias 'tabbar-buffer-tab-label 'tabbar-buffer-tab-label/xterm))
      ))
 
 
@@ -449,7 +452,7 @@ See also: `kill-rectangle', `copy-to-register'."
 That is, a string used to represent it on the tab bar."
   (let ((label  (if tabbar--buffer-show-groups
                     (format "[%s]" (tabbar-tab-tabset tab))
-                  (format " %s " (tabbar-tab-value tab)))))
+                  (format "/%s\\" (tabbar-tab-value tab)))))
     ;; Unless the tab bar auto scrolls to keep the selected tab
     ;; visible, shorten the tab label to keep as many tabs as possible
     ;; in the visible area of the tab bar.
