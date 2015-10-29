@@ -174,11 +174,11 @@
             (hs-minor-mode 1)
             
             (when (not window-system)
-              (if (car (window-margins (selected-window)))
-                  (display-warning :warning
-                                   "`hideshowvis' needs to use left-margin, \n
-but currenly it seems to be already used (`linum-mode' on?).
-Anyway `hideshowvis-mode' will continue to turn on."))
+;;               (if (car (window-margins (selected-window)))
+;;                   (display-warning :warning
+;;                                    "`hideshowvis' needs to use left-margin, \n
+;; but currenly it seems to be already used (`linum-mode' on?).
+;; Anyway `hideshowvis-mode' will continue to turn on."))
               (add-hook 'window-configuration-change-hook
                         'hideshowvis-update-margin nil 'local)
               (hideshowvis-update-margin))
