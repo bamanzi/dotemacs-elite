@@ -520,13 +520,17 @@ If the new path's directories does not exist, create them."
 (progn
   (global-set-key (kbd "<M-f5>") 'anything-resume)
   
-  (global-set-key (kbd "<f5> r") 'anything-recentf)
+  (global-set-key (kbd "<f5> f") 'anything-for-files)
   (global-set-key (kbd "<f5> b") 'anything-buffers+)
+  
+  (global-set-key (kbd "<f5> r") 'anything-recentf)
   (global-set-key (kbd "<f5> B") 'anything-bookmarks)
   (global-set-key (kbd "<f5> l") 'anything-locate)
   (global-set-key (kbd "<f5> c") 'anything-browse-code)
   (global-set-key (kbd "<f5> i") 'anything-imenu)
   (global-set-key (kbd "<f5> o") 'anything-occur)
+  (global-set-key (kbd "<f5> R") 'anything-register)
+  (global-set-key (kbd "<f5> M-y") 'anything-show-kill-ring)
   )
 
 (eval-after-load "anything-config"    
