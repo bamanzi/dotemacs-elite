@@ -673,10 +673,34 @@ It is an enhanced version of `anything-for-buffers'."
 (autoload 'highlight-indentation-current-column-mode "highlight-indentation"
   "Hilight Indentation minor mode displays" t)
 
-(global-set-key (kbd "<f10> hi") 'highlight-indentation-current-column-mode)
+(global-set-key (kbd "<f10> hI") 'highlight-indentation-current-column-mode)
+
+;;(if (boundp 'prog-mode-hook)
+;;    (add-hook 'prog-mode-hook 'highlight-indentation-current-column-mode))
+
+;; *** highlight-indent-guides
+;; https://github.com/DarthFennec/highlight-indent-guides
+;; FIXME: this is a better implementation than `highlight-indentation'?
+;; According to its README, it works fine on both space & tabs,
+;; while `highlight-indentation' and `visual-indentation-mode' won't work on tabs.
+;; Although `indent-guide' works on spaces & tabs, it is farily slow, and jittery
+(autoload 'highlight-indent-guides-mode "highlight-indent-guides"
+  "Display indent guides in a buffer." t)
+
+(global-set-key (kbd "<f10> hi") 'highlight-indent-guides-mode)
 
 (if (boundp 'prog-mode-hook)
-    (add-hook 'prog-mode-hook 'highlight-indentation-current-column-mode))
+    (add-hook 'prog-mode-hook 'highlight-indent-guides-mode))
+
+(eval-after-load "highlight-indent-guides"
+  `(progn
+     (set-face-attribute 'highlight-indent-guides-odd-face
+                         :inherit 'fringe
+                         :background nil)
+     (set-face-attribute 'highlight-indent-guides-even-face
+                         :inherit 'default
+                         :background nil)
+     ))
 
 
 ;; ** vi(m) emulation
