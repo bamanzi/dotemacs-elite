@@ -135,7 +135,7 @@ ALT_R/META_R. Refer [[file:/usr/share/X11/xkb/symbols/altwin]] for detail info."
   (interactive)
   (let ((result (shell-command-to-string "setxkbmap -option altwin:alt_super_win")))
     (if (> (length result) 0)
-        (error result))))
+        (display-warning :warning (concat "Failed in (x-map-menu-key-to-super):\n" result)))))
 
 (when (eq window-system 'x)
   (x-map-menu-key-to-super))
