@@ -189,7 +189,7 @@
 
 (global-set-key (kbd "<C-f4>") 'kill-this-buffer)
 
-(global-set-key (kbd "<f12> *")  (kbd "C-x b *scratch* RET"))
+(global-set-key (kbd "<f12> *")  (kbd "C-x 4 b *scratch* RET"))
 
 (idle-require 'uniquify)
 (setq uniquify-buffer-name-style 'post-forward-angle-brackets)
@@ -426,6 +426,11 @@ If the new path's directories does not exist, create them."
 ;; ***  newline & line-wrap
 (setq require-final-newline 't)
 (setq-default truncate-lines t)
+
+(eval-after-load "help-mode"
+  `(progn
+     (add-hook 'help-mode-hook 'visual-line-mode 'append)
+     ))
 
 ;;(auto-fill-mode t)
 
@@ -772,7 +777,7 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
 
 
 ;; *** outline-org-like (use org-like headings for outline)
-;; FIXME: switch to orgstruct-mode of org-8.x?
+;; FIXME: switch to orgstruct-mode of org-8.x? (but how to highlighting the headings?)
 (autoload 'outline-org-mode  "outline-org-like"
   "A special `outline-minor-mode' that use org-mode-style headings." t)
 
@@ -794,6 +799,8 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
      
      (define-key outline-mode-prefix-map (kbd "<f5>") 'outline-org-headings-mode)
      ))
+
+(global-set-key (kbd "C-z <f5>") 'outline-org-headings-mode)
 
 ;; ;; highlight header
 ;; (defun highlight-outline-header/bmz ()

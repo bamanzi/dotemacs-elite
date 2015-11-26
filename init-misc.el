@@ -441,18 +441,19 @@ See also: `kill-rectangle', `copy-to-register'."
 
      (define-key tabbar-mode-map (kbd "<header-line> <C-mouse-1>") 'tabbar-buffer-list-menu)
 
-     (unless window-system
-       (defalias 'tabbar-buffer-tab-label 'tabbar-buffer-tab-label/xterm))
+     (setq tabbar-tab-label-function 'tabbar-buffer-tab-label/my)
      ))
 
 
 ;;add extra leading & ending space to tab label
-(defun tabbar-buffer-tab-label/xterm (tab)
+(defun tabbar-buffer-tab-label/my (tab)
   "Return a label for TAB.
 That is, a string used to represent it on the tab bar."
   (let ((label  (if tabbar--buffer-show-groups
                     (format "[%s]" (tabbar-tab-tabset tab))
-                  (format "/%s\\" (tabbar-tab-value tab)))))
+                  (if window-system
+                      (format "%s " (tabbar-tab-value tab))
+                    (format "/%s\\" (tabbar-tab-value tab))))))
     ;; Unless the tab bar auto scrolls to keep the selected tab
     ;; visible, shorten the tab label to keep as many tabs as possible
     ;; in the visible area of the tab bar.
@@ -507,7 +508,8 @@ That is, a string used to represent it on the tab bar."
 
 ;; *** tabbar-ruler
 (eval-after-load "tabbar"
-  `(progn         
+  `(progn
+     ;; FIXME: is there any problem if we load `tabbar-ruler' on xterm frame?
      (if (display-graphic-p)
          (require 'tabbar-ruler nil t))
      ))
