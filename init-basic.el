@@ -570,7 +570,12 @@ If the new path's directories does not exist, create them."
 ;; ***  auto-compelte
 (eval-after-load "auto-complete-config"    
   `(progn
-      (ac-config-default)
+     (ac-config-default)
+
+     ;;supress auto-starting completion. use TAB key instead
+     (setq ac-auto-start nil)
+     (ac-set-trigger-key "TAB")
+     
       (define-key ac-completing-map (kbd "ESC ESC") 'ac-stop)
       (define-key ac-completing-map (kbd "C-s") 'ac-isearch) 
       
