@@ -408,6 +408,16 @@ If the new path's directories does not exist, create them."
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
 
+(defun indent-region-or-line ()
+  (interactive)
+  (if mark-active
+      (indent-region (region-beginning) (region-end)))
+    (indent-region (line-beginning-position) (line-end-position)))
+
+(global-set-key (kbd "<S-tab>") 'indent-region-or-line)
+(define-key key-translation-map (kbd "<backtab>") (kbd "<S-tab>"))
+  
+
 ;; ***  parens
 (setq show-paren-style 'mixed)
 (setq show-paren-mode t)
