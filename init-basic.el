@@ -501,7 +501,16 @@ If the new path's directories does not exist, create them."
     "Set variable VAR to value VAL in current buffer."
     ;; Can't use backquote here, it's too early in the bootstrap.
     (list 'set (list 'make-local-variable (list 'quote var)) val)))
-  
+
+(idle-require 'ivy)
+
+(eval-after-load "ivy"
+  `(progn
+     (icomplete-mode -1)
+     (ido-mode -1)
+
+     (ivy-mode 1)
+     ))
 
 ;; *** icomplete
 ;; completion for minibuffer
@@ -510,7 +519,7 @@ If the new path's directories does not exist, create them."
 ;; - functions (describe-function, find-function)
 ;; - groups (customize-group)
 ;; - libraries (find-library)
-;(icomplete-mode t) ;; disabled in favor of `ivy-mode'
+(icomplete-mode t) ;; obsolete in favor of `ivy-mode'
 
 ;; ***  ido
 (require 'ido)
@@ -521,7 +530,8 @@ If the new path's directories does not exist, create them."
 (setq ido-use-url-at-point 'guess)
 ;;disable the merging (the "looking in other directories" in ido vulgo) 
 (setq ido-auto-merge-work-directories-length -1)
-;(ido-mode 'buffers)  ;; disabled in favor of `ivy-mode'
+;; `ido-mode' for files is nasty :-(
+(ido-mode 'buffers)  ;; obsolete in favor of `ivy-mode'
 
 ;; ***  anything
 (autoload 'anything-recentf "anything-config"
