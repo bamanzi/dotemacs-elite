@@ -34,16 +34,26 @@
 
 (global-set-key (kbd "<f10> P") 'prog-mode-run-hook)
 
-
-;;TODO: test and enable this
-(progn
+;;(progn
   ;; (add-hook 'prog-mode-hook 'whitespace-mode)
   ;; (add-hook 'prog-mode-hook 'flyspell-prog-mode)
-  (if (fboundp 'turn-on-hideshow/bmz)
-      (add-hook 'prog-mode-hook 'turn-on-hideshow/bmz))
-  ;; (if (fboundp 'qtmstr-outline-mode)
-  ;;     (add-hook 'prog-mode-hook 'qtmstr-outline-mode))
-  )
+;;  )
+
+
+;; ** code folding
+;; *** folding by class/function
+;; we use `hideshowvis' to show the fringe indicator
+;; you need to customize `hs-special-modes-alist' for each major-mode
+(defun turn-on-hideshowvis-maybe ()
+  (if (and (require 'hideshowvis nil t)
+           (< (buffer-size) 50000))
+      (hideshowvis-enable)))
+
+(if (fboundp 'turn-on-hideshow/bmz)
+    (add-hook 'prog-mode-hook 'turn-on-hideshow-maybe))
+;; (if (fboundp 'qtmstr-outline-mode)
+;;     (add-hook 'prog-mode-hook 'qtmstr-outline-mode))
+
 
 ;; ** automatically highlight current symbol
 (eval-after-load "idle-highlight-mode"
