@@ -305,8 +305,9 @@ If the new path's directories does not exist, create them."
 (global-set-key (kbd "<f11> <tab>") 'other-window)
 (global-set-key (kbd "<f11> <backtab>") (kbd "C-u -1 C-x o"))
 
-(global-set-key (kbd "<f11> 1 v") 'delete-other-windows-vertically)
-(global-set-key (kbd "<f11> 1 h") 'delete-other-windows-horizontally)
+;;NOTE: emacs 23 has no `delete-other-windows-vertically/horizontally'
+(global-set-key (kbd "<f11> V") 'delete-other-windows-vertically)
+(global-set-key (kbd "<f11> H") 'delete-other-windows-horizontally)
 
 ;; ***  winner-mode
 (setq winner-dont-bind-my-keys t)

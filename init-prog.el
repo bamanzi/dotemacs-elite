@@ -49,8 +49,8 @@
            (< (buffer-size) 50000))
       (hideshowvis-enable)))
 
-(if (fboundp 'turn-on-hideshow/bmz)
-    (add-hook 'prog-mode-hook 'turn-on-hideshow-maybe))
+(add-hook 'prog-mode-hook 'turn-on-hideshowvis-maybe)
+
 ;; (if (fboundp 'qtmstr-outline-mode)
 ;;     (add-hook 'prog-mode-hook 'qtmstr-outline-mode))
 
@@ -70,10 +70,11 @@
                 ;;FIXME: other special cases?
                 (t
                  comment-start)))
-    (turn-on-orgstruct-mode)))
+    (if orgstruct-heading-prefix-regexp
+        (turn-on-orgstruct-mode))))
 
-(if (fboundp 'turn-on-hideshow/bmz)
-    (add-hook 'prog-mode-hook 'turn-on-hideshow-maybe))
+
+(add-hook 'prog-mode-hook 'turn-on-orgstruct-maybe)
 
 
 ;; ** automatically highlight current symbol
