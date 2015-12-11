@@ -74,7 +74,7 @@
         (turn-on-orgstruct-mode))))
 
 
-(add-hook 'prog-mode-hook 'turn-on-orgstruct-maybe)
+(add-hook 'prog-mode-hook 'turn-on-orgstruct-mode-maybe)
 
 
 ;; ** automatically highlight current symbol
