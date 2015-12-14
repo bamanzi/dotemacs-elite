@@ -91,6 +91,7 @@
    `(default ((t (:foreground ,ample/fg :background ,ample/bg))))
    `(cursor  ((t (:foreground ,ample/bg :background ,ample/cursor))))
    `(fringe  ((t (:background ,ample/fringe))))
+   `(link    ((t (:foreground ,ample/lighter-blue :underline t))))
    `(region  ((t (:background ,ample/region))))
 
    ;; standard font lock
@@ -124,9 +125,17 @@
    `(isearch		((t (:background ,ample/blue :foreground ,ample/bg))))
    `(lazy-highlight	((t (:background ,ample/bg :foreground ,ample/purple :underline t))))
 
+   ;; evil-search-highlight-persist
+   `(evil-search-highlight-persist-highlight-face ((t (:background ,ample/blue :foreground ,ample/bg))))
+
    ;; ace-jump
    `(ace-jump-face-background ((t (:inherit font-lock-comment-face :background nil))))
    `(ace-jump-face-foreground ((t (:foreground ,ample/purple :bold t :background nil))))
+
+   `(avy-background-face  ((t (:foreground ,ample/dark-gray :background nil))))
+   `(avy-lead-face  ((t (:foreground "white" :background ,ample/purple))))
+   `(avy-lead-face-0  ((t (:foreground "white" :background ,ample/blue))))
+   `(avy-lead-face-1  ((t (:foreground "white" :background ,ample/fg))))
 
    `(vertical-border ((t (:background ,ample/darker-gray :foreground ,ample/darkest-gray))))
 
@@ -658,7 +667,82 @@
    `(highlight-indentation-face                ((t (:foreground nil :background ,ample/region-dark))))
 
    ;; trailing whitespace
-   `(trailing-whitespace ((t (:background "white" :bold t)))))
+   `(trailing-whitespace ((t (:background "white" :bold t))))
+
+   ;; auctex
+   `(font-latex-bold-face                 ((t (:inherit bold :foreground ,ample/gray))))
+   `(font-latex-doctex-documentation-face ((t (:background unspecified))))
+   `(font-latex-doctex-preprocessor-face  ((t (:inherit (font-latex-doctex-documentation-face font-lock-builtin-face font-lock-preprocessor-face)))))
+   `(font-latex-italic-face               ((t (:inherit italic :foreground ,ample/gray))))
+   `(font-latex-math-face                 ((t (:foreground ,ample/purple))))
+   `(font-latex-sectioning-0-face         ((t (:inherit font-latex-sectioning-1-face :height 1.1))))
+   `(font-latex-sectioning-1-face         ((t (:inherit font-latex-sectioning-2-face :height 1.1))))
+   `(font-latex-sectioning-2-face         ((t (:inherit font-latex-sectioning-3-face :height 1.1))))
+   `(font-latex-sectioning-3-face         ((t (:inherit font-latex-sectioning-4-face :height 1.1))))
+   `(font-latex-sectioning-4-face         ((t (:inherit font-latex-sectioning-5-face :height 1.1))))
+   `(font-latex-sectioning-5-face         ((t (:foreground ,ample/red :weight bold))))
+   `(font-latex-sedate-face               ((t (:foreground ,ample/gray))))
+   `(font-latex-slide-title-face          ((t (:inherit font-lock-type-face :weight bold :height 1.2))))
+   `(font-latex-string-face               ((t (:inherit font-lock-string-face))))
+   `(font-latex-subscript-face            ((t (:height 0.8))))
+   `(font-latex-superscript-face          ((t (:height 0.8))))
+   `(font-latex-warning-face              ((t (:inherit font-lock-warning-face))))
+
+   ;; guide-key
+   `(guide-key/prefix-command-face    ((t (:foreground ,ample/green))))
+   `(guide-key/highlight-command-face ((t (:foreground ,ample/blue))))
+   `(guide-key/key-face               ((t (:foreground ,ample/gray))))
+
+   ;; custom
+   `(custom-button                  ((t (:foreground nil :background nil))))
+   `(custom-button-mouse            ((t (:foreground nil :background nil))))
+   `(custom-button-pressed          ((t (:foreground nil :background nil))))
+   `(custom-button-pressed-unraised ((t (:foreground ,ample/purple :background nil))))
+   `(custom-button-unraised         ((t (:foreground nil :background nil))))
+   `(custom-changed                 ((t (:foreground ,ample/red :background nil))))
+   `(custom-comment                 ((t (:foreground ,ample/bg :background ,ample/yellow))))
+   `(custom-comment-tag             ((t (:foreground ,ample/fg :background nil))))
+   `(custom-documentation           ((t (:foreground nil :background nil))))
+   `(custom-face-tag                ((t (:foreground ,ample/light-blue :background nil))))
+   `(custom-group-subtitle          ((t (:foreground nil :background nil :bold t))))
+   `(custom-group-tag               ((t (:foreground ,ample/light-blue :background nil :bold t))))
+   `(custom-group-tag-1             ((t (:foreground ,ample/yellow :background nil :bold t))))
+   `(custom-invalid                 ((t (:foreground ,ample/bg :background ,ample/red))))
+   `(custom-link                    ((t (:inherit button))))
+   `(custom-modified                ((t (:foreground ,ample/red :background nil))))
+   `(custom-rogue                   ((t (:foreground ,ample/yellow :background ,ample/bg))))
+   `(custom-saved                   ((t (:foreground nil :background nil :underline t))))
+   `(custom-set                     ((t (:foreground ,ample/fg :background ,ample/dark-gray))))
+   `(custom-state                   ((t (:foreground ,ample/green :background nil))))
+   `(custom-themed                  ((t (:foreground ,ample/red :background nil))))
+   `(custom-variable-button         ((t (:foreground nil :background nil :underline t :bold t))))
+   `(custom-variable-tag            ((t (:foreground ,ample/light-blue :background nil :bold t))))
+   `(custom-visibility              ((t (:inherit button))))
+
+   `(neo-banner-face              ((t (:foreground ,ample/light-blue :background nil :bold t))))
+   `(neo-button-face              ((t (:foreground nil :background nil))))
+   `(neo-dir-link-face            ((t (:foreground ,ample/blue :background nil))))
+   `(neo-expand-btn-face          ((t (:foreground ,ample/fg :background nil))))
+   `(neo-file-link-face           ((t (:foreground ,ample/fg :background nil))))
+   `(neo-header-face              ((t (:foreground ,ample/fg :background nil))))
+   `(neo-root-dir-face            ((t (:foreground ,ample/green :background nil :bold t))))
+   `(neo-vc-added-face            ((t (:foreground ,ample/green :background nil))))
+   `(neo-vc-conflict-face         ((t (:foreground ,ample/orange :background nil))))
+   `(neo-vc-default-face          ((t (:foreground ,ample/fg :background nil))))
+   `(neo-vc-edited-face           ((t (:foreground ,ample/yellow :background nil))))
+   `(neo-vc-ignored-face          ((t (:foreground ,ample/dark-gray :background nil))))
+   `(neo-vc-missing-face          ((t (:foreground ,ample/red :background nil))))
+   `(neo-vc-needs-merge-face      ((t (:foreground ,ample/orange :background nil))))
+   `(neo-vc-needs-update-face     ((t (:foreground nil :background nil :underline t))))
+   `(neo-vc-removed-face          ((t (:foreground ,ample/purple :background nil))))
+   `(neo-vc-unlocked-changes-face ((t (:foreground ,ample/red :background "Blue"))))
+   `(neo-vc-unregistered-face     ((t (:foreground nil :background nil))))
+   `(neo-vc-up-to-date-face       ((t (:foreground ,ample/fg :background nil))))
+
+   ;; widget
+   `(widget-field  ((t (:foreground ,ample/fg :background ,ample/region-dark))))
+
+   ) ;; end of custom-theme-set-faces
 
   (custom-theme-set-variables
    'ample

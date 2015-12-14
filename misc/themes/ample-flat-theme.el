@@ -85,6 +85,7 @@
    `(default ((t (:foreground ,ample/fg :background ,ample/bg))))
    `(cursor  ((t (:foreground ,ample/bg :background ,ample/cursor))))
    `(fringe  ((t (:background ,ample/fringe))))
+   `(link    ((t (:foreground ,ample/lighter-blue :underline t))))
    `(region  ((t (:background ,ample/region))))
 
    ;; standard font lock
@@ -118,9 +119,18 @@
    `(isearch  ((t (:background ,ample/blue :foreground ,ample/bg))))
    `(lazy-highlight ((t (:background ,ample/bg :foreground ,ample/purple :underline t))))
 
+   ;; evil-search-highlight-persist
+   `(evil-search-highlight-persist-highlight-face ((t (:background ,ample/blue :foreground ,ample/bg))))
+
    ;; ace-jump
    `(ace-jump-face-background ((t (:inherit font-lock-comment-face))))
    `(ace-jump-face-foreground ((t (:foreground ,ample/orange))))
+
+
+   `(avy-background-face  ((t (:foreground ,ample/dark-gray :background nil))))
+   `(avy-lead-face  ((t (:foreground "white" :background ,ample/red))))
+   `(avy-lead-face-0  ((t (:foreground "white" :background ,ample/blue))))
+   `(avy-lead-face-1  ((t (:foreground "white" :background ,ample/fg))))
 
    `(vertical-border ((t (:background ,ample/darker-gray :foreground ,ample/darkest-gray))))
 
@@ -265,10 +275,10 @@
    `(helm-ff-prefix   ((t (:foreground ,ample/red))))
    ;;`(helm-ff-symlink   ((t ())))
    ;;`(helm-grep-cmd-line  ((t ())))
-   ;;`(helm-grep-file   ((t ())))
+   `(helm-grep-file   ((t (:foreground ,ample/blue))))
    ;;`(helm-grep-finish   ((t ())))
-   ;;`(helm-grep-lineno   ((t ())))
-   ;;`(helm-grep-match   ((t ())))
+   `(helm-grep-lineno   ((t (:foreground ,ample/purple))))
+   `(helm-grep-match   ((t (:foreground ,ample/fg :background ,ample/region))))
    ;;`(helm-grep-running  ((t ())))
    `(helm-header   ((t (:foreground ,ample/bg :background ,ample/fg))))
    ;;`(helm-helper   ((t ())))
@@ -379,18 +389,18 @@
 
 
    ;; ediff
-   `(ediff-current-diff-A((t (:foreground nil :background "#482828"))))
-   `(ediff-current-diff-B((t (:foreground nil :background "#284828"))))
-   `(ediff-current-diff-C((t (:foreground nil :background "#484828"))))
+   `(ediff-current-diff-A((t (:foreground nil :background ,ample/red))))
+   `(ediff-current-diff-B((t (:foreground nil :background ,ample/green))))
+   `(ediff-current-diff-C((t (:foreground nil :background ,ample/yellow))))
    ;;`(ediff-current-diff-Ancestor((t ())))
    `(ediff-even-diff-A   ((t (:foreground nil :background "#191925"))))
    `(ediff-even-diff-B   ((t (:foreground nil :background "#191925"))))
    `(ediff-even-diff-C   ((t (:foreground nil :background "#191925"))))
    ;;`(ediff-even-diff-Ancestor  ((t ())))
 
-   `(diff-added             ((t (:foreground nil :background "#284828"))))
-   `(diff-changed           ((t (:foreground nil :background "#484828"))))
-   `(diff-removed           ((t (:foreground nil :background "#482828"))))
+   `(diff-added             ((t (:background nil :foreground ,ample/green))))
+   `(diff-changed           ((t (:background nil :foreground ,ample/yellow))))
+   `(diff-removed           ((t (:background nil :foreground ,ample/red))))
    `(diff-context           ((t (:foreground ,ample/gray :background nil))))
    `(diff-file-header       ((t (:foreground ,ample/bg :background "grey60" :bold t))))
    `(diff-function          ((t (:foreground ,ample/bg :background "grey50"))))
@@ -609,12 +619,30 @@
    `(whitespace-tab   ((t (:foreground ,ample/gray :background "grey15"))))
    `(whitespace-trailing  ((t (:foreground ,ample/rb3 :background ,ample/bg :bold t))))
 
-   ;;magit
+   ;; magit
+   ;; new
+   `(magit-section-heading        ((t (:foreground ,ample/blue, :background nil))))
+   `(magit-hash                   ((t (:foreground ,ample/purple :background nil))))
+   `(magit-branch-local           ((t (:foreground ,ample/orange :background nil))))
+   `(magit-branch-remote          ((t (:foreground ,ample/yellow :background nil))))
+
+   `(magit-diff-added-highlight   ((t (:background ,ample/region :foreground ,ample/green))))
+   `(magit-diff-removed-highlight ((t (:background ,ample/region :foreground ,ample/red))))
+   `(magit-diff-added             ((t (:background nil :foreground ,ample/green))))
+   `(magit-diff-removed           ((t (:background nil :foreground ,ample/red))))
+
+   `(magit-blame-date             ((t (:foreground ,ample/purple :background "grey25"))))
+   `(magit-blame-hash             ((t (:foreground ,ample/purple :background "grey25"))))
+   `(magit-blame-heading          ((t (:foreground ,ample/blue :background "grey25"))))
+   `(magit-blame-name             ((t (:foreground ,ample/green :background "grey25"))))
+   `(magit-blame-summary          ((t (:foreground ,ample/blue :background "grey25"))))
+
+   ;; old
    `(magit-branch    ((t (:foreground ,ample/orange :background nil))))
    ;;`(magit-cherry-equivalent   ((t (:foreground "cyan" :background nil))))
    ;;`(magit-cherry-unmatched   ((t (:foreground "magenta" :background nil))))
-   `(magit-diff-add    ((t (:foreground nil :background ,ample/dark-green))))
-   `(magit-diff-del    ((t (:foreground nil :background ,ample/dark-red))))
+   `(magit-diff-add    ((t (:background nil :foreground ,ample/green))))
+   `(magit-diff-del    ((t (:background nil :foreground ,ample/red))))
    `(magit-diff-file-header   ((t (:foreground ,ample/bg :background ,ample/blue :bold t))))
    `(magit-diff-hunk-header   ((t (:foreground ,ample/bg :background ,ample/blue))))
    `(magit-diff-merge-current   ((t (:foreground ,ample/orange :background nil))))
@@ -666,7 +694,83 @@
    `(highlight-indentation-face                ((t (:foreground nil :background ,ample/darkest-gray))))
 
    ;; trailing whitespace
-   `(trailing-whitespace ((t (:background "white" :bold t)))))
+   `(trailing-whitespace ((t (:background "white" :bold t))))
+
+   ;; auctex
+   `(font-latex-bold-face                 ((t (:inherit bold :foreground ,ample/gray))))
+   `(font-latex-doctex-documentation-face ((t (:background unspecified))))
+   `(font-latex-doctex-preprocessor-face  ((t (:inherit (font-latex-doctex-documentation-face font-lock-builtin-face font-lock-preprocessor-face)))))
+   `(font-latex-italic-face               ((t (:inherit italic :foreground ,ample/gray))))
+   `(font-latex-math-face                 ((t (:foreground ,ample/purple))))
+   `(font-latex-sectioning-0-face         ((t (:inherit font-latex-sectioning-1-face :height 1.1))))
+   `(font-latex-sectioning-1-face         ((t (:inherit font-latex-sectioning-2-face :height 1.1))))
+   `(font-latex-sectioning-2-face         ((t (:inherit font-latex-sectioning-3-face :height 1.1))))
+   `(font-latex-sectioning-3-face         ((t (:inherit font-latex-sectioning-4-face :height 1.1))))
+   `(font-latex-sectioning-4-face         ((t (:inherit font-latex-sectioning-5-face :height 1.1))))
+   `(font-latex-sectioning-5-face         ((t (:foreground ,ample/red :weight bold))))
+   `(font-latex-sedate-face               ((t (:foreground ,ample/gray))))
+   `(font-latex-slide-title-face          ((t (:inherit font-lock-type-face :weight bold :height 1.2))))
+   `(font-latex-string-face               ((t (:inherit font-lock-string-face))))
+   `(font-latex-subscript-face            ((t (:height 0.8))))
+   `(font-latex-superscript-face          ((t (:height 0.8))))
+   `(font-latex-warning-face              ((t (:inherit font-lock-warning-face))))
+
+   ;; guide-key
+   `(guide-key/prefix-command-face    ((t (:foreground ,ample/green))))
+   `(guide-key/highlight-command-face ((t (:foreground ,ample/blue))))
+   `(guide-key/key-face               ((t (:foreground ,ample/gray))))
+
+   ;; custom
+   `(custom-button                  ((t (:foreground nil :background nil))))
+   `(custom-button-mouse            ((t (:foreground nil :background nil))))
+   `(custom-button-pressed          ((t (:foreground nil :background nil))))
+   `(custom-button-pressed-unraised ((t (:foreground ,ample/purple :background nil))))
+   `(custom-button-unraised         ((t (:foreground nil :background nil))))
+   `(custom-changed                 ((t (:foreground ,ample/red :background nil))))
+   `(custom-comment                 ((t (:foreground ,ample/bg :background ,ample/yellow))))
+   `(custom-comment-tag             ((t (:foreground ,ample/fg :background nil))))
+   `(custom-documentation           ((t (:foreground nil :background nil))))
+   `(custom-face-tag                ((t (:foreground ,ample/light-blue :background nil))))
+   `(custom-group-subtitle          ((t (:foreground nil :background nil :bold t))))
+   `(custom-group-tag               ((t (:foreground ,ample/light-blue :background nil :bold t))))
+   `(custom-group-tag-1             ((t (:foreground ,ample/yellow :background nil :bold t))))
+   `(custom-invalid                 ((t (:foreground ,ample/bg :background ,ample/red))))
+   `(custom-link                    ((t (:inherit button))))
+   `(custom-modified                ((t (:foreground ,ample/red :background nil))))
+   `(custom-rogue                   ((t (:foreground ,ample/yellow :background ,ample/bg))))
+   `(custom-saved                   ((t (:foreground nil :background nil :underline t))))
+   `(custom-set                     ((t (:foreground ,ample/fg :background ,ample/dark-gray))))
+   `(custom-state                   ((t (:foreground ,ample/green :background nil))))
+   `(custom-themed                  ((t (:foreground ,ample/red :background nil))))
+   `(custom-variable-button         ((t (:foreground nil :background nil :underline t :bold t))))
+   `(custom-variable-tag            ((t (:foreground ,ample/light-blue :background nil :bold t))))
+   `(custom-visibility              ((t (:inherit button))))
+
+   `(neo-banner-face              ((t (:foreground ,ample/light-blue :background nil :bold t))))
+   `(neo-button-face              ((t (:foreground nil :background nil))))
+   `(neo-dir-link-face            ((t (:foreground ,ample/blue :background nil))))
+   `(neo-expand-btn-face          ((t (:foreground ,ample/fg :background nil))))
+   `(neo-file-link-face           ((t (:foreground ,ample/fg :background nil))))
+   `(neo-header-face              ((t (:foreground ,ample/fg :background nil))))
+   `(neo-root-dir-face            ((t (:foreground ,ample/green :background nil :bold t))))
+   `(neo-vc-added-face            ((t (:foreground ,ample/green :background nil))))
+   `(neo-vc-conflict-face         ((t (:foreground ,ample/orange :background nil))))
+   `(neo-vc-default-face          ((t (:foreground ,ample/fg :background nil))))
+   `(neo-vc-edited-face           ((t (:foreground ,ample/yellow :background nil))))
+   `(neo-vc-ignored-face          ((t (:foreground ,ample/dark-gray :background nil))))
+   `(neo-vc-missing-face          ((t (:foreground ,ample/red :background nil))))
+   `(neo-vc-needs-merge-face      ((t (:foreground ,ample/orange :background nil))))
+   `(neo-vc-needs-update-face     ((t (:foreground nil :background nil :underline t))))
+   `(neo-vc-removed-face          ((t (:foreground ,ample/purple :background nil))))
+   `(neo-vc-unlocked-changes-face ((t (:foreground ,ample/red :background "Blue"))))
+   `(neo-vc-unregistered-face     ((t (:foreground nil :background nil))))
+   `(neo-vc-up-to-date-face       ((t (:foreground ,ample/fg :background nil))))
+
+
+   ;; widget
+   `(widget-field  ((t (:foreground ,ample/fg :background ,ample/dark-gray))))
+
+   ) ;; end of custom-theme-set-faces
 
   (custom-theme-set-variables
    'ample-flat
