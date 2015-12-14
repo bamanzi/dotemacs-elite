@@ -3,18 +3,15 @@
 ;; First derived from color-theme-tango.el,  created by danranx@gmail.com :
 ;; http://www.emacswiki.org/emacs/color-theme-tango.el
 
-;; Copyright (C) 2011, 2012 Julien Barnier <julien@nozav.org>
+;; Copyright (C) 2011, 2012, 2013 Julien Barnier <julien@nozav.org>
 
 ;; Author: Julien Barnier
 ;; Adapted-By: Yesudeep Mangalapilly
 ;; Keywords: tango palette color theme emacs
 ;; URL: https://github.com/juba/color-theme-tangotango
-;; Version: 0.0.4
+;; Version: 0.0.6
 
 ;; This file is NOT part of GNU Emacs.
-
-;; For screenshots and installation instructions :
-;; http://blog.nozav.org/post/2010/07/12/Updated-tangotango-emacs-color-theme
 
 ;;; License:
 
@@ -45,12 +42,11 @@
  ;; - yellow :     "#edd400"
  ;; - green :      "#6ac214"
  ;; - orange/red : "tomato"
- `(default ((t (:family "DejaVu Sans Mono" :foundry "unknown" :width normal :height 90 :weight normal :slant normal :underline nil :overline nil :strike-through nil :box nil :inverse-video nil :foreground "#eeeeec" :background "#2e3434" :stipple nil :inherit nil))))
+ `(default ((t (:weight normal :slant normal :underline nil :overline nil :strike-through nil :box nil :inverse-video nil :foreground "#eeeeec" :background "#2e3434" :stipple nil :inherit nil))))
  `(cursor ((t (:foreground "#222222" :background "#fce94f"))))
  `(fixed-pitch ((t (:inherit (default)))))
  `(variable-pitch ((t (:family "Sans Serif"))))
  `(escape-glyph ((((background dark)) (:foreground "cyan")) (((type pc)) (:foreground "magenta")) (t (:foreground "brown"))))
- `(minibuffer-prompt ((t (:weight bold :foreground "#729fcf"))))
  `(highlight ((t (:background "brown4"))))
  `(region ((t (:background "dark slate blue"))))
  `(shadow ((((class color grayscale) (min-colors 88) (background light)) (:foreground "grey50")) (((class color grayscale) (min-colors 88) (background dark)) (:foreground "grey70")) (((class color) (min-colors 8) (background light)) (:foreground "green")) (((class color) (min-colors 8) (background dark)) (:foreground "yellow"))))
@@ -142,7 +138,7 @@
  `(gnus-header-newsgroups((t (:italic t :bold t :foreground "LightSkyBlue3"))))
  `(gnus-signature((t (:italic t :foreground "dark grey"))))
  `(gnus-summary-cancelled((t (:background "black" :foreground "yellow"))))
- `(gnus-summary-high-ancient((t (:bold t :foreground "rotal blue"))))
+ `(gnus-summary-high-ancient((t (:bold t :foreground "royal blue"))))
  `(gnus-summary-high-read((t (:bold t :foreground "lime green"))))
  `(gnus-summary-high-ticked((t (:bold t :foreground "tomato"))))
  `(gnus-summary-high-unread((t (:bold t :foreground "white"))))
@@ -181,6 +177,7 @@
  `(org-agenda-date ((t (:foreground "#6ac214"))))
  `(org-agenda-date-weekend ((t (:weight normal :foreground "dodger blue"))))
  `(org-agenda-date-today ((t (:weight bold :foreground "#edd400"))))
+ `(org-scheduled-previously ((t (:weight normal :foreground "#edd400"))))
  `(org-block-begin-line ((t ( :foreground "#888a85" :background "#252b2b"))))
  `(org-block-background ((t (:background "#252b2b"))))
  `(org-block-end-line ((t ( :foreground "#888a85" :background "#252b2b"))))
@@ -193,9 +190,6 @@
  `(ess-jb-h3-face ((t (:height 1.2 :foreground "#edd400" :slant normal))))
  `(ecb-default-highlight-face ((t (:background "#729fcf"))))
  `(ecb-tag-header-face ((t (:background "#f57900"))))
- `(magit-header ((t (:foreground "#edd400"))))
- `(magit-diff-add ((t (:foreground "#729fcf"))))
- `(magit-item-highlight ((t (:weight extra-bold :inverse-video t))))
  `(diff-header ((t (:background "gray30"))))
  `(diff-index ((t (:foreground "#edd400" :bold t))))
  `(diff-file-header ((t (:foreground "#eeeeec" :bold t))))
@@ -234,8 +228,22 @@
  `(rpm-spec-section-face ((t (:foreground "#8ae234" :underline t :weight bold))))
  `(rpm-spec-tag-face ((t (:foreground "dodger blue" :weight bold))))
  `(rpm-spec-var-face ((t (:foreground "tomato"))))
+ ;; regexp metachars
+ `(font-lock-negation-char-face ((t (:foreground "#6ac214"))))
+ `(font-lock-regexp-grouping-construct ((t (:foreground "#edd400"))))
+ `(font-lock-regexp-grouping-backslash ((t (:foreground "#888a85"))))
+ `(which-func ((t (:inherit (font-lock-function-name-face) :weight normal))))
  )
 
+
+;; Autoload for MELPA
+
+;;;###autoload
+(and load-file-name
+     (boundp 'custom-theme-load-path)
+     (add-to-list 'custom-theme-load-path
+                  (file-name-as-directory
+                   (file-name-directory load-file-name))))
 
 (provide-theme 'tangotango)
 
