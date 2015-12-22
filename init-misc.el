@@ -772,6 +772,25 @@ vi style of % jumping to matching brace."
 (define-key global-map (kbd "<f6> g d") 'vimpulse-goto-definition)
 
 
+;; ** isend-mode
+;; `isend-mode` allows interaction with code interpreters in `ansi-term` or
+;; `term` buffers. Some language-specific modes (e.g. `python.el`) already
+;; provide similar features;
+
+;; NOTE: it also could be used to send region to normal buffers. (bamanzi)
+
+(autoload 'isend-associate "isend-mode"
+  "Set the buffer to which commands will be sent using `isend-send'." t)
+
+(autoload 'isend-send "isend-mode"
+  "Send the current region of line to a terminal." t)
+
+(global-set-key (kbd "<apps> C-RET") 'isend-send)
+(global-set-key (kbd "ESC C-RET")    'isend-send)
+
+(autoload 'isend-display-buffer "isend-mode"
+  "Undocumented." t)
+
 ;; ** misc
 ;;--
 ;;(global-unset-key (kbd "<f10>"))
