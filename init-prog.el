@@ -1,5 +1,6 @@
 ;; * programming
 
+;; ** prog-mode
 (unless (fboundp 'prog-mode)
   (defvar prog-mode-map
     (let ((map (make-sparse-keymap)))
@@ -88,6 +89,43 @@
 
 (idle-require 'idle-highlight-mode)
 
+
+;; ** indent guides
+;;show guides for each indentation level
+(autoload 'highlight-indentation-mode "highlight-indentation"
+  "Highlight indentation minor mode highlights indentation based" t)
+;;only the current column
+(autoload 'highlight-indentation-current-column-mode "highlight-indentation"
+  "Hilight Indentation minor mode displays" t)
+
+(global-set-key (kbd "<f10> hI") 'highlight-indentation-current-column-mode)
+
+;;(if (boundp 'prog-mode-hook)
+;;    (add-hook 'prog-mode-hook 'highlight-indentation-current-column-mode))
+
+;; *** highlight-indent-guides
+;; https://github.com/DarthFennec/highlight-indent-guides
+;; FIXME: this is a better implementation than `highlight-indentation'?
+;; According to its README, it works fine on both space & tabs,
+;; while `highlight-indentation' and `visual-indentation-mode' won't work on tabs.
+;; Although `indent-guide' works on spaces & tabs, it is farily slow, and jittery
+(autoload 'highlight-indent-guides-mode "highlight-indent-guides"
+  "Display indent guides in a buffer." t)
+
+(global-set-key (kbd "<f10> hi") 'highlight-indent-guides-mode)
+
+(if (boundp 'prog-mode-hook)
+    (add-hook 'prog-mode-hook 'highlight-indent-guides-mode))
+
+(eval-after-load "highlight-indent-guides"
+  `(progn
+     (set-face-attribute 'highlight-indent-guides-odd-face nil
+                         :inherit 'fringe
+                         :background nil)
+     (set-face-attribute 'highlight-indent-guides-even-face nil
+                         :inherit 'default
+                         :background nil)
+     ))
 
 ;; ** which-func-mode
 
@@ -346,3 +384,5 @@ found in DIRECTORY or any of its ancestors."
   "Toggle between the REPL buffer and the source buffer." t)
 
 (global-set-key (kbd "<f12> ~") 'repl-toggle)
+
+
