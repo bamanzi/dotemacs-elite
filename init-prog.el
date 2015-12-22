@@ -71,7 +71,7 @@
                 (t
                  comment-start)))
     (if orgstruct-heading-prefix-regexp
-        (turn-on-orgstruct-mode))))
+        (turn-on-orgstruct))))
 
 
 (add-hook 'prog-mode-hook 'turn-on-orgstruct-mode-maybe)

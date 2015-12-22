@@ -694,10 +694,10 @@ It is an enhanced version of `anything-for-buffers'."
 
 (eval-after-load "highlight-indent-guides"
   `(progn
-     (set-face-attribute 'highlight-indent-guides-odd-face
+     (set-face-attribute 'highlight-indent-guides-odd-face nil
                          :inherit 'fringe
                          :background nil)
-     (set-face-attribute 'highlight-indent-guides-even-face
+     (set-face-attribute 'highlight-indent-guides-even-face nil
                          :inherit 'default
                          :background nil)
      ))
