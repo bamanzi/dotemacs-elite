@@ -96,8 +96,10 @@ If called with C-u prefix, it would archive to file \"%s_archive::\". "
               (load-library "org-md")))  ;; contrib/lisp/org-md.el in 7.9.2 - 7.9.x
 
       ;; 3. org 8.x can export to Markdown directly (no contrib needed)
-      (require 'ox-md nil t))  ;; expose Markdown to C-c C-e menu
-      ))
+      (require 'ox-md nil t) ;; expose Markdown to C-c C-e menu
+      (require 'ox-gfm nil t) ;; enhanced for GitHub Flavored MarkDown
+                                        ; https://github.com/larstvei/ox-gfm
+      )))
 
 
 ;; ** org-babel
