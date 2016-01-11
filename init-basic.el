@@ -819,42 +819,20 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
 
 ;; ** highlighting
 ;; ***  highlight-symbol
-(autoload 'highlight-symbol-at-point-ext "highlight-symbol"
+(autoload 'highlight-symbol "highlight-symbol"
   "Toggle highlighting of the symbol at point." t)
 (idle-require 'highlight-symbol)
 
-(define-key search-map (kbd "j")     'highlight-symbol-at-point-ext)
+(define-key search-map (kbd "j")     'highlight-symbol)
 (define-key search-map (kbd "#")     'highlight-symbol-prev)
 (define-key search-map (kbd "*")     'highlight-symbol-next)
 
-(global-set-key (kbd "<double-mouse-1>")  'highlight-symbol-at-point-ext)
+(global-set-key (kbd "<double-mouse-1>")  'highlight-symbol)
 (global-set-key (kbd "<S-wheel-up>")      'highlight-symbol-prev)
 (global-set-key (kbd "<S-wheel-down>")    'highlight-symbol-next)
 (global-set-key (kbd "<S-mouse-3>")       'highlight-symbol-occur)
 
 (define-key search-map "O" 'highlight-symbol-occur)
-
-(eval-after-load "highlight-symbol"
-  `(progn
-     (if (version< emacs-version "24.4")
-         ;; add an alias
-         (defalias 'highlight-symbol-at-point-ext 'highlight-symbol-at-point)
-       
-       ;; Emacs 24.4 has a built-in `highlight-symbol-at-point`.
-       (defalias 'highlight-symbol-at-point-built-in 'highlight-symbol-at-point)
-         
-       ;; we have to 'reimplemented' it (copied from `highlight-symbol.el`)
-       (defun highlight-symbol-at-point-ext ()
-         "Toggle highlighting of the symbol at point.
-This highlights or unhighlights the symbol at point using the first
-element in of `highlight-symbol-faces'."
-         (interactive)
-         (let ((symbol (highlight-symbol-get-symbol)))
-           (unless symbol (error "No symbol at point"))
-           (if (highlight-symbol-symbol-highlighted-p symbol)
-               (highlight-symbol-remove-symbol symbol)
-             (highlight-symbol-add-symbol symbol))))
-       )))
 
 ;; *** idle-highlight
 (autoload 'idle-highlight-mode "idle-highlight-mode"
