@@ -487,36 +487,6 @@ If the new path's directories does not exist, create them."
 
 
 ;; ** minibuffer
-;; *** ivy-mode
-;; better replacement for icomplete + ido + ido-vertical + ido-ubiquitous
-;; - commands (M-x, where-is)
-;; - variables (describe-variable, set-variable, customize-variable, find-variable)
-;; - functions (describe-function, find-function)
-;; - groups (customize-group)
-;; - libraries (find-library)
-;; - packages (describe-package, package-install)
-;; - tags (find-tag)
-;; - info nodes (Info-goto-node, info-lookup-symbol)
-
-(autoload 'ivy-mode "ivy"
-  "Toggle Ivy mode on or off." t)
-
-(unless (fboundp 'setq-local)
-  ;; emacs <= 24.2 doesn't have `setq-local'
-  (defmacro setq-local (var val)
-    "Set variable VAR to value VAL in current buffer."
-    ;; Can't use backquote here, it's too early in the bootstrap.
-    (list 'set (list 'make-local-variable (list 'quote var)) val)))
-
-(idle-require 'ivy)
-
-(eval-after-load "ivy"
-  `(progn
-     (icomplete-mode -1)
-     (ido-mode -1)
-
-     (ivy-mode 1)
-     ))
 
 ;; *** icomplete
 ;; completion for minibuffer
