@@ -285,6 +285,10 @@ If the new path's directories does not exist, create them."
 (global-set-key (kbd "<f12> C-l") 'desktop-change-dir)
 (global-set-key (kbd "<f12> C-s") 'desktop-save)
 
+;; restore cursor position when re-opening a file
+;; http://ergoemacs.org/emacs/emacs_save_cursor_position.html
+(setq-default save-place t)
+(idle-require 'saveplace)
 
 ;; ***  recentf
 (require 'recentf)
@@ -487,6 +491,8 @@ If the new path's directories does not exist, create them."
 
 
 ;; ** minibuffer
+(setq read-file-name-completion-ignore-case t
+      read-buffer-completion-ignore-case t)
 
 ;; *** icomplete
 ;; completion for minibuffer
