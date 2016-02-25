@@ -59,7 +59,7 @@
 ;; *** folding by org-mode like section header
 ;; this requires `orgstruct-mode' in org 8
 ;; http://www.orgmode.org/manual/Orgstruct-mode.html
-(defun turn-on-orgstruct-mode-maybe ()
+(defun bmz/turn-on-orgstruct-mode-maybe ()
   (interactive)
   (require 'org)
   (if (string< org-version "8")
@@ -75,7 +75,7 @@
         (turn-on-orgstruct))))
 
 
-(add-hook 'prog-mode-hook 'turn-on-orgstruct-mode-maybe)
+(add-hook 'prog-mode-hook 'bmz/turn-on-orgstruct-mode-maybe)
 
 
 ;; ** automatically highlight current symbol
@@ -117,14 +117,17 @@
 (if (boundp 'prog-mode-hook)
     (add-hook 'prog-mode-hook 'highlight-indent-guides-mode))
 
+(defun bmz/init-highlight-indent-guides-faces (&optional frame)
+  (set-face-attribute 'highlight-indent-guides-odd-face frame
+                      :inherit 'fringe
+                      :background nil)
+  (set-face-attribute 'highlight-indent-guides-even-face frame
+                      :inherit 'default
+                      :background nil))
+  
 (eval-after-load "highlight-indent-guides"
   `(progn
-     (set-face-attribute 'highlight-indent-guides-odd-face nil
-                         :inherit 'fringe
-                         :background nil)
-     (set-face-attribute 'highlight-indent-guides-even-face nil
-                         :inherit 'default
-                         :background nil)
+     (add-hook 'after-make-frame-functions 'bmz/init-highlight-indent-guides-faces)
      ))
 
 ;; ** which-func-mode
@@ -142,7 +145,8 @@
      (define-key which-func-keymap (kbd "<mode-line> <C-mouse-1>") 'imenu)
      (define-key which-func-keymap (kbd "<mode-line> <C-mouse-3>") 'imenu)
 
-     (add-to-list 'which-func-modes 'js-mode)
+     (if (listp which-func-modes) ;;the default value in emacs>=24.3 is `t' (not a list)
+         (add-to-list 'which-func-modes 'js-mode))
      ))
 
 (defun show-which-function ()
@@ -370,6 +374,19 @@ found in DIRECTORY or any of its ancestors."
 (autoload 'nv-speedbar-open-current-buffer-in-tree "projectile-speedbar"
   "Undocumented." t)
 (defalias 'projectile-speedbar 'nv-speedbar-open-current-buffer-in-tree)
+
+
+(autoload 'ibuffer-projectile-set-filter-groups "ibuffer-projectile"
+  "Set the current filter groups to filter by vc root dir." t)
+
+(eval-after-load "ibuffer"
+  `(progn
+     (add-hook 'ibuffer-hook
+               #'(lambda ()
+                   (if (and (boundp 'projectile-global-mode)
+                            projectile-global-mode)
+                       (ibuffer-projectile-set-filter-groups)))
+               'append)))
 
 
 ;; ** documentation lookup
