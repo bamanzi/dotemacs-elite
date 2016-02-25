@@ -845,10 +845,11 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
 
 
 ;; *** highlight url
-(add-hook 'find-file-hook 'goto-address-mode) ;;this one is better
+(add-hook 'find-file-hook 'goto-address-mode)
 (define-key goto-map "u" 'goto-address)
 
-(global-set-key (kbd "M-s RET") 'browse-url)
+(global-set-key (kbd "M-s RET") 'browse-url-at-point)
+(defalias 'buap 'browse-url-at-point)
 
 ;; **** this supports more link types
 ;; http://orgmode.org/manual/External-links.html
@@ -861,10 +862,10 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
 (autoload 'org-link-minor-mode "org-link-minor-mode"
   "Toggle display of org-mode style bracket links in non-org-mode buffers." t)
 
-(when (and (require 'org nil t)
-         (string< "7.3" org-version))
-  (remove-hook 'find-file-hook 'goto-address-mode)
-  (add-hook 'find-file-hook 'org-link-minor-mode))
+;; (when (and (require 'org nil t)
+;;          (string< "7.3" org-version))
+;;   (remove-hook 'find-file-hook 'goto-address-mode)
+;;   (add-hook 'find-file-hook 'org-link-minor-mode))
 
 (global-set-key (kbd "C-c C-o") 'org-open-at-point-global)
 
