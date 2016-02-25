@@ -52,7 +52,10 @@ If called with C-u prefix, it would archive to file \"%s_archive::\". "
     (error "Can't set `org-archive-location' properly. Maybe you have `#+ARCHIVE:' in header?"))
   (call-interactively 'org-archive-subtree))
 
-(define-key org-mode-map (kbd "C-c C-x C-a") 'org-archive-subtree-to-file)
+(eval-after-load "org"
+  `(progn
+    (define-key org-mode-map (kbd "C-c C-x C-a") 'org-archive-subtree-to-file)
+    ))
 
 ;; ** export
 
