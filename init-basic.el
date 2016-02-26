@@ -26,6 +26,7 @@
 (define-key key-translation-map (kbd "<left-fringe> <C-mouse-5>") (kbd "<left-fringe> <C-wheel-down>"))
 
 (global-unset-key (kbd "M-h"))
+(global-unset-key (kbd "<C-f10>")) ;;to make emacs-25 happy
 
 ;; ** emacs environment
 (progn
@@ -278,6 +279,7 @@ If the new path's directories does not exist, create them."
 (setq make-backup-file-name-function 'my-backup-file-name)
 
 ;; *** desktop
+(setq desktop-base-file-name (format ".emacs.desktop.%s" emacs-major-version))
 (require 'desktop)
 (setq desktop-restore-eager 5)
 (desktop-save-mode t)
