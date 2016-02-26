@@ -819,8 +819,11 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
 ;; *** iedit
 (autoload 'iedit-mode "iedit"
   "Edit multiple regions in the same way simultaneously." t)
-(autoload 'iedit-mode-on-function "iedit"
-  "Toggle Iedit mode on current function." t)
+
+(defun iedit-mode-on-function ()
+  (interactive)
+  (require 'iedit)
+  (iedit-mode 0))
 
 (global-set-key (kbd "C-;") 'iedit-mode-on-function)
 (global-set-key (kbd "C-c ;") 'iedit-mode-on-function)  ;;for terminal
