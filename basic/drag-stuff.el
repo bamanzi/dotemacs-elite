@@ -1,10 +1,10 @@
 ;;; drag-stuff.el --- Drag stuff (lines, words, region, etc...) around
 
-;; Copyright (C) 2010 Johan Andersson
+;; Copyright (C) 2010-2012 Johan Andersson
 
 ;; Author: Johan Andersson <johan.rejeep@gmail.com>
 ;; Maintainer: Johan Andersson <johan.rejeep@gmail.com>
-;; Version: 0.0.3
+;; Version: 0.1.0
 ;; Keywords: speed, convenience
 ;; URL: http://github.com/rejeep/drag-stuff
 
@@ -77,26 +77,54 @@
 (defvar drag-stuff-mode-map (make-sparse-keymap)
   "Keymap for `drag-stuff-mode'.")
 
+(defvar drag-stuff-before-drag-hook nil
+  "Called before dragging occurs.")
+
+(defvar drag-stuff-after-drag-hook nil
+  "Called after dragging occurs.")
+
+;; save-mark-and-excursion in Emacs 25 works like save-excursion did before
+(eval-when-compile
+  (when (not (fboundp #'save-mark-and-excursion))
+    (defmacro save-mark-and-excursion (&rest body)
+      `(save-excursion ,@body))))
 
 (defun drag-stuff--kbd (key)
+  "Key binding helper."
   (let ((mod (if (listp drag-stuff-modifier)
                  drag-stuff-modifier
                (list drag-stuff-modifier))))
     (vector (append mod (list key)))))
 
+(defmacro drag-stuff--execute (&rest body)
+  "Execute BODY without conflicting modes."
+  `(let ((auto-fill-function nil)
+         (electric-indent-mode nil)
+         (longlines-mode-active
+          (and (boundp 'longlines-mode) longlines-mode)))
+     (when longlines-mode-active
+       (longlines-mode -1))
+     (run-hooks 'drag-stuff-before-drag-hook)
+     ,@body
+     (run-hooks 'drag-stuff-after-drag-hook)
+     (when longlines-mode-active
+       (longlines-mode 1))))
+
 (defun drag-stuff-up (arg)
   "Drag stuff ARG lines up."
   (interactive "p")
-  (if mark-active
-      (drag-stuff-lines-up (- arg))
-    (drag-stuff-line-up (- arg))))
+  (drag-stuff--execute
+   (if mark-active
+       (drag-stuff-lines-up (- arg))
+     (drag-stuff-line-up (- arg)))))
 
 (defun drag-stuff-down (arg)
   "Drag stuff ARG lines down."
   (interactive "p")
-  (if mark-active
-      (drag-stuff-lines-down arg)
-    (drag-stuff-line-down arg)))
+  (drag-stuff--execute
+   (if mark-active
+       (drag-stuff-lines-down arg)
+     (drag-stuff-line-down arg))))
 
 (defun drag-stuff-right (arg)
   "Drag stuff ARG lines to the right."
@@ -138,7 +166,7 @@
     (funcall fn beg end column)))
 
 (defun drag-stuff-lines-up (arg)
-  "Moves all lines in the selected region ARG lines up."
+  "Move all lines in the selected region ARG lines up."
   (if (> (line-number-at-pos (min (point) (mark))) (abs arg))
       (drag-stuff-lines-vertically
        (lambda (beg end)
@@ -146,7 +174,7 @@
     (message "Can not move lines further up")))
 
 (defun drag-stuff-lines-down (arg)
-  "Moves all lines in the selected region ARG lines up."
+  "Move all lines in the selected region ARG lines up."
   (if (<= (+ (line-number-at-pos (max (point) (mark))) arg) (count-lines (point-min) (point-max)))
       (drag-stuff-lines-vertically
        (lambda (beg end)
@@ -158,7 +186,7 @@
   (let* ((deactivate-mark nil)
          (mark-line (line-number-at-pos (mark)))
          (point-line (line-number-at-pos (point)))
-         (mark-col (save-excursion (exchange-point-and-mark) (current-column)))
+         (mark-col (save-mark-and-excursion (exchange-point-and-mark) (current-column)))
          (point-col (current-column))
          (bounds (drag-stuff-whole-lines-region))
          (beg (car bounds))
@@ -240,7 +268,7 @@
 (defun drag-stuff-word-horizontally (arg)
   "Drags word horizontally ARG times."
   (let ((old-point (point))
-        (offset (- (save-excursion (forward-word) (point)) (point))))
+        (offset (- (save-mark-and-excursion (forward-word) (point)) (point))))
     (condition-case err
         (progn
           (transpose-words arg)
@@ -270,14 +298,14 @@
 
 ;;;###autoload
 (defun turn-on-drag-stuff-mode ()
-  "Turn on `drag-stuff-mode'"
+  "Turn on `drag-stuff-mode'."
   (interactive)
   (unless (member major-mode drag-stuff-except-modes)
     (drag-stuff-mode +1)))
 
 ;;;###autoload
 (defun turn-off-drag-stuff-mode ()
-  "Turn off `drag-stuff-mode'"
+  "Turn off `drag-stuff-mode'."
   (interactive)
   (drag-stuff-mode -1))
 
