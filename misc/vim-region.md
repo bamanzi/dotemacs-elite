@@ -73,6 +73,11 @@ vim-region-mode
 ","  vim-region-backward-last-char
 
 "u"  undo
+
+"+"  er/expand-region
+
+"L"  sort-lines
+"A"  align-regexp
 ```
 
 ## AUTHORS
