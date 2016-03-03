@@ -423,6 +423,24 @@ See also: `kill-rectangle', `copy-to-register'."
 (global-set-key (kbd "<f11> 0") 'select-minibuffer-window)
 
 
+;; ** buffers
+;; *** ibuffers
+;; *** rings
+(eval-after-load "rings"
+  `(progn
+     (dotimes (i 10)
+       (eval `(progn
+                (define-key global-map ,(read-kbd-macro (format "<f12> %d" i))  nil)
+                (define-key global-map ,(read-kbd-macro (format "<f12> %d" i)) (rings-generate-cycler ,i))
+
+                (define-key global-map ,(read-kbd-macro (format "<f12> M-%d" i))  nil)
+                (define-key global-map ,(read-kbd-macro (format "<f12> M-%d" i)) (rings-generate-setter ,i))
+                )))
+     ))
+
+(idle-require 'rings)
+
+
 ;; ** tabbar
 (idle-require 'tabbar)
 
