@@ -175,16 +175,26 @@ On Windows, baskslashes is substituted with slashes."
 
 (defun comint-toggle-cursor-keybinding (arg)
   "Toggle up/down key between {previous,next}-line and {previous,next}-input."
-  (interactive "P")
   (if (or arg (eq (key-binding (kbd "<up>")) 'previous-line))
       (progn
         (local-set-key (kbd "<up>")   'comint-previous-input)
-        (local-set-key (kbd "<down>") 'comint-next-input)
-        (message "Now up/down key bound to `comint-{previous,next}-input'."))
+        (local-set-key (kbd "<down>") 'comint-next-input))
     (progn
-        (local-set-key (kbd "<up>")   'previous-line)
-        (local-set-key (kbd "<down>") 'next-line)
-        (message "Now up/down key bound to `{previous,next}-line."))))
+      (local-set-key (kbd "<up>")   'previous-line)
+      (local-set-key (kbd "<down>") 'next-line))))
+
+(defun comint-bind-cursor-key-for-history ()
+  "Bind up/down key to comint-{previous,next}-input."
+  (interactive)
+  (comint-toggle-cursor-keybinding 1)
+  (message "Now up/down key bound to `comint-{previous,next}-input'."))
+
+(defun comint-bind-cursor-key-for-lines ()
+  "Bind up/down key to {previous,next}-line."
+  (interactive)
+  (comint-toggle-cursor-keybinding nil)
+  (message "Now up/down key bound to `{previous,next}-line."))
+
 
 ;; stolen from http://emacsredux.com/blog/2015/01/18/clear-comint-buffers/
 (defun comint-clear-buffer ()
@@ -194,8 +204,10 @@ On Windows, baskslashes is substituted with slashes."
 
 (eval-after-load "comint"
   `(progn
+     (add-hook 'comint-mode-hook 'comint-bind-cursor-key-for-history)
      ;; let's bind the new command to a keycombo
-     (define-key comint-mode-map "\C-c\M-o" #'comint-clear-buffer)))
+     (define-key comint-mode-map "\C-c\M-o" #'comint-clear-buffer)
+     ))
 
 ;; ** misc
 ;; *** compilation-shell-minor-mode (also for grep/grin in shell)
