@@ -13,6 +13,7 @@ gallery: http://pawelbx.github.io/emacs-theme-gallery/
 | zenburn        | Y [*]         | Y          |      | dark         | https://github.com/bbatsov/zenburn-emacs        |
 | *anti-zenburn* |               | Y          |      | light        | https://github.com/m00natic/anti-zenburn-theme  |
 | *ample*        |               | Y          |  256 | dark / light | https://github.com/jordonbiondo/ample-theme     |
+| *leuven*       |               | Y          |      | light        | https://github.com/fniessen/emacs-leuven-theme  |
 | +billc+        | Y             |            |      | dark         |                                                 |
 | +hober2+       | Y             |            |      | dark         |                                                 |
 | +naquadah+     |               | Y          |      | dark         | https://github.com/jd/naquadah-theme            |
