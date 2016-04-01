@@ -972,6 +972,8 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
 (global-set-key (kbd "<apps> M-O") 'de-open-current-dir-in-associated-app)
 
 ;; ** misc
+(setq scroll-margin 3)
+
 (column-number-mode t)
 
 (global-set-key (kbd "C-x C-j") 'dired-jump)

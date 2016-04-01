@@ -64,19 +64,21 @@ If called with C-u prefix, it would archive to file \"%s_archive::\". "
       org-export-with-toc 3 ;; no ToC in export (toc: 3)
       org-export-with-author-info nil ;; no author info in export
       org-export-with-creator-info nil ;; no creator info
+      org-export-with-sub-superscripts nil ;; required by org>=8
+                                        ; (org-use-sub-superscripts no longer working for exporting)
       ;; org-export-htmlize-output-type 'inline-css ;; use inline css for source code
       )
 
 ;; let ~foo~ generate "<kbd>foo</kbd>"
 (setq org-emphasis-alist
-  `(("*" bold "<b>" "</b>")
-    ("/" italic "<i>" "</i>")
-    ("_" underline "<span style=\"text-decoration:underline;\">" "</span>")
-    ("=" org-code "<code>" "</code>" verbatim)
-    ("~" org-verbatim "<kbd>" "</kbd>" verbatim)  ;;changed
-    ("+" ,(if (featurep 'xemacs) 'org-table '(:strike-through t))
-     "<del>" "</del>")
-    ))
+      `(("*" bold "<b>" "</b>")
+        ("/" italic "<i>" "</i>")
+        ("_" underline "<span style=\"text-decoration:underline;\">" "</span>")
+        ("=" org-code "<code>" "</code>" verbatim)
+        ("~" org-verbatim "<kbd>" "</kbd>" verbatim)  ;;changed
+        ("+" ,(if (featurep 'xemacs) 'org-table '(:strike-through t))
+         "<del>" "</del>")
+        ))
 
 ;; *** markdown
 (eval-after-load "org"

@@ -46,7 +46,8 @@
 ;; we use `hideshowvis' to show the fringe indicator
 ;; you need to customize `hs-special-modes-alist' for each major-mode
 (defun turn-on-hideshowvis-maybe ()
-  (if (and (require 'hideshowvis nil t)
+  (if (and (display-graphic-p)
+           (require 'hideshowvis nil t)
            (< (buffer-size) 50000))
       (hideshowvis-enable)))
 
