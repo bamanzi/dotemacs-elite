@@ -442,6 +442,7 @@ See also: `kill-rectangle', `copy-to-register'."
 
 
 ;; ** tabbar
+;; *** basic setup
 (idle-require 'tabbar)
 
 (eval-after-load "tabbar"
@@ -497,11 +498,11 @@ That is, a string used to represent it on the tab bar."
 
 ;; *** grouping
 (defun tabbar-group-by-major-modes ()
-  "Use tabbar.el's default grouping method: group major-mode grouping of buffers."
+  "Use tabbar.el's default grouping method: group by major-mode names."
   (interactive)
   (setq tabbar-buffer-groups-function 'tabbar-buffer-groups))
 
-(defun tabbar-buffer-groups/bmz ()
+(defun tabbar-buffer-groups/simple ()
   "Return the list of group names the current buffer belongs to.
  Return a list of one element based on major mode."
   (list
@@ -511,17 +512,40 @@ That is, a string used to represent it on the tab bar."
                                          diff-mode))
          (get-buffer-process (current-buffer))
          (member (buffer-name) '("*scratch*" "*messages*" "*Help*")))
-     "Utils")
+     "utils")
     ((or (= (aref (buffer-name) 0) ?*)
          (= (aref (buffer-name) 0) ? ))
      "*temp*")
     (t
-     "Files"
+     "files"
      ))))
 
-(defun tabbar-group-by-my-rules ()
+(defun tabbar-group-by-simple-rules ()
   (interactive)
-  (setq tabbar-buffer-groups-function 'tabbar-buffer-groups/bmz))
+  (setq tabbar-buffer-groups-function 'tabbar-buffer-groups/simple))
+
+
+;; **** grouping with rings
+(defvar tabbar-buffer-groups-function/without-rings nil)
+
+(defun tabbar-buffer-groups/simple-with-rings ()
+  "Return the list of group names the current buffer belongs to.
+ Return a list of one element based on major mode."
+  (let ((rings (remove-if-not 'identity
+                              (mapcar #'(lambda (var)
+                                          (let ((varname (format "%s" (car var))))
+                                            (if (string-match-p "^rings-[0-9]" varname)
+                                                varname)))
+                                      (buffer-local-variables (current-buffer))))))
+    (append rings (if tabbar-buffer-groups-function/without-rings
+                      (funcall tabbar-buffer-groups-function/without-rings)
+                    (tabbar-buffer-groups/simple)))))
+
+(defun tabbar-group-by-simple-with-rings ()
+  (interactive)
+  (setq tabbar-buffer-groups-function/without-rings 'tabbar-buffer-groups/simple)
+  (setq tabbar-buffer-groups-function 'tabbar-buffer-groups/simple-with-rings))
+
 
 
 ;; *** tabbar-ruler
