@@ -178,10 +178,15 @@ On Windows, baskslashes is substituted with slashes."
   (if (or arg (eq (key-binding (kbd "<up>")) 'previous-line))
       (progn
         (local-set-key (kbd "<up>")   'comint-previous-input)
-        (local-set-key (kbd "<down>") 'comint-next-input))
+        (local-set-key (kbd "<down>") 'comint-next-input)
+        (local-set-key (kbd "M-p")    'previous-line)
+        (local-set-key (kbd "M-n")    'next-line))
     (progn
       (local-set-key (kbd "<up>")   'previous-line)
-      (local-set-key (kbd "<down>") 'next-line))))
+      (local-set-key (kbd "<down>") 'next-line)
+      (local-set-key (kbd "M-p")    'comint-previous-input)
+      (local-set-key (kbd "M-n")    'comint-next-input))
+    
 
 (defun comint-bind-cursor-key-for-history ()
   "Bind up/down key to comint-{previous,next}-input."
