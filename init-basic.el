@@ -952,6 +952,24 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
                 
 (run-with-idle-timer 3 nil 'bmz/init-frame)
 
+;; *** open file in desktop environment
+(defun de-open-file-in-associated-app (file)
+  (cond
+   ((eq system-type 'windows-nt)
+    (w32-browser file))
+   ((eq system-type 'gnu/linux)
+    (start-process "" nil "xdg-open" file))))
+
+(defun de-open-current-file-in-associated-app ()
+  (interactive)
+  (de-open-file-in-associated-app buffer-file-name))
+
+(defun de-open-current-dir-in-associated-app ()
+  (interactive)
+  (de-open-file-in-associated-app default-directory))
+
+(global-set-key (kbd "<apps> M-o") 'de-open-current-file-in-associated-app)
+(global-set-key (kbd "<apps> M-O") 'de-open-current-dir-in-associated-app)
 
 ;; ** misc
 (column-number-mode t)
