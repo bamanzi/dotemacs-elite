@@ -801,7 +801,7 @@ vi style of % jumping to matching brace."
 
 (autoload 'viper-info-on-file "viper-ex" nil nil)
  
-(define-key global-map (kbd "<f6> C-g") 'viper-describe-file)
+(define-key global-map (kbd "<f6> C-g") 'viper-info-on-file)
 
 (define-key global-map (kbd "<f6> y y")  #'(lambda ()
                                       (interactive)
