@@ -565,7 +565,7 @@ That is, a string used to represent it on the tab bar."
 (eval-after-load "tabbar-ruler"
   `(progn
      ;;reset my grouping funciton
-     (setq tabbar-buffer-groups-function 'tabbar-buffer-groups/bmz)
+     (setq tabbar-buffer-groups-function 'tabbar-buffer-groups/simple-with-rings)
 
      (require 'color nil t)
      (unless (fboundp 'color-name-to-rgb)
