@@ -679,6 +679,15 @@ It is an enhanced version of `anything-for-buffers'."
 ;; *** spell
 (define-key global-map (kbd "ESC M-$") 'ispell-complete-word)
 
+(eval-after-load "cheatsheet"
+  `(progn
+     (cheatsheet-add :group 'Lanuage\ Tools
+                     :key "ESC M-$"
+                     :description "ispell-complete-word.")
+     t))
+
+
+;; **** ispell + auto-complete
 (defun ac-ispell-get-candidates ()
   (let ((word (car (ispell-get-word nil "\\*")))
         (interior-frag nil))
