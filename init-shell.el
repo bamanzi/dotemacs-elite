@@ -185,8 +185,8 @@ On Windows, baskslashes is substituted with slashes."
       (local-set-key (kbd "<up>")   'previous-line)
       (local-set-key (kbd "<down>") 'next-line)
       (local-set-key (kbd "M-p")    'comint-previous-input)
-      (local-set-key (kbd "M-n")    'comint-next-input))
-    
+      (local-set-key (kbd "M-n")    'comint-next-input))))
+
 
 (defun comint-bind-cursor-key-for-history ()
   "Bind up/down key to comint-{previous,next}-input."
