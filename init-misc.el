@@ -268,8 +268,7 @@ Otherwise it requires user to input full thing name (value of `thing/name-map`).
 
 ;; *** copy/paste rectangle
 ;;stolen from http://ergoemacs.org/emacs/emacs_string-rectangle_ascii-art.html
-(unless (functionp 'copy-rectangle-as-kill)  ;; emacs-24 has this
-  (defun copy-rectangle-to-clipboard (p1 p2)
+(defun copy-rectangle-to-clipboard (p1 p2)
     "Copy region as column (rectangle) to operating system's clipboard.
 This command will also put the text in register 0.
 
@@ -282,7 +281,14 @@ See also: `kill-rectangle', `copy-to-register'."
          (insert-register ?0)
          (buffer-string) )) ) )
 
-  (define-key global-map (kbd "C-x r M-w") 'copy-rectangle-to-clipboard))
+(define-key global-map (kbd "C-x r M-w") 'copy-rectangle-to-clipboard)
+
+(eval-after-load "cheatsheet"
+  `(progn
+     (cheatsheet-add :group 'Rectangle
+                     :key "C-x r M-w"
+                     :description "Copy rectangle-area to clipboard/kill-ring.")
+     t))
 
 ;; *** misc
 (autoload 'copy-from-above-command "misc"
