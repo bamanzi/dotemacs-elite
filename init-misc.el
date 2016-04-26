@@ -663,12 +663,16 @@ It is an enhanced version of `anything-for-buffers'."
     (let ((theme-dir (locate-library "tangotango-theme")))
       (if theme-dir
           (add-to-list 'custom-theme-load-path (file-name-directory theme-dir))))
+    
     (unless custom-enabled-themes
-      (custom-set-variables
-       '(custom-enabled-themes (quote (tango-dark)))))
-    )
-  )
-
+      (if (display-graphic-p)
+          ;;GUI
+          (custom-set-variables
+           '(custom-enabled-themes (quote (tango-dark))))
+        (when (> (display-color-cells) 255)
+          (custom-set-variables
+           '(custom-enabled-themes (quote (subatomic256)))))))
+    ))
 
 
 ;; ** languages tools
