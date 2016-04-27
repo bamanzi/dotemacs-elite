@@ -852,6 +852,18 @@ vi style of % jumping to matching brace."
 (autoload 'isend-display-buffer "isend-mode"
   "Undocumented." t)
 
+
+(eval-after-load "cheatsheet"
+  `(progn
+     (cheatsheet-add :group 'Shell\ &\ Term
+                     :key "isend-send"
+                     :description "Send the current region of line to a terminal.")
+     (cheatsheet-add :group 'Shell\ &\ Term
+                     :key "isend-associate"
+                     :description "Set the buffer to which commands will be sent using `isend-send'.")
+     t))
+
+
 ;; ** misc
 ;;--
 ;;(global-unset-key (kbd "<f10>"))
