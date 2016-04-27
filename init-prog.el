@@ -200,12 +200,20 @@
 
 (global-set-key (kbd "<f9> I") 'helm-imenu-anywhere)
 
+(eval-after-load "cheatsheet"
+  `(progn
+     (cheatsheet-add :group 'Programming/Tags
+                     :key "<f9> I"
+                     :description "helm-imenu-anywhere (Show imenu tags across all buffers.)")
+     t))
+
 
 ;; ** tags
 ;; *** etags
-(global-set-key (kbd "<f9> . SPC") 'anything-c-etags-select)
+(global-set-key (kbd "<f9> M-.") 'anything-c-etags-select)
 
-(defun anything-goto-definition--etags ()
+
+(defun anything--etags+imenu ()
   "Show function/symbol list with etags & imenu.
 
 Current symbol would be used as input to narrow the choices."
@@ -219,8 +227,18 @@ Current symbol would be used as input to narrow the choices."
          anything-c-source-imenu
          )))
 
-(global-set-key (kbd "<f9> g .") 'anything-goto-definition--etags)
-(global-set-key (kbd "<f9> M-.") 'anything-c-etags-select)
+(global-set-key (kbd "<f9> .") 'anything--etags+imenu)
+
+(eval-after-load "cheatsheet"
+  `(progn
+     (cheatsheet-add :group 'Programming/Tags
+                     :key "<f9> M-."
+                     :description "anything-c-etags-select")
+     (cheatsheet-add :group 'Programming/Tags
+                     :key "<f9> ."
+                     :description "anything--etags+imenu")
+     t))
+
 
 ;; *** tags history
 ;; tags-view works with etags.el & gtags.el
@@ -231,6 +249,14 @@ Current symbol would be used as input to narrow the choices."
 (global-set-key (kbd "M-h .") 'tv-view-history)
 
 (defalias 'find-tag-history 'tv-view-history)
+
+(eval-after-load "cheatsheet"
+  `(progn
+     (cheatsheet-add :group 'Programming/Tags
+                     :key "M-h ."
+                     :description "tv-view-history (tags-view.el)")
+     t))
+
 
 ;; *** anything-etags+
 (autoload 'anything-etags+-select-at-point "anything-etags+"
@@ -251,6 +277,25 @@ Current symbol would be used as input to narrow the choices."
      (global-set-key (kbd "<apps> . >") 'anything-etags+-history-go-forward)
      ))
 
+(eval-after-load "cheatsheet"
+  `(progn
+     (cheatsheet-add :group 'Programming/Tags
+                     :key "<apps> M-."
+                     :description "anything-etags+-select-at-point")
+     (cheatsheet-add :group 'Programming/Tags
+                     :key "<apps> . SPEC"
+                     :description "anything-etags+-select")
+     (cheatsheet-add :group 'Programming/Tags
+                     :key "<apps> . M-h"
+                     :description "anything-etags+-history")
+     (cheatsheet-add :group 'Programming/Tags
+                     :key "<apps> . <"
+                     :description "anything-etags+-history-go-back")
+     (cheatsheet-add :group 'Programming/Tags
+                     :key "<apps> . >"
+                     :description "anything-etags+-history-go-forward")
+     t))
+
 ;; *** ctags
 ;; **** anything-ctags-current-file
 ;; similar to 'taglist' plugin of vim, to use `anything-c-source-ctags'
@@ -269,6 +314,12 @@ Current symbol would be used as input to narrow the choices."
 
 (global-set-key (kbd "<f9> t") 'anything-ctags-current-file)
 
+(eval-after-load "cheatsheet"
+  `(progn
+     (cheatsheet-add :group 'Programming/Tags
+                     :key "<f9> t"
+                     :description "anything-ctags-current-file")
+     t))
 
 ;; ** compilation
 (setq compilation-error-regexp-alist '(gnu java))

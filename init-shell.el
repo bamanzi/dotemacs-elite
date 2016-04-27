@@ -89,7 +89,12 @@ On Windows, baskslashes is substituted with slashes."
 
 (define-key global-map (kbd "<apps> , p") 'ac-complete-pcomplete)
 
-
+(eval-after-load "cheatsheet"
+  `(progn
+     (cheatsheet-add :group 'Shell\ &\ Term
+                     :key "ac-complete-pcomplete"
+                     :description "complete shell commands & args with pcomplete + auto-complete.")
+     t))
 
 ;; *** history
 
@@ -164,6 +169,22 @@ On Windows, baskslashes is substituted with slashes."
 
 (add-hook 'eshell-mode-hook 'bmz/eshell-mode-init)
 
+(eval-after-load "cheatsheet"
+  `(progn
+     (cheatsheet-add :group 'Eshell
+                     :key "<f5> M-h"
+                     :description "anything-eshell-history")
+     (cheatsheet-add :group 'Eshell
+                     :key "<f5> TAB"
+                     :description "anything-esh-pcomplete")
+     (cheatsheet-add :group 'Eshell
+                     :key "M-."
+                     :description "kai-eshell-insert-last-word")
+     
+     
+     t))
+
+
 ;; *** eshell prompt
 (setq eshell-prompt-function (lambda nil
                                (concat
@@ -213,6 +234,13 @@ On Windows, baskslashes is substituted with slashes."
      ;; let's bind the new command to a keycombo
      (define-key comint-mode-map "\C-c\M-o" #'comint-clear-buffer)
      ))
+
+(eval-after-load "cheatsheet"
+  `(progn
+     (cheatsheet-add :group 'Shell\ &\ Term
+                     :key "C-c C-o"
+                     :description "comint-clear-buffer")
+     t))
 
 ;; ** misc
 ;; *** compilation-shell-minor-mode (also for grep/grin in shell)
