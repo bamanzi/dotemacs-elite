@@ -92,10 +92,10 @@ On Windows, baskslashes is substituted with slashes."
 (eval-after-load "cheatsheet"
   `(progn
      (cheatsheet-add :group 'Eshell
-                     :key "ac-complete-pcomplete"
+                     :key "M-x ac-complete-pcomplete"
                      :description "complete shell commands & args with pcomplete + auto-complete.")
      (cheatsheet-add :group 'Shell-mode
-                     :key "ac-complete-pcomplete"
+                     :key "M-x ac-complete-pcomplete"
                      :description "complete shell commands & args with pcomplete + auto-complete.")
      t))
 

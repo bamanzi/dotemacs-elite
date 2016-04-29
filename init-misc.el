@@ -856,10 +856,10 @@ vi style of % jumping to matching brace."
 (eval-after-load "cheatsheet"
   `(progn
      (cheatsheet-add :group 'Misc
-                     :key "isend-send"
+                     :key "M-x isend-send"
                      :description "Send the current region of line to a buffer.")
      (cheatsheet-add :group 'Misc
-                     :key "isend-associate"
+                     :key "M-x isend-associate"
                      :description "Set the buffer to which commands will be sent using `isend-send'.")
      t))
 
