@@ -681,7 +681,7 @@ It is an enhanced version of `anything-for-buffers'."
 
 (eval-after-load "cheatsheet"
   `(progn
-     (cheatsheet-add :group 'Lanuage\ Tools
+     (cheatsheet-add :group 'Language-Tools
                      :key "ESC M-$"
                      :description "ispell-complete-word.")
      t))
@@ -855,10 +855,10 @@ vi style of % jumping to matching brace."
 
 (eval-after-load "cheatsheet"
   `(progn
-     (cheatsheet-add :group 'Shell\ &\ Term
+     (cheatsheet-add :group 'Misc
                      :key "isend-send"
-                     :description "Send the current region of line to a terminal.")
-     (cheatsheet-add :group 'Shell\ &\ Term
+                     :description "Send the current region of line to a buffer.")
+     (cheatsheet-add :group 'Misc
                      :key "isend-associate"
                      :description "Set the buffer to which commands will be sent using `isend-send'.")
      t))
