@@ -431,7 +431,7 @@ If the new path's directories does not exist, create them."
 (eval-after-load "cheatsheet"
   `(progn
      (cheatsheet-add :group 'Rectangle :key "C-x r RET" :description "cua-set-rectangle-mark")
-     (cheatsheet-add :group 'Rectangle :key "M-?"       :description "(cua) cua-help-for-rectangle")
+     (cheatsheet-add :group 'Rectangle :key "(cua-rect) M-?"       :description "(cua) cua-help-for-rectangle")
      t
      ))
 
