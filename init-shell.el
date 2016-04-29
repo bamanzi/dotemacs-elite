@@ -91,7 +91,10 @@ On Windows, baskslashes is substituted with slashes."
 
 (eval-after-load "cheatsheet"
   `(progn
-     (cheatsheet-add :group 'Shell\ &\ Term
+     (cheatsheet-add :group 'Eshell
+                     :key "ac-complete-pcomplete"
+                     :description "complete shell commands & args with pcomplete + auto-complete.")
+     (cheatsheet-add :group 'Shell-mode
                      :key "ac-complete-pcomplete"
                      :description "complete shell commands & args with pcomplete + auto-complete.")
      t))
@@ -237,9 +240,12 @@ On Windows, baskslashes is substituted with slashes."
 
 (eval-after-load "cheatsheet"
   `(progn
-     (cheatsheet-add :group 'Shell\ &\ Term
+     (cheatsheet-add :group 'Shell-mode
                      :key "C-c C-o"
                      :description "comint-clear-buffer")
+     (cheatsheet-add :group 'Comint
+                     :key "C-c C-o"
+                     :description "comint-clear-buffer")     
      t))
 
 ;; ** misc

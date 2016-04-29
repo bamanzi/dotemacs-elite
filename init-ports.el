@@ -95,13 +95,34 @@ but not mapped by term/xterm.el"
 
 ;; *** sudo.el
 (autoload 'sudo-find-file "sudo"
-  "Open a file, which may or may not be readable. If we can't" t)
+  "use sudo to open an otherwise unreadable file." t)
+(autoload 'sudo-save-current-buffer "sudo"
+  "Save current buffer, running sudo if necessary." t)
 
 (autoload 'sudo-unset-ro-or-save "sudo"
-  "Unset read-only flag for buffer, otherwise" t)
+  "unset read-only (if necessary), else sudo-save.")
 
 (global-set-key (kbd "C-x M-f") 'sudo-find-file)
 (global-set-key (kbd "C-x M-s") 'sudo-unset-ro-or-save)
+
+(eval-after-load "cheatsheet"
+  `(progn
+     (cheatsheet-add :group 'Open/Save
+                     :key "M-x revert-buffer-with-sudo"
+                     :description "revert-buffer-with-sudo")
+
+     (cheatsheet-add :group 'Open/Save
+                     :key "M-x sudo-find-file"
+                     :description "use sudo to open an otherwise unreadable file.")
+     (cheatsheet-add :group 'Open/Save
+                     :key "M-x sudo-save-current-buffer"
+                     :description "save current buffer, running sudo if necessary.")
+
+     (cheatsheet-add :group 'Open/Save
+                     :key "M-x sudo-unset-ro-or-save"
+                     :description "Unset read-only flag for buffer if necessary, otherwise sudo-save")
+     t))
+
 
 ;; ** key modifiers
 ;; *** win32

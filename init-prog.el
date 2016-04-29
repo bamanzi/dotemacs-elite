@@ -210,8 +210,9 @@
 
 ;; ** tags
 ;; *** etags
-(global-set-key (kbd "<f9> M-.") 'anything-c-etags-select)
-
+(autoload 'anything-c-etags-select "anything-config"
+  "Preconfigured anything for etags." t)
+(global-set-key (kbd "<f9> e") 'anything-c-etags-select)
 
 (defun anything--etags+imenu ()
   "Show function/symbol list with etags & imenu.
@@ -227,15 +228,19 @@ Current symbol would be used as input to narrow the choices."
          anything-c-source-imenu
          )))
 
-(global-set-key (kbd "<f9> .") 'anything--etags+imenu)
+(global-set-key (kbd "<f9> E") 'anything--etags+imenu)
 
 (eval-after-load "cheatsheet"
   `(progn
      (cheatsheet-add :group 'Programming/Tags
-                     :key "<f9> M-."
+                     :key "<f9> e"
                      :description "anything-c-etags-select")
      (cheatsheet-add :group 'Programming/Tags
-                     :key "<f9> ."
+                     :key "<f5> a e"
+                     :description "anything-c-etags-select")
+     
+     (cheatsheet-add :group 'Programming/Tags
+                     :key "<f9> E"
                      :description "anything--etags+imenu")
      t))
 
@@ -266,33 +271,33 @@ Current symbol would be used as input to narrow the choices."
 
 (eval-after-load "anything-etags+"
   `(progn
-     (global-set-key (kbd "<apps> M-.")   'anything-etags+-select-at-point)
-     (global-set-key (kbd "<apps> . SPC") 'anything-etags+-select)
+     (global-set-key (kbd "<f9> M-.")   'anything-etags+-select-at-point)
+     (global-set-key (kbd "<f9> . SPC") 'anything-etags+-select)
 
      ;; 'anything-etags+-history' has its own marker-ring. thus could
      ;; not be used with `find-tag'
-     (global-set-key (kbd "<apps> .  M-h") 'anything-etags+-history)
+     (global-set-key (kbd "<f9> .  M-h") 'anything-etags+-history)
 
-     (global-set-key (kbd "<apps> . <") 'anything-etags+-history-go-back)
-     (global-set-key (kbd "<apps> . >") 'anything-etags+-history-go-forward)
+     (global-set-key (kbd "<f9> . <") 'anything-etags+-history-go-back)
+     (global-set-key (kbd "<f9> . >") 'anything-etags+-history-go-forward)
      ))
 
 (eval-after-load "cheatsheet"
   `(progn
      (cheatsheet-add :group 'Programming/Tags
-                     :key "<apps> M-."
+                     :key "<f9> M-."
                      :description "anything-etags+-select-at-point")
      (cheatsheet-add :group 'Programming/Tags
-                     :key "<apps> . SPEC"
+                     :key "<f9> . SPEC"
                      :description "anything-etags+-select")
      (cheatsheet-add :group 'Programming/Tags
-                     :key "<apps> . M-h"
+                     :key "<f9> . M-h"
                      :description "anything-etags+-history")
      (cheatsheet-add :group 'Programming/Tags
-                     :key "<apps> . <"
+                     :key "<f9> . <"
                      :description "anything-etags+-history-go-back")
      (cheatsheet-add :group 'Programming/Tags
-                     :key "<apps> . >"
+                     :key "<f9> . >"
                      :description "anything-etags+-history-go-forward")
      t))
 

@@ -134,6 +134,14 @@
 
 (global-set-key (kbd "<C-f11> <C-f11>") 'maximize-frame)
 
+(eval-after-load "cheatsheet"
+  `(progn
+     (cheatsheet-add :group 'OS
+                     :key "<C-f11> <C-f11>"
+                     :description "maximize-frame")
+     t))
+
+
 ;; *** font
 (global-set-key (kbd "<C-M-wheel-up>") 'text-scale-increase)
 (global-set-key (kbd "<C-M-wheel-down>") 'text-scale-decrease)
@@ -247,6 +255,11 @@ By default, describe the current buffer."
 
 (global-set-key (kbd "C-h B") 'describe-buffer-)
 
+(eval-after-load "cheatsheet"
+  `(cheatsheet-add :group 'Misc
+                  :key "C-h B"
+                  :description "describe-buffer-"))
+
 ;; *** backups
 (setq make-backup-files t) ;;to disable backup, set it to nil
 (setq backup-directory-alist '(("." . "~/.emacs.d/backups")))
@@ -286,6 +299,13 @@ If the new path's directories does not exist, create them."
 
 (global-set-key (kbd "<f12> C-l") 'desktop-change-dir)
 (global-set-key (kbd "<f12> C-s") 'desktop-save)
+
+(eval-after-load "cheatsheet"
+  `(progn
+     (cheatsheet-add :group 'Misc :key "<f12> C-l" :description "desktop-change-dir")
+     (cheatsheet-add :group 'Misc :key "<f12> C-s" :description "desktop-save")
+     t))
+
 
 ;; restore cursor position when re-opening a file
 ;; http://ergoemacs.org/emacs/emacs_save_cursor_position.html
@@ -406,6 +426,13 @@ If the new path's directories does not exist, create them."
   `(progn
      ;; as `C-?' already used by `undo-tree-redo'
      (define-key cua--rectangle-keymap (kbd "M-?") 'cua-help-for-rectangle)
+     ))
+
+(eval-after-load "cheatsheet"
+  `(progn
+     (cheatsheet-add :group 'Rectangle :key "C-x r RET" :description "cua-set-rectangle-mark")
+     (cheatsheet-add :group 'Rectangle :key "M-?"       :description "(cua) cua-help-for-rectangle")
+     t
      ))
 
 
@@ -630,6 +657,15 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
   (define-key global-map (kbd "<apps> , i") 'ac-complete-imenu)
   (define-key global-map (kbd "<apps> , a") 'ac-complete-scite-api)
   (define-key global-map (kbd "<apps> , y") 'ac-complete-yasnippet)
+
+  (eval-after-load "cheatsheet"
+    `(progn
+       (cheatsheet-add :group 'Auto-Complete :key "<apps> , f" :description "ac-complete-filename")
+       (cheatsheet-add :group 'Auto-Complete :key "<apps> , i" :description "ac-complete-imenu")
+       (cheatsheet-add :group 'Auto-Complete :key "<apps> , a" :description "ac-complete-scite-api")
+       (cheatsheet-add :group 'Auto-Complete :key "<apps> , y" :description "ac-complete-yasnippet")
+       t
+       ))
   )
 
 
@@ -929,6 +965,13 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
      (define-key emacs-lisp-mode-map (kbd "C-c .") 'find-symbol-at-point)
      ))
 
+(eval-after-load "cheatsheet"
+  `(progn
+     (cheatsheet-add :group 'Emacs-Lisp-Mode
+                     :key "C-c ."
+                     :description "find-symbol-at-point")
+     t))
+
 
 ;; ** utils
 (autoload 'ifas "bmz-elisp-misc"
@@ -938,6 +981,13 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
   "load a library 'foobar' and execute the command with same name:" t)
 
 (global-set-key (kbd "M-X") 'load-and-execute)
+
+(eval-after-load "cheatsheet"
+  `(progn
+     (cheatsheet-add :group 'Minibuffer
+                     :key "M-S-x"
+                     :description "load library 'foobar' and execute 'M-x foobar-mode' or 'M-x foobar'.")
+     t))
 
 
 ;; *** workaround for some display tweaking
@@ -968,8 +1018,14 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
   (interactive)
   (de-open-file-in-associated-app default-directory))
 
-(global-set-key (kbd "<apps> M-o") 'de-open-current-file-in-associated-app)
-(global-set-key (kbd "<apps> M-O") 'de-open-current-dir-in-associated-app)
+(global-set-key (kbd "<apps> C-o") 'de-open-current-file-in-associated-app)
+(global-set-key (kbd "<apps> C-O") 'de-open-current-dir-in-associated-app)
+
+(eval-after-load "cheatsheet"
+  `(progn
+     (cheatsheet-add :group 'OS :key "<apps> C-o"   :description "de-open-current-file-in-associated-app")
+     (cheatsheet-add :group 'OS :key "<apps> C-S-o" :description "de-open-current-dir-in-associated-app")
+     t))
 
 ;; ** misc
 (setq scroll-margin 3)
