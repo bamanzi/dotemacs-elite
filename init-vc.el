@@ -38,13 +38,24 @@
   
 ;;(add-hook 'prog-mode-hook 'diff-hl-mode)
 
-(defun toggle-diff-hl-mode ()
+(defun diff-hl-mode-fringe-or-margin ()
+  "Toggle `diff-hl-mode' or `diff-hl-margin-mode' according to current frame's display."
+  (interactive)
   (if window-system
       (diff-hl-mode)
     (diff-hl-margin-mode)))
 
-(global-set-key (kbd "<f10> d h") 'toggle-diff-hl-mode)
+(global-set-key (kbd "<f10> d h") 'diff-hl-mode-fringe-or-margin)
 
+(eval-after-load "cheatsheet"
+  `(progn
+     (cheatsheet-add :group 'VC
+                     :key "M-x diff-hl-mode"
+                     :description "Toggle VC diff fringe highlighting.")
+     (cheatsheet-add :group 'VC
+                     :key "M-x diff-hl-margin-mode"
+                     :description "Toggle displaying `diff-hl-mode' highlights on the margin.")
+     t))
 
 ;; *** smeargle
 (autoload 'smeargle "smeargle"
@@ -52,3 +63,17 @@
 
 (autoload 'smeargle-commits "smeargle"
   "Highlight regions by age of commits." t)
+
+(eval-after-load "cheatsheet"
+  `(progn
+     (cheatsheet-add :group 'VC
+                     :key "M-x smeargle"
+                     :description "Highlight regions by last updated time." t)
+     (cheatsheet-add :group 'VC
+                     :key "M-x smeargle-commits"
+                     :description "Highlight regions by age of commits." t)
+     t
+     ))
+
+
+
