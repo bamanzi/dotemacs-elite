@@ -439,10 +439,10 @@ See also: `kill-rectangle', `copy-to-register'."
 
 (eval-after-load "cheatsheet"
   `(progn
-     (cheatsheet-add :group 'Ibuffers
+     (cheatsheet-add :group 'Ibuffer
                 :key "G ESC"
                 :description "M-x ibuffer-clear-filter-groups")
-     (cheatsheet-add :group 'Ibuffers
+     (cheatsheet-add :group 'Ibuffer
                 :key "G m"
                 :description "M-x ibuffer-set-filter-groups-by-mode")
      ))

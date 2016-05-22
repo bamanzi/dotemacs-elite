@@ -439,17 +439,17 @@ found in DIRECTORY or any of its ancestors."
 
 (eval-after-load "ibuffer"
   `(progn
-     (add-hook 'ibuffer-hook
-               #'(lambda ()
-                   (if (and (boundp 'projectile-global-mode)
-                            projectile-global-mode)
-                       (ibuffer-projectile-set-filter-groups)))
-               'append)
+     ;; (add-hook 'ibuffer-hook
+     ;;           #'(lambda ()
+     ;;               (if (and (boundp 'projectile-global-mode)
+     ;;                        projectile-global-mode)
+     ;;                   (ibuffer-projectile-set-filter-groups)))
+     ;;           'append)
 
      (define-key ibuffer-mode-map (kbd "G p") 'ibuffer-projectile-set-filter-groups)
      ))
 
-(cheatsheet-add :group 'Ibuffers
+(cheatsheet-add :group 'Ibuffer
                 :key "G p"
                 :description "M-x ibuffer-projectile-set-filter-groups")
 
