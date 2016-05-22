@@ -431,6 +431,22 @@ See also: `kill-rectangle', `copy-to-register'."
 
 ;; ** buffers
 ;; *** ibuffers
+(eval-after-load "ibuffer"
+  `(progn
+     (define-key ibuffer-mode-map (kbd "G m")   'ibuffer-set-filter-groups-by-mode)
+     (define-key ibuffer-mode-map (kbd "G ESC") 'ibuffer-clear-filter-groups)
+     ))
+
+(eval-after-load "cheatsheet"
+  `(progn
+     (cheatsheet-add :group 'Ibuffers
+                :key "G ESC"
+                :description "M-x ibuffer-clear-filter-groups")
+     (cheatsheet-add :group 'Ibuffers
+                :key "G m"
+                :description "M-x ibuffer-set-filter-groups-by-mode")
+     ))
+
 ;; *** rings
 (eval-after-load "rings"
   `(progn
