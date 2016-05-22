@@ -433,8 +433,9 @@ found in DIRECTORY or any of its ancestors."
 (defalias 'projectile-speedbar 'nv-speedbar-open-current-buffer-in-tree)
 
 
+;; *** ibuffer-projectile
 (autoload 'ibuffer-projectile-set-filter-groups "ibuffer-projectile"
-  "Set the current filter groups to filter by vc root dir." t)
+  "Set the current filter groups to filter by project root dir." t)
 
 (eval-after-load "ibuffer"
   `(progn
@@ -443,8 +444,14 @@ found in DIRECTORY or any of its ancestors."
                    (if (and (boundp 'projectile-global-mode)
                             projectile-global-mode)
                        (ibuffer-projectile-set-filter-groups)))
-               'append)))
+               'append)
 
+     (define-key ibuffer-mode-map (kbd "G p") 'ibuffer-projectile-set-filter-groups)
+     ))
+
+(cheatsheet-add :group 'Ibuffers
+                :key "G p"
+                :description "M-x ibuffer-projectile-set-filter-groups")
 
 ;; ** documentation lookup
 (autoload 'keyword-help-lookup "bmz-keyword-help"
