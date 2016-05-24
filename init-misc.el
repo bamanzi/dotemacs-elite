@@ -719,7 +719,14 @@ It is an enhanced version of `anything-for-buffers'."
          (candidates . ac-ispell-get-candidates)))
      ))
 
-(define-key global-map (kbd "C-. $") 'ac-complete-ispell-word)
+(define-key global-map (kbd "<apps> , $") 'ac-complete-ispell-word)
+
+(eval-after-load "cheatsheet"
+  `(progn
+     (cheatsheet-add :group 'Auto-Complete
+                     :key "<apps> , $"
+                     :description "ac-complete-ispell-word")
+     t))
 
 
 
