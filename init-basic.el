@@ -511,6 +511,8 @@ If the new path's directories does not exist, create them."
 
 (global-set-key (kbd "C-c ;") 'comment-or-uncomment-region)
 
+(global-set-key (kbd "<M-S-backspace>") 'backward-kill-line)
+
 (progn
   (global-unset-key (kbd "M-c"))
   (global-set-key (kbd "M-c c") 'capitalize-word)
@@ -1037,3 +1039,7 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
 (global-set-key (kbd "ESC M-%") 'query-replace-regexp)
 
 (setq bookmark-save-flag 1) ;; save every time we make or delete a bookmark
+
+(setq gc-cons-threshold 4000000)
+
+(global-set-key (kbd "<header-line> <C-mouse-3>") 'mouse-delete-window)

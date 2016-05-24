@@ -449,9 +449,12 @@ found in DIRECTORY or any of its ancestors."
      (define-key ibuffer-mode-map (kbd "G p") 'ibuffer-projectile-set-filter-groups)
      ))
 
-(cheatsheet-add :group 'Ibuffer
-                :key "G p"
-                :description "M-x ibuffer-projectile-set-filter-groups")
+(eval-after-load "cheatsheet"
+  `(progn
+     (cheatsheet-add :group 'Ibuffer
+                     :key "G p"
+                     :description "M-x ibuffer-projectile-set-filter-groups")
+     ))
 
 ;; ** documentation lookup
 (autoload 'keyword-help-lookup "bmz-keyword-help"
