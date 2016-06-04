@@ -82,19 +82,28 @@ On Windows, baskslashes is substituted with slashes."
   `(progn
      (ac-define-source pcomplete
        '((candidates . pcomplete-completions)))
+     ;; NOTE: `pcomplete-complations' won't work for command args when used in auto-complete.
+     ;; http://emacswiki.org/emacs/EshellCompletion#toc4 provides a better solution
 
      (add-to-list 'ac-modes 'eshell-mode)
      (add-to-list 'ac-modes 'shell-mode)
      ))
 
-(define-key global-map (kbd "<apps> , p") 'ac-complete-pcomplete)
+;;(define-key global-map (kbd "<apps> , p") 'ac-complete-pcomplete)
 
 (eval-after-load "cheatsheet"
   `(progn
      (cheatsheet-add :group 'Eshell
-                     :key "M-x ac-complete-pcomplete"
-                     :description "complete shell commands & args with pcomplete + auto-complete.")
-     (cheatsheet-add :group 'Shell-mode
+                     :key "C-c TAB"
+                     :description "ac-complete-pcomplete: complete shell commands & args with pcomplete + auto-complete.")
+     (cheatsheet-add :group 'Eshell
+                     :key "<f5> TAB"
+                     :description "anything-esh-pcomplete")
+     (cheatsheet-add :group 'Eshell
+                     :key "<f5> M-h"
+                     :description "anything-esh-history")
+     
+     (cheatsheet-add :group 'Shell
                      :key "M-x ac-complete-pcomplete"
                      :description "complete shell commands & args with pcomplete + auto-complete.")
      t))
@@ -108,8 +117,12 @@ On Windows, baskslashes is substituted with slashes."
       (progn
         (define-key eshell-mode-map (kbd "<up>")   'eshell-previous-input)
         (define-key eshell-mode-map (kbd "<down>") 'eshell-next-input)
+        (define-key eshell-mode-map (kbd "M-p")    'previous-line)
+        (define-key eshell-mode-map (kbd "M-n")    'next-line)
         (message "Now up/down key now binding to `eshell-{previous,next}-input'."))
     (progn
+        (define-key eshell-mode-map (kbd "M-p")    'eshell-previous-input)
+        (define-key eshell-mode-map (kbd "M-n")    'eshell-next-input)
         (define-key eshell-mode-map (kbd "<up>")   'previous-line)
         (define-key eshell-mode-map (kbd "<down>") 'next-line)
         (message "Now up/down key now binding to `{previous,next}-line."))))
@@ -128,7 +141,6 @@ On Windows, baskslashes is substituted with slashes."
   "Preconfigured anything to provide anything completion in eshell." t)
 
 
-
 ;; *** misc
 (defun eshell-maybe-bol ()
   (interactive)
@@ -143,13 +155,16 @@ On Windows, baskslashes is substituted with slashes."
   (define-key eshell-mode-map (kbd "C-a")    'eshell-maybe-bol)
   (define-key eshell-mode-map (kbd "<home>") 'eshell-maybe-bol)  
 
+  (define-key eshell-mode-map (kbd "M-.") 'kai-eshell-insert-last-word)
+
   (eshell-toggle-cursor-keybinding 1)
   (define-key eshell-mode-map (kbd "<Scroll_Lock>") 'eshell-toggle-cursor-keybinding)
   (define-key eshell-mode-map (kbd "<scroll>") 'eshell-toggle-cursor-keybinding)
-
   (define-key eshell-mode-map (kbd "<f5> M-h") 'anything-eshell-history)
+
   (define-key eshell-mode-map (kbd "<f5> TAB") 'anything-esh-pcomplete)
-  (define-key eshell-mode-map (kbd "<M-TAB>")  'complete-symbol)
+  (define-key eshell-mode-map (kbd "C-c TAB")  'ac-complete-pcomplete)
+  ;;(define-key eshell-mode-map (kbd "M-TAB")  'complete-symbol)
   
   (define-key eshell-mode-map (kbd "<M-up>")   'eshell-previous-matching-input)
   (define-key eshell-mode-map (kbd "<M-down>") 'eshell-next-matching-input)
@@ -160,8 +175,7 @@ On Windows, baskslashes is substituted with slashes."
   (if (fboundp 'drag-stuff-mode)
       (drag-stuff-mode -1))
   
-  (define-key eshell-mode-map (kbd "M-.") 'kai-eshell-insert-last-word)
-  ;; disable `highlight-symbol` as it would make eshell lose all colors
+  ;; disable `highlight-symbol'  as it would make eshell lose all colors
   (define-key eshell-mode-map (kbd "<double-mouse-1>") 'mouse-set-point)
   
   (setq outline-regexp "^.* $")
@@ -183,8 +197,6 @@ On Windows, baskslashes is substituted with slashes."
      (cheatsheet-add :group 'Eshell
                      :key "M-."
                      :description "kai-eshell-insert-last-word")
-     
-     
      t))
 
 
@@ -240,7 +252,7 @@ On Windows, baskslashes is substituted with slashes."
 
 (eval-after-load "cheatsheet"
   `(progn
-     (cheatsheet-add :group 'Shell-mode
+     (cheatsheet-add :group 'Shell
                      :key "C-c C-o"
                      :description "comint-clear-buffer")
      (cheatsheet-add :group 'Comint
@@ -254,4 +266,5 @@ On Windows, baskslashes is substituted with slashes."
 
 (global-set-key (kbd "M-g <C-f9>") 'compile-goto-error)
 
-
+;; any other key will jump back to the prompt
+(setq eshell-scroll-to-bottom-on-input t)
