@@ -155,7 +155,7 @@
   (interactive)
   (message "Current function: %s" (which-function)))
   
-(define-key global-map (kbd "<f9> w") 'show-which-function)
+(define-key global-map (kbd "<f7> w") 'show-which-function)
 
 
 ;; ** imenu
@@ -170,24 +170,24 @@
 (autoload 'anything-browse-code "anything-config"
   "Preconfigured anything to browse code. `imenu' + elisp/python improvements." t)
 
-(global-set-key (kbd "<f9> i") 'anything-imenu)
-(global-set-key (kbd "<f9> c") 'anything-browse-code)
+(global-set-key (kbd "<f7> i") 'anything-imenu)
+(global-set-key (kbd "<f7> c") 'anything-browse-code)
 
-(defun anything-goto-symbol--imenu ()
-  "Show anything list, using current symbol as input to narrow the choices."
+(defun anything-list-symbols ()
+  "Show symbol list (imenu + semantic), using current symbol as input to narrow the choices."
   (interactive)
   (anything
    :prompt "Go to:"
    :candidate-number-limit 10
    :input (thing-at-point 'symbol)
    :sources
-      '( anything-c-source-imenu
-         anything-c-source-browse-code
-         anything-c-source-semantic
-;;         anything-c-source-etags-select
-         )))
+   '( anything-c-source-imenu
+      anything-c-source-browse-code
+      anything-c-source-semantic
+      ;;         anything-c-source-etags-select
+      )))
 
-(define-key global-map (kbd "<f9> g i") 'anything-goto-symbol--imenu)
+(define-key global-map (kbd "<f7> l") 'anything-list-symbols)
 
 ;; *** imenu-anywhere: imenu tags across all buffers
 (autoload 'imenu-anywhere "imenu-anywhere"
@@ -198,12 +198,12 @@
 (autoload 'helm-imenu-anywhere  "imenu-anywhere"
   "`helm' source for `imenu-anywhere'." t)
 
-(global-set-key (kbd "<f9> I") 'helm-imenu-anywhere)
+(global-set-key (kbd "<f7> I") 'helm-imenu-anywhere)
 
 (eval-after-load "cheatsheet"
   `(progn
      (cheatsheet-add :group 'Programming/Tags
-                     :key "<f9> I"
+                     :key "<f7> I"
                      :description "helm-imenu-anywhere (Show imenu tags across all buffers.)")
      t))
 
@@ -212,7 +212,7 @@
 ;; *** etags
 (autoload 'anything-c-etags-select "anything-config"
   "Preconfigured anything for etags." t)
-(global-set-key (kbd "<f9> e") 'anything-c-etags-select)
+(global-set-key (kbd "<f7> e") 'anything-c-etags-select)
 
 (defun anything--etags+imenu ()
   "Show function/symbol list with etags & imenu.
@@ -228,19 +228,19 @@ Current symbol would be used as input to narrow the choices."
          anything-c-source-imenu
          )))
 
-(global-set-key (kbd "<f9> E") 'anything--etags+imenu)
+(global-set-key (kbd "<f7> E") 'anything--etags+imenu)
 
 (eval-after-load "cheatsheet"
   `(progn
      (cheatsheet-add :group 'Programming/Tags
-                     :key "<f9> e"
+                     :key "<f7> e"
                      :description "anything-c-etags-select")
      (cheatsheet-add :group 'Programming/Tags
                      :key "<f5> a e"
                      :description "anything-c-etags-select")
      
      (cheatsheet-add :group 'Programming/Tags
-                     :key "<f9> E"
+                     :key "<f7> E"
                      :description "anything--etags+imenu")
      t))
 
@@ -271,33 +271,33 @@ Current symbol would be used as input to narrow the choices."
 
 (eval-after-load "anything-etags+"
   `(progn
-     (global-set-key (kbd "<f9> M-.")   'anything-etags+-select-at-point)
-     (global-set-key (kbd "<f9> . SPC") 'anything-etags+-select)
+     (global-set-key (kbd "<f7> M-.")   'anything-etags+-select-at-point)
+     (global-set-key (kbd "<f7> . SPC") 'anything-etags+-select)
 
      ;; 'anything-etags+-history' has its own marker-ring. thus could
      ;; not be used with `find-tag'
-     (global-set-key (kbd "<f9> .  M-h") 'anything-etags+-history)
+     (global-set-key (kbd "<f7> .  M-h") 'anything-etags+-history)
 
-     (global-set-key (kbd "<f9> . <") 'anything-etags+-history-go-back)
-     (global-set-key (kbd "<f9> . >") 'anything-etags+-history-go-forward)
+     (global-set-key (kbd "<f7> . <") 'anything-etags+-history-go-back)
+     (global-set-key (kbd "<f7> . >") 'anything-etags+-history-go-forward)
      ))
 
 (eval-after-load "cheatsheet"
   `(progn
      (cheatsheet-add :group 'Programming/Tags
-                     :key "<f9> M-."
+                     :key "<f7> M-."
                      :description "anything-etags+-select-at-point")
      (cheatsheet-add :group 'Programming/Tags
-                     :key "<f9> . SPEC"
+                     :key "<f7> . SPEC"
                      :description "anything-etags+-select")
      (cheatsheet-add :group 'Programming/Tags
-                     :key "<f9> . M-h"
+                     :key "<f7> . M-h"
                      :description "anything-etags+-history")
      (cheatsheet-add :group 'Programming/Tags
-                     :key "<f9> . <"
+                     :key "<f7> . <"
                      :description "anything-etags+-history-go-back")
      (cheatsheet-add :group 'Programming/Tags
-                     :key "<f9> . >"
+                     :key "<f7> . >"
                      :description "anything-etags+-history-go-forward")
      t))
 
@@ -317,12 +317,12 @@ Current symbol would be used as input to narrow the choices."
 ;;          anything-c-source-imenu
 ;;          )))
 
-(global-set-key (kbd "<f9> t") 'anything-ctags-current-file)
+(global-set-key (kbd "<f7> t") 'anything-ctags-current-file)
 
 (eval-after-load "cheatsheet"
   `(progn
      (cheatsheet-add :group 'Programming/Tags
-                     :key "<f9> t"
+                     :key "<f7> t"
                      :description "anything-ctags-current-file")
      t))
 
@@ -333,13 +333,13 @@ Current symbol would be used as input to narrow the choices."
 (define-key global-map (kbd "<M-wheel-down>") 'next-error)
 (define-key global-map (kbd "<M-wheel-up>")   'previous-error)
 
-(define-key global-map (kbd "<f9> n") 'next-error)
-(define-key global-map (kbd "<f9> p") 'previous-error)
+(define-key global-map (kbd "<f9> C-n") 'next-error)
+(define-key global-map (kbd "<f9> C-p") 'previous-error)
 
-(global-set-key (kbd "C-c <f9>") 'compilation-shell-minor-mode)
+(global-set-key (kbd "C-c <C-f9>") 'compilation-shell-minor-mode)
 
-(global-set-key (kbd "M-g <f9>") 'compile-goto-error)
-(global-set-key (kbd "<f9> G") 'compile-goto-error)
+(global-set-key (kbd "M-g <C-f9>") 'compile-goto-error)
+(global-set-key (kbd "<f9> M-g")   'compile-goto-error)
 
 
 ;; ** flymake

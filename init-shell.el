@@ -250,8 +250,8 @@ On Windows, baskslashes is substituted with slashes."
 
 ;; ** misc
 ;; *** compilation-shell-minor-mode (also for grep/grin in shell)
-(global-set-key (kbd "C-c <f9>") 'compilation-shell-minor-mode)
+(global-set-key (kbd "C-c <C-f9>") 'compilation-shell-minor-mode)
 
-(global-set-key (kbd "M-g <f9>") 'compile-goto-error)
+(global-set-key (kbd "M-g <C-f9>") 'compile-goto-error)
 
 
