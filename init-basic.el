@@ -943,10 +943,11 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
 ;; *** emacs lisp mode
 (eval-after-load "lisp-mode"
   `(progn     
-     (define-key goto-map (kbd "f") 'find-function-at-point)
-     (define-key goto-map (kbd "F") 'find-function)
-     (define-key goto-map (kbd "v") 'find-variable-at-point)
-     (define-key goto-map (kbd "V") 'find-variable)
+     (define-key emacs-lisp-mode-map (kbd "<M-f7> f") 'find-function-at-point)
+     (define-key emacs-lisp-mode-map (kbd "<M-f7> F") 'find-function)
+     (define-key emacs-lisp-mode-map (kbd "<M-f7> v") 'find-variable-at-point)
+     (define-key emacs-lisp-mode-map (kbd "<M-f7> V") 'find-variable)
+     (define-key emacs-lisp-mode-map (kbd "<M-f7> SPC") 'find-symbol-at-point)
 
      (require 'eldoc)
      (require 'eldoc-extension nil t)
@@ -960,15 +961,10 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
 (autoload 'find-symbol-at-point  "bmz-elisp-misc"
   "Find the definiton of the SYMBOL near point." t)
 
-(eval-after-load "lisp-mode"
-  `(progn
-     (define-key emacs-lisp-mode-map (kbd "C-c .") 'find-symbol-at-point)
-     ))
-
 (eval-after-load "cheatsheet"
   `(progn
      (cheatsheet-add :group 'Emacs-Lisp-Mode
-                     :key "C-c ."
+                     :key "<M-f7> SPC"
                      :description "find-symbol-at-point")
      t))
 
