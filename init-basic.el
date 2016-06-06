@@ -942,7 +942,11 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
 ;; ** major modes
 ;; *** emacs lisp mode
 (eval-after-load "lisp-mode"
-  `(progn     
+  `(progn
+     (define-key emacs-lisp-mode-map (kbd "<f9> d")   'eval-defun)
+     (define-key emacs-lisp-mode-map (kbd "<f9> SPC") 'eval-region)
+     (define-key emacs-lisp-mode-map (kbd "<f9> (")   'eval-last-sexp)
+     
      (define-key emacs-lisp-mode-map (kbd "<M-f7> f") 'find-function-at-point)
      (define-key emacs-lisp-mode-map (kbd "<M-f7> F") 'find-function)
      (define-key emacs-lisp-mode-map (kbd "<M-f7> v") 'find-variable-at-point)

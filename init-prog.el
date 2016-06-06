@@ -457,6 +457,6 @@ found in DIRECTORY or any of its ancestors."
 (autoload 'repl-toggle "bmz-repl-toggle"
   "Toggle between the REPL buffer and the source buffer." t)
 
-(global-set-key (kbd "<f12> ~") 'repl-toggle)
+(global-set-key (kbd "<f9> ~") 'repl-toggle)
 
 
