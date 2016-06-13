@@ -59,6 +59,8 @@ but not mapped by term/xterm.el"
 
 
 (progn
+  (xterm-map-function-keys-csi)
+  
   (define-key key-translation-map (kbd "<select>") (kbd "<end>"))
 
   (define-key key-translation-map  (kbd "ESC <up>")    (kbd "<M-up>"))
@@ -67,8 +69,34 @@ but not mapped by term/xterm.el"
   (define-key key-translation-map  (kbd "ESC <right>") (kbd "<M-right>"))
   (define-key key-translation-map  (kbd "ESC <insertchar>")  (kbd "<M-insert>"))
   (define-key key-translation-map  (kbd "ESC <deletechar>")  (kbd "<M-delete>"))
+
+  (define-key key-translation-map  (kbd "ESC <f1>")   (kbd "<M-f1>"))
+  (define-key key-translation-map  (kbd "ESC <f2>")   (kbd "<M-f2>"))
+  (define-key key-translation-map  (kbd "ESC <f3>")   (kbd "<M-f3>"))
+  (define-key key-translation-map  (kbd "ESC <f4>")   (kbd "<M-f4>"))
+  (define-key key-translation-map  (kbd "ESC <f5>")   (kbd "<M-f5>"))
+  (define-key key-translation-map  (kbd "ESC <f6>")   (kbd "<M-f6>"))
+  (define-key key-translation-map  (kbd "ESC <f7>")   (kbd "<M-f7>"))
+  (define-key key-translation-map  (kbd "ESC <f8>")   (kbd "<M-f8>"))
+  (define-key key-translation-map  (kbd "ESC <f9>")   (kbd "<M-f9>"))
+  (define-key key-translation-map  (kbd "ESC <f10>")  (kbd "<M-f10>"))
+  (define-key key-translation-map  (kbd "ESC <f11>")  (kbd "<M-f11>"))
+  (define-key key-translation-map  (kbd "ESC <f12>")  (kbd "<M-f12>"))
+
+  ;; some PuTTY sequences:
+;;  (define-key input-decode-map "\e[23~" [S-f1]) -> F11
+;;  (define-key input-decode-map "\e[24~" [S-f2]) -> F12
+  (define-key input-decode-map "\e[25~" [S-f3])
+  (define-key input-decode-map "\e[26~" [S-f4])
   
-  (xterm-map-function-keys-csi)
+  (define-key input-decode-map "\e[28~" [S-f5])
+  (define-key input-decode-map "\e[29~" [S-f6])
+  (define-key input-decode-map "\e[31~" [S-f7])
+  (define-key input-decode-map "\e[32~" [S-f8])
+  (define-key input-decode-map "\e[33~" [S-f9])
+  (define-key input-decode-map "\e[34~" [S-f10])
+  
+ 
   )
 
 (defun bmz/xterm-init-keys (&optional frame)
