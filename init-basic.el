@@ -839,16 +839,20 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
   "Toggle highlighting of the symbol at point." t)
 (idle-require 'highlight-symbol)
 
-(define-key search-map (kbd "j")     'highlight-symbol)
-(define-key search-map (kbd "#")      'highlight-symbol-prev)
-(define-key search-map (kbd "*")     'highlight-symbol-next)
+(progn
+  (define-key search-map "j"               'highlight-symbol)
+  (define-key search-map "#"               'highlight-symbol-prev)
+  (define-key search-map "*"               'highlight-symbol-next)
+  (define-key search-map "O"               'highlight-symbol-occur)
 
-(global-set-key (kbd "<double-mouse-1>")  'highlight-symbol)
-(global-set-key (kbd "<S-wheel-up>")      'highlight-symbol-prev)
-(global-set-key (kbd "<S-wheel-down>")    'highlight-symbol-next)
-(global-set-key (kbd "<S-mouse-3>")       'highlight-symbol-occur)
-
-(define-key search-map "O" 'highlight-symbol-occur)
+  (global-set-key (kbd "<double-mouse-1>") 'highlight-symbol)
+  (global-set-key (kbd "<S-wheel-up>")     'highlight-symbol-prev)
+  (global-set-key (kbd "<S-wheel-down>")   'highlight-symbol-next)
+  (global-set-key (kbd "<S-mouse-3>")      'highlight-symbol-occur)
+  (global-set-key (kbd "<f3>")             'highlight-symbol-prev)
+  (global-set-key (kbd "<S-f3>")           'highlight-symbol-next)
+  (global-set-key (kbd "<M-f3>")           'highlight-symbol-occur)
+)
 
 ;; *** idle-highlight
 (autoload 'idle-highlight-mode "idle-highlight-mode"
