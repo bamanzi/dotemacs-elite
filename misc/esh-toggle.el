@@ -169,7 +169,7 @@ window configuration then `switch-buffer-other-window')"
     ;; need to create a new one.
     (if (eq this-window (selected-window))
 	(progn
-	  (split-window-vertically)
+	  (split-window-sensibly)
 	  (other-window 1)))))
 
 (provide 'esh-toggle)

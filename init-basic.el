@@ -325,8 +325,9 @@ If the new path's directories does not exist, create them."
 
 
 ;; ** windows
-(setq split-width-threshold 120
-      split-height-threshold 60)
+;;supress splitting on small window (works for `split-window-sensibly' and `display-buffer')
+(setq split-width-threshold 150
+      split-height-threshold 80)
 
 (global-set-key (kbd "<f11> <tab>") 'other-window)
 (global-set-key (kbd "<f11> <backtab>") (kbd "C-u -1 C-x o"))
