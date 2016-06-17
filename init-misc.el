@@ -59,15 +59,17 @@ save it in `ffap-file-at-point-line-number' variable."
 "Visits the selected directory in the current buffer, replacing the" t)
 
 (eval-after-load "dired"
-  `(progn
-     (define-key dired-mode-map [return] 'dired-single-buffer)
-     (define-key dired-mode-map (kbd "RET") 'dired-single-buffer)
-     
-     (define-key dired-mode-map [mouse-1] 'dired-single-buffer-mouse)
-     (define-key dired-mode-map "^"
-       (function
-        (lambda nil (interactive) (dired-single-buffer ".."))))
-     )) 
+  `(add-hook 'dired-mode-hook 'bmz/dired-init-keys 'append)
+  )
+
+(defun bmz/dired-init-keys ()
+  (define-key dired-mode-map [return] 'dired-single-buffer)
+  (define-key dired-mode-map (kbd "RET") 'dired-single-buffer)
+  
+  (define-key dired-mode-map [mouse-1] 'dired-single-buffer-mouse)
+  (define-key dired-mode-map "^" ''(lambda ()
+                                     (interactive)
+                                     (dired-single-buffer ".."))))
 
 ;; *** nc.el: norton commander clone
 (autoload 'nc "nc" "Major mode for File Browser in GNU emacs." t)
@@ -681,14 +683,10 @@ It is an enhanced version of `anything-for-buffers'."
           (add-to-list 'custom-theme-load-path (file-name-directory theme-dir))))
     
     (unless custom-enabled-themes
-      (if (display-graphic-p)
-          ;;GUI
-          (custom-set-variables
-           '(custom-enabled-themes (quote (tango-dark))))
-        (when (> (display-color-cells) 255)
-          (custom-set-variables
-           '(custom-enabled-themes (quote (subatomic256)))))))
-    ))
+      (load-theme 'tango-dark)
+      (custom-set-variables
+       '(custom-enabled-themes (quote (tango-dark))))
+    )))
 
 
 ;; ** languages tools

@@ -840,7 +840,7 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
 (idle-require 'highlight-symbol)
 
 (define-key search-map (kbd "j")     'highlight-symbol)
-(define-key search-map (kbd "#")     'highlight-symbol-prev)
+(define-key search-map (kbd "#")      'highlight-symbol-prev)
 (define-key search-map (kbd "*")     'highlight-symbol-next)
 
 (global-set-key (kbd "<double-mouse-1>")  'highlight-symbol)
@@ -993,16 +993,17 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
 
 
 ;; *** workaround for some display tweaking
-(defun bmz/init-frame ()
+(defun bmz/call-frame-init-functions ()
+  "Nanually call all functions added into `after-make-frame-functions'."
   (interactive)
   (run-hook-with-args 'after-make-frame-functions
                       (selected-frame)))
   
 ;;put face-adjusting code to hook `after-make-frame-functions'
 ;;then use this to call them
-(global-set-key (kbd "<f12> <f12>") 'bmz/init-frame)
+(global-set-key (kbd "<f12> <f12>") 'bmz/call-frame-init-functions)
                 
-(run-with-idle-timer 3 nil 'bmz/init-frame)
+(run-with-timer 5 nil 'bmz/call-frame-init-functions)
 
 ;; *** open file in desktop environment
 (defun de-open-file-in-associated-app (file)

@@ -109,7 +109,8 @@ If called with C-u prefix, it would archive to file \"%s_archive::\". "
 
 ;; ** org-babel
 (setq org-confirm-babel-evaluate nil)
-(eval-after-load "ob"
+(idle-require 'ob-tangle)
+(eval-after-load "ob-tangle"
   `(progn
      (org-babel-do-load-languages 'org-babel-load-languages
                                   '((sh . t)
