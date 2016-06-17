@@ -139,7 +139,17 @@
 ;;(add-hook 'prog-mode-hook 'which-func-mode)
 
 ;; move which-func indicator to the start of mode line
-(setcar mode-line-format '(which-func-mode which-func-format))
+(defun bmz/mode-line-move-which-func-indicator ()
+  (interactive)
+  (set-face-attribute 'which-func nil :inherit 'font-lock-keyword-face)
+  (if (boundp 'mode-line-misc-info)
+      (setq mode-line-misc-info
+            (remove '(which-func-mode ("" which-func-format " "))   mode-line-misc-info)))
+  (setq-default mode-line-format
+                (cons '(which-func-mode ("" which-func-format " "))
+                      (remove '(which-func-mode which-func-format) mode-line-format))))
+
+;;(add-hook 'after-make-frame-functions 'bmz/mode-line-move-which-func-indicator)
 
 (eval-after-load "which-func"
   `(progn
@@ -148,6 +158,8 @@
 
      (if (listp which-func-modes) ;;the default value in emacs>=24.3 is `t' (not a list)
          (add-to-list 'which-func-modes 'js-mode))
+
+     (bmz/mode-line-move-which-func-indicator)
      ))
 
 (defun show-which-function ()
@@ -210,6 +222,17 @@
 
 ;; ** tags
 ;; *** etags
+;; -- automatically add a bookmark (bm.el)
+(progn
+  (defadvice find-tag (after bookmark-after-find-tag)
+    (if (require 'bm nil t)
+        (let ((bookmark (bm-bookmark-at (point))))
+          (unless bookmark
+            (bm-bookmark-add)))))
+  (ad-activate 'find-tag)
+  )
+
+;; -- select tags (anything)
 (autoload 'anything-c-etags-select "anything-config"
   "Preconfigured anything for etags." t)
 (global-set-key (kbd "<f7> e") 'anything-c-etags-select)
@@ -230,6 +253,7 @@ Current symbol would be used as input to narrow the choices."
 
 (global-set-key (kbd "<f7> E") 'anything--etags+imenu)
 
+
 (eval-after-load "cheatsheet"
   `(progn
      (cheatsheet-add :group 'Programming/Tags
@@ -246,7 +270,7 @@ Current symbol would be used as input to narrow the choices."
 
 
 ;; *** tags history
-;; tags-view works with etags.el & gtags.el
+;; tags-view works with etags.el & gtags.el,
 ;; and for etags, it make use `find-tag-marker-ring' 
 (autoload 'tv-view-history "tags-view"
   "Open a buffer listing locations on the tag stack." t)
