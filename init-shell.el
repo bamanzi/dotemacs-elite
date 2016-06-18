@@ -209,24 +209,42 @@ On Windows, baskslashes is substituted with slashes."
 
 
 ;; *** bookmark integration
-;; stolen from https://www.emacswiki.org/emacs/EshellBmk
+;; based on code from https://www.emacswiki.org/emacs/EshellBmk
 (defun pcomplete/eshell-mode/bmk ()
   "Completion for `bmk'"
   (pcomplete-here (bookmark-all-names)))
 
 (defun eshell/bmk (&rest args)
   "Integration between EShell and bookmarks.
-For usage, execute without arguments."
+For usage, execute with argument '-h'."
   (setq args (eshell-flatten-list args))
   (let ((bookmark (car args))
         filename name)
     (cond
      ((eq nil args)
-      (format "Usage: 
-* bmk BOOKMARK to
-** either change directory pointed to by BOOKMARK
-** or bookmark-jump to the BOOKMARK if it is not a directory.
-* bmk . BOOKMARK to bookmark current directory in BOOKMARK.
+      (let ((all-bookmarks (bookmark-all-names)))
+        (if all-bookmarks
+            (mapconcat #'(lambda (bookmark)
+                           (let ((filename (bookmark-get-filename bookmark)))
+                             ;;TODO: surpress checking for existence for tramp files
+                             (propertize (format "%16s\t%s" bookmark filename)
+                                         'face (if (file-directory-p filename)
+                                                   'eshell-ls-directory
+                                                 (if (file-exists-p filename)
+                                                     'default
+                                                   'eshell-ls-missing)))))
+                       all-bookmarks
+                       "\n")
+          "No bookmarks defined. Use 'C-x r m' to add one.")))
+     ((or (string= "-h" bookmark)
+          (string= "--help" bookmark)
+          (string= "/?" bookmark))
+      (format "Usage:
+bmk BOOKMARK
+    either change directory pointed to by BOOKMARK
+    or bookmark-jump to the BOOKMARK if it is not a directory.
+bmk . BOOKMARK
+    bookmark current directory as name BOOKMARK.
 Completion is available."))
      ((string= "." bookmark)
       ;; Store current path in EShell as a bookmark
