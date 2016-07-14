@@ -108,8 +108,8 @@
 ;; https://github.com/DarthFennec/highlight-indent-guides
 ;; FIXME: this is a better implementation than `highlight-indentation'?
 ;; According to its README, it works fine on both space & tabs,
-;; while `highlight-indentation' and `visual-indentation-mode' won't work on tabs.
-;; Although `indent-guide' works on spaces & tabs, it is farily slow, and jittery
+;; while `highlight-indentation.el' and `visual-indentation-mode.el' won't work on tabs.
+;; Although `indent-guide.el' works on spaces & tabs, it is farily slow, and jittery
 (autoload 'highlight-indent-guides-mode "highlight-indent-guides"
   "Display indent guides in a buffer." t)
 
@@ -119,12 +119,17 @@
     (add-hook 'prog-mode-hook 'highlight-indent-guides-mode))
 
 (defun bmz/init-highlight-indent-guides-faces (&optional frame)
-  (set-face-attribute 'highlight-indent-guides-odd-face frame
-                      :inherit 'fringe
-                      :background nil)
-  (set-face-attribute 'highlight-indent-guides-even-face frame
-                      :inherit 'default
-                      :background nil))
+  (when (boundp 'highlight-indent-guides-method)
+    (setq highlight-indent-guides-method
+          (if (display-graphic-p)
+              'character
+            'column))
+    (set-face-attribute 'highlight-indent-guides-odd-face frame
+                        :inherit 'fringe
+                        :background nil)
+    (set-face-attribute 'highlight-indent-guides-even-face frame
+                        :inherit 'default
+                        :background nil)))
   
 (eval-after-load "highlight-indent-guides"
   `(progn
