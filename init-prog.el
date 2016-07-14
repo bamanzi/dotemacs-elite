@@ -214,14 +214,25 @@
 
 (autoload 'helm-imenu-anywhere  "imenu-anywhere"
   "`helm' source for `imenu-anywhere'." t)
+(autoload 'ivy-imenu-anywhere "imenu-anywhere"
+  "IVY interface for `imenu-anywhere'" t)
 
-(global-set-key (kbd "<f7> I") 'helm-imenu-anywhere)
+(defun helm-or-ivy-imenu-anything ()
+  (interactive)
+  (require 'imenu-anywhere)
+  (if (featurep 'helm-imenu)
+      (call-interactively 'helm-imenu-anywhere)
+    (if (featurep 'ivy)
+        (call-interactively 'ivy-imenu-anywhere)
+      (call-interactively 'ido-imenu-anywhere))))
+      
+(global-set-key (kbd "<f7> I") 'helm-or-ivy-imenu-anything)
 
 (eval-after-load "cheatsheet"
   `(progn
      (cheatsheet-add :group 'Programming/Tags
                      :key "<f7> I"
-                     :description "helm-imenu-anywhere (Show imenu tags across all buffers.)")
+                     :description "{helm,ivy}-imenu-anywhere (Show imenu tags across all buffers.)")
      t))
 
 
