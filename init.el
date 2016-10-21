@@ -8,8 +8,6 @@
     )    ;;<- put cursor here, press C-x C-e
   )
 
-(add-to-list 'load-path "~/.emacs.d/lisp")
-
 (setq dotemacs-elite-dir (if load-file-name
                     (file-name-directory load-file-name)
                   default-directory))
@@ -45,11 +43,12 @@
 ;;          (message "Failed %s" file)))
 	(directory-files dotemacs-elite-dir 'full "^init-\.*.el$"))
 
+  (add-to-list 'load-path "~/.emacs.d/lisp")
+  
   (if (fboundp 'idle-require-mode)
       (idle-require-mode 1)))
       
-
-
+;; ###################################################################################
 ;; TIPS: Sometimes you want to find out where a particular error,
 ;; warning or just plain annoying message in Messages is coming from.
 ;;
