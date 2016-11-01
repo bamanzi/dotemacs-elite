@@ -236,7 +236,7 @@
      t))
 
 
-;; ** tags
+;; ** code jumpping
 ;; *** etags
 ;; -- automatically add a bookmark (bm.el)
 (progn
@@ -365,6 +365,12 @@ Current symbol would be used as input to narrow the choices."
                      :key "<f7> t"
                      :description "anything-ctags-current-file")
      t))
+
+
+;; *** dumb-jump
+(autoload 'dumb-jump-mode "dumb-jump"
+  "Minor mode for jumping to variable and function definitions" t)
+
 
 ;; ** compilation
 (setq compilation-error-regexp-alist '(gnu java))
