@@ -264,6 +264,31 @@ Completion is available."))
              (bookmark-jump bookmark))
          (error "%s is not a bookmark" bookmark))))))
 
+;; *** bashmarks integration
+;; based on code from https://gist.github.com/tomykaira/1437200
+(defun bashmarks:sdirs-to-map ()
+  (let (marks)
+    (with-temp-buffer
+      (insert-file "~/.sdirs")
+      (while (re-search-forward "export DIR_\\([^=]*\\)=\"\\([^'\"]*\\)\"" nil t)
+        (setq marks (cons (cons (match-string 1) (match-string 2)) marks))))
+    marks))
+
+(defun eshell/bml ()
+  "List all bookmarks created by bashmarks."
+  (interactive)
+  (mapconcat #'(lambda (mark)
+                 (format "%-20s %s" (car mark) (cdr mark)))
+             (bashmarks:sdirs-to-map)
+             "\n"))
+
+(defun eshell/bmg (bm-name)
+  "Goes (cd) to the directory associated with \"bookmark_name\"."
+  (let ((bm (assoc bm-name (bashmarks:sdirs-to-map))))
+    (if bm
+        (eshell/cd (replace-regexp-in-string "\$HOME" "~" (cdr bm)))
+      (error "There's no bashmark named '%s'" bm-name))))
+
 
 ;; ** comint general
 
