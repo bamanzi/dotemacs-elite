@@ -238,17 +238,7 @@
 
 ;; ** code jumpping
 ;; *** etags
-;; -- automatically add a bookmark (bm.el)
-(progn
-  (defadvice find-tag (after bookmark-after-find-tag)
-    (if (require 'bm nil t)
-        (let ((bookmark (bm-bookmark-at (point))))
-          (unless bookmark
-            (bm-bookmark-add)))))
-  (ad-activate 'find-tag)
-  )
-
-;; -- select tags (anything)
+;; **** select tag withing project
 (autoload 'anything-c-etags-select "anything-config"
   "Preconfigured anything for etags." t)
 (global-set-key (kbd "<f7> e") 'anything-c-etags-select)
@@ -285,7 +275,7 @@ Current symbol would be used as input to narrow the choices."
      t))
 
 
-;; *** tags history
+;; **** tags history
 ;; tags-view works with etags.el & gtags.el,
 ;; and for etags, it make use `find-tag-marker-ring' 
 (autoload 'tv-view-history "tags-view"
@@ -303,43 +293,17 @@ Current symbol would be used as input to narrow the choices."
      t))
 
 
-;; *** anything-etags+
-(autoload 'anything-etags+-select-at-point "anything-etags+"
-  "Tag jump with current symbol using etags and `anything'." t)
-(autoload 'anything-etags+-select "anything-etags+"
-  "Tag jump using etags and `anything'." t)
+;; **** misc
 
-(eval-after-load "anything-etags+"
-  `(progn
-     (global-set-key (kbd "<f7> M-.")   'anything-etags+-select-at-point)
-     (global-set-key (kbd "<f7> . SPC") 'anything-etags+-select)
-
-     ;; 'anything-etags+-history' has its own marker-ring. thus could
-     ;; not be used with `find-tag'
-     (global-set-key (kbd "<f7> .  M-h") 'anything-etags+-history)
-
-     (global-set-key (kbd "<f7> . <") 'anything-etags+-history-go-back)
-     (global-set-key (kbd "<f7> . >") 'anything-etags+-history-go-forward)
-     ))
-
-(eval-after-load "cheatsheet"
-  `(progn
-     (cheatsheet-add :group 'Programming/Tags
-                     :key "<f7> M-."
-                     :description "anything-etags+-select-at-point")
-     (cheatsheet-add :group 'Programming/Tags
-                     :key "<f7> . SPEC"
-                     :description "anything-etags+-select")
-     (cheatsheet-add :group 'Programming/Tags
-                     :key "<f7> . M-h"
-                     :description "anything-etags+-history")
-     (cheatsheet-add :group 'Programming/Tags
-                     :key "<f7> . <"
-                     :description "anything-etags+-history-go-back")
-     (cheatsheet-add :group 'Programming/Tags
-                     :key "<f7> . >"
-                     :description "anything-etags+-history-go-forward")
-     t))
+;; automatically add a bookmark (bm.el)
+(progn
+  (defadvice find-tag (after bookmark-after-find-tag)
+    (if (require 'bm nil t)
+        (let ((bookmark (bm-bookmark-at (point))))
+          (unless bookmark
+            (bm-bookmark-add)))))
+  (ad-activate 'find-tag)
+  )
 
 ;; *** ctags
 ;; **** anything-ctags-current-file
