@@ -136,6 +136,7 @@
      (add-hook 'after-make-frame-functions 'bmz/init-highlight-indent-guides-faces)
      ))
 
+
 ;; ** which-func-mode
 
 (define-key global-map (kbd "<f10> w f") 'which-func-mode)
@@ -143,18 +144,26 @@
 (which-func-mode t)
 ;;(add-hook 'prog-mode-hook 'which-func-mode)
 
-;; move which-func indicator to the start of mode line
-(defun bmz/mode-line-move-which-func-indicator ()
-  (interactive)
-  (set-face-attribute 'which-func nil :inherit 'font-lock-keyword-face)
+(defun bmz/mode-line-move-which-func-indicator (&optional frame)
+  "Move which-func indicator to the start of mode line."
+  (interactive (list (selected-frame)))
+  (set-face-attribute 'which-func nil :inherit 'font-lock-function-name-face
+                      :background (face-background 'default))
   (if (boundp 'mode-line-misc-info)
       (setq mode-line-misc-info
             (remove '(which-func-mode ("" which-func-format " "))   mode-line-misc-info)))
+  ;; current buffer
+  (setq mode-line-format
+        (cons '(which-func-mode ("" which-func-format " "))
+              (remove '(which-func-mode ("" which-func-format " "))
+                      (remove '(which-func-mode which-func-format) mode-line-format))))
+  ;; default value
   (setq-default mode-line-format
                 (cons '(which-func-mode ("" which-func-format " "))
-                      (remove '(which-func-mode which-func-format) mode-line-format))))
+                      (remove '(which-func-mode ("" which-func-format " "))
+                              (remove '(which-func-mode which-func-format) (default-value 'mode-line-format))))))
 
-;;(add-hook 'after-make-frame-functions 'bmz/mode-line-move-which-func-indicator)
+(add-hook 'after-make-frame-functions 'bmz/mode-line-move-which-func-indicator)
 
 (eval-after-load "which-func"
   `(progn
