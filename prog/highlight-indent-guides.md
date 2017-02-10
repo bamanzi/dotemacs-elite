@@ -6,23 +6,31 @@ highlight-indent-guides.el
 This minor mode highlights indentation levels via `font-lock`. Indent widths are
 dynamically discovered, which means this correctly highlights in any mode,
 regardless of indent width, even in languages with non-uniform indentation such
-as Haskell. This mode works properly around hard tabs and mixed indentation, and
-it behaves well in large buffers.
+as Haskell. By default, this mode also inspects your theme dynamically, and
+automatically chooses appropriate colors for highlighting. This mode works
+properly around hard tabs and mixed indentation, and it behaves well in large
+buffers.
 
 Screenshots
 -----------
 
 ![fill method screenshot](highlight-indent-guides-fill-screenshot.png)
 
-`(setq highlight-indent-guides-method 'fill)`
+``` emacs-lisp
+(setq highlight-indent-guides-method 'fill)
+```
 
 ![column method screenshot](highlight-indent-guides-column-screenshot.png)
 
-`(setq highlight-indent-guides-method 'column)`
+``` emacs-lisp
+(setq highlight-indent-guides-method 'column)
+```
 
 ![character method screenshot](highlight-indent-guides-character-screenshot.png)
 
-`(setq highlight-indent-guides-method 'character)`
+``` emacs-lisp
+(setq highlight-indent-guides-method 'character)
+```
 
 Installation
 ------------
@@ -34,14 +42,13 @@ package-install RET highlight-indent-guides RET</kbd>. Otherwise, download
 Usage
 -----
 
-Require it:
+Once the mode is installed, do <kbd>M-x highlight-indent-guides-mode</kbd> to
+enable it. To enable it automatically in most programming modes, use the
+following:
 
-`(require 'highlight-indent-guides)`
-
-Then, do <kbd>M-x highlight-indent-guides-mode</kbd> to enable it. To enable it
-automatically in most programming modes, use the following:
-
-`(add-hook 'prog-mode-hook 'highlight-indent-guides-mode)`
+``` emacs-lisp
+(add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
+```
 
 Configuration
 -------------
@@ -58,25 +65,49 @@ customize `highlight-indent-guides-method`, and set it to one of the following:
   `highlight-indent-guides-character`, and it is drawn using the face
   `highlight-indent-guides-character-face`.
 
-To change the colors used for highlighting in the `fill` or `column` methods,
-customize `highlight-indent-guides-odd-face` and
-`highlight-indent-guides-even-face`.
+For example:
+
+``` emacs-lisp
+(setq highlight-indent-guides-method 'character)
+```
+
+To change the character used for drawing guide lines with the `character`
+display method, customize `highlight-indent-guides-character`.
 
 For example:
 
-`(set-face-background 'highlight-indent-guides-odd-face "darkgray")`
+``` emacs-lisp
+(setq highlight-indent-guides-character ?\|)
+```
 
-`(set-face-background 'highlight-indent-guides-even-face "dimgray")`
+Highlight Colors
+----------------
 
-To change the display of the indent guides in the `character` method, customize
-`highlight-indent-guides-character` and
-`highlight-indent-guides-character-face`.
+By default, this mode dynamically chooses colors that look acceptable with the
+loaded theme. It does this by altering the luminosity of the theme's background
+color by a given percentage. These percentages can be tweaked, to make the
+colors more intense or subtle.
 
 For example:
 
-`(setq highlight-indent-guides-character ?\|)`
+``` emacs-lisp
+(setq highlight-indent-guides-auto-odd-face-perc 15)
+(setq highlight-indent-guides-auto-even-face-perc 15)
+(setq highlight-indent-guides-auto-character-face-perc 20)
+```
 
-`(set-face-foreground 'highlight-indent-guides-character-face "darkgray")`
+To set the colors manually, disable this feature and customize the faces
+directly.
+
+For example:
+
+``` emacs-lisp
+(setq highlight-indent-guides-auto-enabled nil)
+
+(set-face-background 'highlight-indent-guides-odd-face "darkgray")
+(set-face-background 'highlight-indent-guides-even-face "dimgray")
+(set-face-foreground 'highlight-indent-guides-character-face "dimgray")
+```
 
 Limitations
 -----------
