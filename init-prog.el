@@ -75,9 +75,13 @@
     (if orgstruct-heading-prefix-regexp
         (turn-on-orgstruct))))
 
-
-(add-hook 'prog-mode-hook 'bmz/turn-on-orgstruct-mode-maybe)
-
+;;(add-hook 'prog-mode-hook 'bmz/turn-on-orgstruct-mode-maybe)
+(eval-after-load "cheatsheet"
+  `(progn
+     (cheatsheet-add :group 'Programming/Tags
+                     :key "bmz/turn-on-orgstruct-mode"
+                     :description "folding by org-mode like section header")
+     t))
 
 ;; ** automatically highlight current symbol
 (eval-after-load "idle-highlight-mode"
