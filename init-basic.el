@@ -123,7 +123,7 @@
                '(2 "_NET_WM_STATE_MAXIMIZED_HORZ" 0))
        ;; adjust window borders, needed when running remote emacs on local X server (?)
        (unless (string-match "^\\(localhost\\)?:[0-9]." (getenv "DISPLAY"))
-         (set-frame-parameter nil 'fullscreen 'fullboth)
+        ;; (set-frame-parameter nil 'fullscreen 'fullboth)
          (set-frame-position (selected-frame) 5 25)
          (set-frame-width nil (- (frame-parameter nil 'width) 3))
          (set-frame-height nil (- (frame-parameter nil 'height) 3)))))))
