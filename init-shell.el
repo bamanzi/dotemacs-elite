@@ -71,6 +71,11 @@ On Windows, baskslashes is substituted with slashes."
 
 (defalias 'eshell/cls 'eshell/clear)
 
+(defun eshell/\,\, (pattern replace)
+  "`cd' command to mimic commacd (http://github.com/shyiko/command)."
+  (let ((tdir (replace-regexp-in-string pattern replace default-directory)))
+    (eshell/cd tdir)))
+
 (defun eshell/nc (&optional dir)
   (interactive)
   (nc-goto-dir (or dir default-directory)))
