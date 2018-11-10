@@ -1,10 +1,10 @@
 ;;; bmz-repl-toggle --- toggle focus bwteen source buffer and repl buffer
 
 ;;
-;; Copyright (C) 2013-2014 Ba Manzi
+;; Copyright (C) 2013-2014,2018 Ba Manzi
 ;;
 ;; Author: Ba Manzi <bamanzi * gmail com>
-;; Version: 1.0
+;; Version: 1.1
 ;; Keywords: shell repl buffers
 ;; URL: http://bitbucket.org/bamanzi/dotemacs-extra/src/default/prog/
 ;; Compatibility: GNU Emacs 23.x, GNU Emacs 24.x
@@ -105,21 +105,18 @@ Command `repl-buffer-associate` would set this variable.")
 
 
 (setq repl-buffer-pairs
-      '((python-mode     . inferior-python-mode)
-        (emacs-lisp-mode . lisp-interaction-mode)
+      '((python-mode     inferior-python-mode  run-python)
+        (emacs-lisp-mode lisp-interaction-mode nil)
         ))
 
-(defun repl-toggle--is-current-buffer-repl ()
+(defun repl-toggle--current-buffer-is-repl ()
   "Check whether current buffer is a REPL buffer
-according to configurationin `repl-buffer-pairs."
+
+according to configurationin `repl-buffer-pairs'."
   ;;FIXME: parent mode?
-  (let ((current-mode major-mode))
-    (cond
-     ((assoc-default current-mode repl-buffer-pairs)
-      nil)
-     ((rassq current-mode repl-buffer-pairs)
-      t)
-     )))
+  (let ((repl-mode-list (mapcar 'cadr repl-buffer-pairs)))
+    (member major-mode repl-mode-list)))
+
 
 ;;;###autoload
 (defun repl-toggle ()
@@ -131,7 +128,7 @@ buffer.
 When called in the REPL buffer returns you to the buffer you were
 editing before caling the first time."
   (interactive)
-  (if (repl-toggle--is-current-buffer-repl)
+  (if (repl-toggle--current-buffer-is-repl)
       (if (and (eq last-command 'repl-toggle)
                (not (eq (count-windows) 1)))
           (progn
@@ -143,9 +140,8 @@ editing before caling the first time."
           (repl-toggle--return-to-source-buffer)
           (message "repl-toggle: return to source buffer.")))
     ;; switch to repl buffer
-    (let ((repl-mode (assoc-default major-mode repl-buffer-pairs)))
-      (if repl-mode
-          ;;FIXME: passing `new-repl-buffer-cmd`
-          (repl-toggle--goto-repl-buffer repl-mode nil)))))
+    (let ((repl-setting (assoc-default major-mode repl-buffer-pairs)))
+      (if repl-setting
+          (repl-toggle--goto-repl-buffer (car repl-setting) (cadr repl-setting))))))
 
 ;;; bmz-repl-toggle.el ends here
