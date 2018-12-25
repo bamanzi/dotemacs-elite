@@ -431,8 +431,8 @@ If the new path's directories does not exist, create them."
 
 (eval-after-load "cheatsheet"
   `(progn
-     (cheatsheet-add :group 'Rectangle :key "C-x r RET" :description "cua-set-rectangle-mark")
-     (cheatsheet-add :group 'Rectangle :key "(cua-rect) M-?"       :description "(cua) cua-help-for-rectangle")
+     (cheatsheet-add :group 'Rectangle/cua :key "C-x r RET" :description "cua-set-rectangle-mark")
+     (cheatsheet-add :group 'Rectangle/cua :key "(cua-rect) M-?"       :description "(cua) cua-help-for-rectangle")
      t
      ))
 
@@ -501,6 +501,7 @@ If the new path's directories does not exist, create them."
   `(progn
      ;;    (setq drag-stuff-modifier 'hyper)
      (add-to-list 'drag-stuff-except-modes 'org-mode)
+     (drag-stuff-define-keys)
      (drag-stuff-global-mode t)))
 
 (idle-require 'drag-stuff)

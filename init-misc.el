@@ -287,7 +287,7 @@ See also: `kill-rectangle', `copy-to-register'."
 
 (eval-after-load "cheatsheet"
   `(progn
-     (cheatsheet-add :group 'Rectangle
+     (cheatsheet-add :group 'Rectangle/kill-ring
                      :key "C-x r M-w"
                      :description "Copy rectangle-area to clipboard/kill-ring.")
      t))
