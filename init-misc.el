@@ -283,12 +283,12 @@ See also: `kill-rectangle', `copy-to-register'."
          (insert-register ?0)
          (buffer-string) )) ) )
 
-(define-key global-map (kbd "C-x r M-w") 'copy-rectangle-to-clipboard)
+;;(define-key global-map (kbd "C-x r M-w") 'copy-rectangle-to-clipboard)
 
 (eval-after-load "cheatsheet"
   `(progn
      (cheatsheet-add :group 'Rectangle/kill-ring
-                     :key "C-x r M-w"
+                     :key "M-x copy-rectangle-to-clipboard"
                      :description "Copy rectangle-area to clipboard/kill-ring.")
      t))
 
