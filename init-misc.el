@@ -432,6 +432,24 @@ See also: `kill-rectangle', `copy-to-register'."
 
 
 ;; ** buffers
+;; *** swbuff
+(autoload 'nswbuff-switch-to-next-buffer "nswbuff"
+  "Switch to the next buffer in the buffer list." t)
+(autoload 'nswbuff-switch-to-previous-buffer "nswbuff"
+  "Switch to the previous buffer in the buffer list." t)
+
+(progn
+  (global-set-key (kbd "<M-f12>")   'nswbuff-switch-to-next-buffer)
+  (global-set-key (kbd "<M-S-f12>") 'nswbuff-switch-to-previous-buffer)
+
+  (when (and (< emacs-major-version 25)
+             (not (featurep 'seq)))
+    ;; http://elpa.gnu.org/packages/seq.html
+    (require 'seq-24)
+    (provide 'seq)
+    ))
+
+
 ;; *** ibuffers
 (eval-after-load "ibuffer"
   `(progn
