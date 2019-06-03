@@ -134,10 +134,10 @@ Stores the window cofiguration before creating and/or switching window."
 	 ;; Find out which directory we are in (the method differs for
 	 ;; different buffers)
 	 (or (and make-cd
-                  (concat "cd " default-directory))
+                  (format "cd \"%s\"" default-directory))
 	     (and make-cd
 		  list-buffers-directory
-		  (concat "cd " list-buffers-directory)))))
+		  (format "cd \"%s\"" list-buffers-directory)))))
     ;; Switch to an existin eshell if one exists, otherwise switch to
     ;; another window and start a new eshell
     (if eshell-buffer
