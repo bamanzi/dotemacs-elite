@@ -756,6 +756,9 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
      (define-key view-mode-map (kbd "n") 'outline-next-visible-heading)
      (define-key view-mode-map (kbd "p") 'outline-previous-visible-heading)
      (define-key view-mode-map (kbd "u") 'outline-up-heading)
+
+     (define-key view-mode-map (kbd "*") 'highlight-symbol-next)
+     (define-key view-mode-map (kbd "#") 'highlight-symbol-prev)
      ))
 
 ;; *** outline
