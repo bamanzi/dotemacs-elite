@@ -130,6 +130,7 @@ Otherwise it requires user to input full thing name (value of `thing/name-map`).
   (thing/kill-one-thing 'symbol))
 
 (global-set-key (kbd "M-s C-w") 'thing/kill-symbol-or-word)
+
 ;; *** copy/cut current line if nothing selected
 ;; http://ergoemacs.org/emacs/emacs_copy_cut_current_line.html
 (defadvice kill-ring-save (before slick-copy activate compile)
@@ -149,30 +150,6 @@ Otherwise it requires user to input full thing name (value of `thing/name-map`).
      (progn
        (list (line-beginning-position) (line-beginning-position 2)) ) ) ))
 
-;; *** copy/paste rectangle
-;;stolen from http://ergoemacs.org/emacs/emacs_string-rectangle_ascii-art.html
-(defun copy-rectangle-to-clipboard (p1 p2)
-    "Copy region as column (rectangle) to operating system's clipboard.
-This command will also put the text in register 0.
-
-See also: `kill-rectangle', `copy-to-register'."
-    (interactive "r")
-    (let ((x-select-enable-clipboard t))
-      (copy-rectangle-to-register ?0 p1 p2)
-      (kill-new
-       (with-temp-buffer
-         (insert-register ?0)
-         (buffer-string) )) ) )
-
-;;(define-key global-map (kbd "C-x r M-w") 'copy-rectangle-to-clipboard)
-
-(eval-after-load "cheatsheet"
-  `(progn
-     (cheatsheet-add :group 'Rectangle/kill-ring
-                     :key "M-x copy-rectangle-to-clipboard"
-                     :description "Copy rectangle-area to clipboard/kill-ring.")
-     t))
-
 ;; *** misc
 (autoload 'copy-from-above-command "misc"
   "Copy characters from previous nonblank line, starting just above point." t)
@@ -185,7 +162,73 @@ See also: `kill-rectangle', `copy-to-register'."
   (kill-line 0))
 
 (global-set-key (kbd "C-c C-u") 'backward-kill-line)
- ;; ** languages tools
+
+
+;; ** rectangle
+;; *** C-x r ... (no speicial selection)
+
+;; put rectangle-area to `killed-rectangle'
+;; (same with `copy-rectangle-as-kill' in emacs>=24.3)
+(autoload 'rectplus-copy-rectangle  "rect+"
+  "Copy rectangle area." t)
+
+;; copy content of `killed-rectangle' to `kill-ring'
+(autoload 'rectplus-rectangle-to-kill-ring "rect+"
+  "Killed rectangle to normal `kill-ring'." t)
+
+(autoload 'rectplus-insert-number-rectangle  "rect+"
+  "Insert incremental number into each left edges of rectangle's line." t)
+
+(define-key ctl-x-r-map (kbd "M-n")   'rectplus-insert-number-rectangle)
+
+(define-key global-map (kbd "C-x r M-w") 'rectplus-copy-rectangle)
+
+(progn
+  (cheatsheet-add :group 'Rectangle/rect
+                  :key "C-x r M-w"
+                  :description "rectplus-copy-rectangle - Copy rectangle-area to `killed-rectangle'.")
+  (cheatsheet-add :group 'Rectangle/rect
+                  :key "C-x r y"
+                  :description "yank-rectangle - Yank the last killed rectangle (`killed-rectangle').")
+  
+  (cheatsheet-add :group 'Rectangle/kill-ring
+                  :key "M-x rectplus-rectangle-to-kill-ring"
+                  :description "Copy content of `killed-rectangle' to `kill-ring'")
+  t
+  )
+
+;; *** cua rectangle (visual)
+(autoload 'cua-mouse-set-rectangle-mark "cua-rect"
+  "Start rectangle at mouse click position." t)
+
+;; *** rectangle-mark-mode (visual, but only available on emacs>=24.4)
+
+;; use mouse to mark rectangle (r-m-m)
+;; https://tangjunjie.wordpress.com/2015/07/10/enable-emacs-column-selection-using-mouse/
+(defun mouse-start-rectangle (start-event)
+  (interactive "e")
+  (deactivate-mark)
+  (mouse-set-point start-event)
+  (rectangle-mark-mode +1)
+  (let ((drag-event))
+    (track-mouse
+      (while (progn
+               (setq drag-event (read-event))
+               (mouse-movement-p drag-event))
+        (mouse-set-point drag-event)))))
+
+(if (fboundp 'rectangle-mark-mode)
+    (global-set-key (kbd "<C-M-down-mouse-1>") #'mouse-start-rectangle)
+  (global-set-key (kbd "<C-M-down-mouse-1>")   'cua-mouse-set-rectangle-mark))
+
+(progn
+  (cheatsheet-add :group 'Rectangle/cua
+                  :key "<C-M-down-mouse-1>"
+                  :description "mouse-start-rectangle (r-m-m) / cua-mouse-set-rectangle-mark (cua)")
+  t
+  )
+
+;; ** languages tools
 ;; *** spell
 (define-key global-map (kbd "ESC M-$") 'ispell-complete-word)
 
@@ -221,7 +264,6 @@ See also: `kill-rectangle', `copy-to-register'."
                      :key "<apps> , $"
                      :description "ac-complete-ispell-word")
      t))
-
 
 
 ;; ** vi(m) emulation
