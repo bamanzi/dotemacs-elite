@@ -104,7 +104,32 @@ save it in `ffap-file-at-point-line-number' variable."
 
 (define-key search-map (kbd "g C") 'nc-goto-dir-at-point)
 
-                
+;; *** open file in desktop environment
+(defun de-open-file-in-associated-app (file)
+  (cond
+   ((eq system-type 'windows-nt)
+    (w32-browser file))
+   ((eq system-type 'gnu/linux)
+    (start-process "" nil "xdg-open" file))))
+
+(defun de-open-current-file-in-associated-app ()
+  (interactive)
+  (de-open-file-in-associated-app buffer-file-name))
+
+(defun de-open-current-dir-in-associated-app ()
+  (interactive)
+  (de-open-file-in-associated-app default-directory))
+
+(global-set-key (kbd "<apps> C-o") 'de-open-current-file-in-associated-app)
+(global-set-key (kbd "<apps> C-O") 'de-open-current-dir-in-associated-app)
+
+(eval-after-load "cheatsheet"
+  `(progn
+     (cheatsheet-add :group 'OS :key "<apps> C-o"   :description "de-open-current-file-in-associated-app")
+     (cheatsheet-add :group 'OS :key "<apps> C-S-o" :description "de-open-current-dir-in-associated-app")
+     t))
+
+
 ;; ** minibuffer
 ;; *** easily insert buffer name (useful for `shell-command', `compile' etc)
 (defun minibuffer-insert-buffer-filename (arg)
@@ -231,6 +256,63 @@ save it in `ffap-file-at-point-line-number' variable."
 
 
 ;; ** buffers
+;; *** describe-buffer
+;; based on `describe-buffer' from http://www.emacswiki.org/emacs/download/help-fns%2b.el
+(defun describe-buffer- (&optional buffer-name)
+    "Describe the existing buffer named BUFFER-NAME.
+By default, describe the current buffer."
+    ;; (interactive "bDescribe buffer: ")
+    (interactive "@")
+    (unless buffer-name (setq buffer-name  (buffer-name)))
+    (help-setup-xref `(describe-buffer- ,buffer-name) (called-interactively-p 'interactive))
+    (let ((buf  (get-buffer buffer-name)))
+      (unless (and buf  (buffer-live-p buf))  (error(format "No such live buffer `%s'" buffer-name)))
+      (let* ((file       (or (buffer-file-name buf)
+                             (with-current-buffer buf
+                               (and (eq major-mode 'dired-mode)  default-directory))))
+             (help-text  (concat
+                          (format "Buffer `%s'\n%s\n\n" buffer-name (make-string
+                                                                     (+ 9 (length buffer-name)) ?-))
+                          (and file  (format "File/directory: %s\n\n" file))
+                          (format "Mode:           %s\n"
+                                  (with-current-buffer buf (format-mode-line mode-name)))
+                          (format "Encoding:       %s\n" buffer-file-coding-system)
+                          (format "Line-ending:    %s\n"
+                                (with-current-buffer buf
+                                  (let ((eol-type (coding-system-eol-type buffer-file-coding-system)))
+                                    (cond
+                                     ((eq 0 eol-type) "UNIX")
+                                     ((eq 1 eol-type) "DOS")
+                                     ((eq 2 eol-type) "MAC")
+                                     (t "???")))))
+                          (format "Lines:          %s\n"
+                                  (with-current-buffer buf
+                                      (count-lines (point-min) (point-max))))
+                          (format "Chars:          %g\n" (buffer-size buf))
+                          (format "Modified:       %s\n" (if (buffer-modified-p buf) "yes" "no"))
+                          (with-current-buffer buf
+                            (format "Read-only:      %s\n" (if buffer-read-only "yes" "no")))
+                          (with-current-buffer buf
+                            (if (not buffer-display-time)
+                                "Never displayed\n"
+                              (format "Last displayed: %s\n"
+                                      (format-time-string
+                                       ;; Could use this, for short format: "%02H:%02M:%02S"
+                                       ;; Or this, for a bit longer: "%_3a %_2l:%02M:%02S %_2p"
+                                       "%a %b %e %T %Y (%z)"
+                                       buffer-display-time)))))))
+        
+        (with-help-window (help-buffer)
+          (with-current-buffer (help-buffer)
+            (insert help-text))))))
+
+(global-set-key (kbd "C-h B") 'describe-buffer-)
+
+(eval-after-load "cheatsheet"
+  `(cheatsheet-add :group 'Misc
+                  :key "C-h B"
+                  :description "describe-buffer-"))
+
 ;; *** swbuff
 (autoload 'nswbuff-switch-to-next-buffer "nswbuff"
   "Switch to the next buffer in the buffer list." t)
