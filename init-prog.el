@@ -493,3 +493,34 @@ found in DIRECTORY or any of its ancestors."
 (global-set-key (kbd "<f9> ~") 'repl-toggle)
 
 
+
+;; ** isend-mode
+;; `isend-mode` allows interaction with code interpreters in `ansi-term` or
+;; `term` buffers. Some language-specific modes (e.g. `python.el`) already
+;; provide similar features;
+
+;; NOTE: it also could be used to send region to normal buffers. (bamanzi)
+
+(autoload 'isend-associate "isend-mode"
+  "Set the buffer to which commands will be sent using `isend-send'." t)
+
+(autoload 'isend-send "isend-mode"
+  "Send the current region of line to a terminal." t)
+
+(global-set-key (kbd "<apps> C-RET") 'isend-send)
+(global-set-key (kbd "ESC C-RET")    'isend-send)
+
+(autoload 'isend-display-buffer "isend-mode"
+  "Undocumented." t)
+
+
+(eval-after-load "cheatsheet"
+  `(progn
+     (cheatsheet-add :group 'Misc
+                     :key "M-x isend-send"
+                     :description "Send the current region of line to a buffer.")
+     (cheatsheet-add :group 'Misc
+                     :key "M-x isend-associate"
+                     :description "Set the buffer to which commands will be sent using `isend-send'.")
+     t))
+
