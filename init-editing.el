@@ -183,19 +183,20 @@ Otherwise it requires user to input full thing name (value of `thing/name-map`).
 
 (define-key global-map (kbd "C-x r M-w") 'rectplus-copy-rectangle)
 
-(progn
-  (cheatsheet-add :group 'Rectangle/rect
-                  :key "C-x r M-w"
-                  :description "rectplus-copy-rectangle - Copy rectangle-area to `killed-rectangle'.")
-  (cheatsheet-add :group 'Rectangle/rect
-                  :key "C-x r y"
-                  :description "yank-rectangle - Yank the last killed rectangle (`killed-rectangle').")
+(eval-after-load "cheatsheet"
+  `(progn
+     (cheatsheet-add :group 'Rectangle/rect
+                     :key "C-x r M-w"
+                     :description "rectplus-copy-rectangle - Copy rectangle-area to `killed-rectangle'.")
+     (cheatsheet-add :group 'Rectangle/rect
+                     :key "C-x r y"
+                     :description "yank-rectangle - Yank the last killed rectangle (`killed-rectangle').")
   
-  (cheatsheet-add :group 'Rectangle/kill-ring
-                  :key "M-x rectplus-rectangle-to-kill-ring"
-                  :description "Copy content of `killed-rectangle' to `kill-ring'")
-  t
-  )
+     (cheatsheet-add :group 'Rectangle/kill-ring
+                     :key "M-x rectplus-rectangle-to-kill-ring"
+                     :description "Copy content of `killed-rectangle' to `kill-ring'")
+     t
+     ))
 
 ;; *** cua rectangle (visual)
 (autoload 'cua-mouse-set-rectangle-mark "cua-rect"
@@ -221,11 +222,10 @@ Otherwise it requires user to input full thing name (value of `thing/name-map`).
     (global-set-key (kbd "<C-M-down-mouse-1>") #'mouse-start-rectangle)
   (global-set-key (kbd "<C-M-down-mouse-1>")   'cua-mouse-set-rectangle-mark))
 
-(progn
-  (cheatsheet-add :group 'Rectangle/cua
-                  :key "<C-M-down-mouse-1>"
-                  :description "mouse-start-rectangle (r-m-m) / cua-mouse-set-rectangle-mark (cua)")
-  t
+(eval-after-load "cheatsheet"
+  `(cheatsheet-add :group 'Rectangle/cua
+                   :key "<C-M-down-mouse-1>"
+                   :description "mouse-start-rectangle (r-m-m) / cua-mouse-set-rectangle-mark (cua)")
   )
 
 ;; ** languages tools
