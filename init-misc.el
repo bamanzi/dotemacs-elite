@@ -137,10 +137,10 @@ save it in `ffap-file-at-point-line-number' variable."
   (let ((target-buffer (window-buffer (minibuffer-selected-window))))
     (if (and target-buffer
              (buffer-file-name target-buffer))
-      (insert-string (if arg
+      (insert (if arg
                          (buffer-file-name target-buffer)
                        (file-name-nondirectory (buffer-file-name target-buffer))))
-      (insert-string " "))))
+      (insert " "))))
 
 (define-key minibuffer-local-map (kbd "<M-insert> %") 'minibuffer-insert-buffer-filename)
 

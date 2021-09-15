@@ -482,11 +482,11 @@ If the new path's directories does not exist, create them."
 ;; ***  ido
 (require 'ido)
 
-(setq ido-everywhere t)
+;;(setq ido-everywhere t)
 (setq ido-enable-flex-matching t)
 (setq ido-use-filename-at-point 'guess)
 (setq ido-use-url-at-point 'guess)
-;;disable the merging (the "looking in other directories" in ido vulgo) 
+;; disable the merging (the "looking in other directories" in ido vulgo) 
 (setq ido-auto-merge-work-directories-length -1)
 ;; `ido-mode' for files is nasty :-(
 (ido-mode 'buffers)  ;; obsolete in favor of `ivy-mode'

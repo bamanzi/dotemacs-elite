@@ -191,8 +191,12 @@
 ;; ** imenu
 (define-key goto-map "i" 'imenu)
 
+(defun imenu-add-menubar-index-maybe ()
+  (ignore-errors
+    (imenu-add-menubar-index)))
+
 (if (boundp 'prog-mode-hook)
-    (add-hook 'prog-mode-hook 'imenu-add-menubar-index))
+    (add-hook 'prog-mode-hook 'imenu-add-menubar-index-maybe))
 
 ;; *** anything-imenu
 (autoload 'anything-imenu "anything-config"
