@@ -370,16 +370,23 @@ vi style of % jumping to matching brace."
 ;;    `anything-goto-definition-etags/imenu' from file:init-prog.el
 (define-key global-map (kbd "<f6> g d") 'vimpulse-goto-definition)
 
-;; ** misc
-;;--
-;;(global-unset-key (kbd "<f10>"))
-(global-set-key (kbd "<f10> ws") 'whitespace-mode)
+;; ** some indicators
+(global-set-key (kbd "<f10> -") 'hl-line-mode)
 
 ;;--
 ;;(setq-default fill-column 72)
 
 (autoload 'fci-mode "fill-column-indicator"
   "Toggle fci-mode on and off." t)
+
+(global-set-key (kbd "<f10> |") 'fci-mode)
+
+
+;; ** misc
+;;--
+;;(global-unset-key (kbd "<f10>"))
+(global-set-key (kbd "<f10> ws") 'whitespace-mode)
+
 
 ;;--
 ;;goto-line with line number
