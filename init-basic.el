@@ -602,17 +602,17 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
 										"disabled"))))
 
 (progn
-  (define-key global-map (kbd "<apps> , f") 'ac-complete-filename)
-  (define-key global-map (kbd "<apps> , i") 'ac-complete-imenu)
-  (define-key global-map (kbd "<apps> , a") 'ac-complete-scite-api)
-  (define-key global-map (kbd "<apps> , y") 'ac-complete-yasnippet)
+  (define-key global-map (kbd "<f4> f") 'ac-complete-filename)
+  (define-key global-map (kbd "<f4> i") 'ac-complete-imenu)
+  (define-key global-map (kbd "<f4> a") 'ac-complete-scite-api)
+  (define-key global-map (kbd "<f4> y") 'ac-complete-yasnippet)
 
   (eval-after-load "cheatsheet"
     `(progn
-       (cheatsheet-add :group 'Auto-Complete :key "<apps> , f" :description "ac-complete-filename")
-       (cheatsheet-add :group 'Auto-Complete :key "<apps> , i" :description "ac-complete-imenu")
-       (cheatsheet-add :group 'Auto-Complete :key "<apps> , a" :description "ac-complete-scite-api")
-       (cheatsheet-add :group 'Auto-Complete :key "<apps> , y" :description "ac-complete-yasnippet")
+       (cheatsheet-add :group 'Auto-Complete :key "<f4> f" :description "ac-complete-filename")
+       (cheatsheet-add :group 'Auto-Complete :key "<f4> i" :description "ac-complete-imenu")
+       (cheatsheet-add :group 'Auto-Complete :key "<f4> a" :description "ac-complete-scite-api")
+       (cheatsheet-add :group 'Auto-Complete :key "<f4> y" :description "ac-complete-yasnippet")
        t
        ))
   )

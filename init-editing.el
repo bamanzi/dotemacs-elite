@@ -256,12 +256,12 @@ Otherwise it requires user to input full thing name (value of `thing/name-map`).
          (candidates . ac-ispell-get-candidates)))
      ))
 
-(define-key global-map (kbd "<apps> , $") 'ac-complete-ispell-word)
+(define-key global-map (kbd "<f4> $") 'ac-complete-ispell-word)
 
 (eval-after-load "cheatsheet"
   `(progn
      (cheatsheet-add :group 'Auto-Complete
-                     :key "<apps> , $"
+                     :key "<f4> $"
                      :description "ac-complete-ispell-word")
      t))
 
