@@ -13,6 +13,8 @@
 (global-unset-key (kbd "<f10>"))
 (global-set-key (kbd "<f10> <f10>") 'menu-bar-open)
 
+(global-set-key (kbd "<f3>") search-map)
+(global-unset-key (kbd "<f4>"))
 (global-unset-key (kbd "<f5>"))
 (global-unset-key (kbd "<f11>"))
 (global-unset-key (kbd "<f12>"))
@@ -797,9 +799,9 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
   (global-set-key (kbd "<S-wheel-up>")     'highlight-symbol-prev)
   (global-set-key (kbd "<S-wheel-down>")   'highlight-symbol-next)
   (global-set-key (kbd "<S-mouse-3>")      'highlight-symbol-occur)
-  (global-set-key (kbd "<f3>")             'highlight-symbol-prev)
+  (global-set-key (kbd "<M-f3>")           'highlight-symbol-prev)
   (global-set-key (kbd "<S-f3>")           'highlight-symbol-next)
-  (global-set-key (kbd "<M-f3>")           'highlight-symbol-occur)
+  (global-set-key (kbd "<C-f3>")           'highlight-symbol-occur)
 )
 
 ;; *** idle-highlight
