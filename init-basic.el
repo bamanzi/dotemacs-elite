@@ -851,7 +851,7 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
 (add-hook 'find-file-hook 'goto-address-mode)
 (define-key goto-map "u" 'goto-address)
 
-(global-set-key (kbd "M-s RET") 'browse-url-at-point)
+(define-key search-map (kbd "RET") 'browse-url-at-point)
 (defalias 'buap 'browse-url-at-point)
 
 ;; **** this supports more link types

@@ -102,7 +102,7 @@ save it in `ffap-file-at-point-line-number' variable."
   (let ((ffap-directory-finder 'nc-goto-dir))
     (call-interactively 'dired-at-point)))
 
-(define-key search-map (kbd "g C") 'nc-goto-dir-at-point)
+(define-key goto-map (kbd "C") 'nc-goto-dir-at-point)
 
 ;; *** open file in desktop environment
 (defun de-open-file-in-associated-app (file)
@@ -200,8 +200,7 @@ save it in `ffap-file-at-point-line-number' variable."
   (let ((default-directory dir))
     (call-interactively 'grep)))
 
-(define-key search-map "g " 'grep-on-dir)
-(define-key search-map " g" 'grep-on-dir)
+(global-set-key (kbd "<apps> gg") 'grep-on-dir)
 
 
 (autoload 'grin "grin"
@@ -219,7 +218,7 @@ save it in `ffap-file-at-point-line-number' variable."
          (null-device nil))
     (grep cmd)))
 
-(define-key search-map "gg" 'grin-on-dir)
+(global-set-key (kbd "<apps> gG") 'grin-on-dir)
 
 
 (autoload 'ack "ack"
@@ -231,8 +230,8 @@ save it in `ffap-file-at-point-line-number' variable."
   (let* ((default-directory dir)
          (ack-command (concat ack-command " \"" (or pattern (thing-at-point 'symbol)) "\"")))
     (call-interactively 'ack)))
-   
-(define-key search-map "ga" 'ack-on-dir)
+
+(global-set-key (kbd "<apps> ga") 'ack-on-dir)
 
 ;; ** windows
 ;; *** window splitting
