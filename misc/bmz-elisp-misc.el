@@ -40,10 +40,10 @@ Useful when writing autoload spec."
   (require 'eldoc)
   (if (null function)
       (message "You didn't specify a function")
-    (insert-string (format " \"%s\"\n  \"%s\" t)"
-                           (replace-regexp-in-string ".elc?$" "" (file-name-nondirectory (symbol-file function 'defun)))
-                           (or (eldoc-docstring-first-line (documentation function t))
-                               "Undocumented.")    ))))
+    (insert (format " \"%s\"\n  \"%s\" t)"
+                    (replace-regexp-in-string ".elc?$" "" (file-name-nondirectory (symbol-file function 'defun)))
+                    (or (elisp--docstring-first-line (documentation function t))
+                        "Undocumented.")    ))))
 
 (defalias 'ifas 'insert-function-autoload-spec)
 
