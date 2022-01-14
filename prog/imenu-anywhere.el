@@ -315,19 +315,19 @@ This is a simple wrapper around `imenu-anywhere' which uses
 
 (eval-after-load "helm"
   '(progn
-     (require 'helm-imenu)
-     (defvar helm-source-imenu-anywhere
-       (helm-make-source "imenu-anywere" 'helm-source-sync
-         :candidates #'helm-imenu-anywhere-candidates
-         :persistent-action (lambda (elm)
-                              (imenu-anywhere-goto "" elm)
-                              (unless (fboundp 'semantic-imenu-tag-overlay)
-                                (helm-highlight-current-line)))
-         :fuzzy-match helm-imenu-fuzzy-match
-         :persistent-help "Show this entry"
-         :action (lambda (elm) (imenu-anywhere-goto "" elm)))
-       "Helm source for `imenu-anywhere' (which see).")
-     (add-to-list 'helm-sources-using-default-as-input 'helm-source-imenu-anywhere)))
+     (when (require 'helm-imenu nil t)
+       (defvar helm-source-imenu-anywhere
+         (helm-make-source "imenu-anywere" 'helm-source-sync
+           :candidates #'helm-imenu-anywhere-candidates
+           :persistent-action (lambda (elm)
+                                (imenu-anywhere-goto "" elm)
+                                (unless (fboundp 'semantic-imenu-tag-overlay)
+                                  (helm-highlight-current-line)))
+           :fuzzy-match helm-imenu-fuzzy-match
+           :persistent-help "Show this entry"
+           :action (lambda (elm) (imenu-anywhere-goto "" elm)))
+         "Helm source for `imenu-anywhere' (which see).")
+       (add-to-list 'helm-sources-using-default-as-input 'helm-source-imenu-anywhere))))
 
 (defun helm-imenu-anywhere-candidates ()
   ;; don't use macro with-helm-current-buffer

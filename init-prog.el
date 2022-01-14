@@ -229,12 +229,10 @@
 
 (define-key goto-map "I" 'imenu-anywhere)
 
-(autoload 'helm-imenu-anywhere  "imenu-anywhere"
-  "`helm' source for `imenu-anywhere'." t)
-(autoload 'ivy-imenu-anywhere "imenu-anywhere"
-  "IVY interface for `imenu-anywhere'" t)
+(autoload 'ido-imenu-anywhere "imenu-anywhere"
+  "IDO interface for ‘imenu-anywhere’." t)
 
-(defun helm-or-ivy-imenu-anything ()
+(defun imenu-anywhere+ ()
   (interactive)
   (require 'imenu-anywhere)
   (if (featurep 'helm-imenu)
@@ -243,7 +241,7 @@
         (call-interactively 'ivy-imenu-anywhere)
       (call-interactively 'ido-imenu-anywhere))))
       
-(global-set-key (kbd "<f7> I") 'helm-or-ivy-imenu-anything)
+(global-set-key (kbd "<f7> I") 'imenu-anywhere+)
 
 (eval-after-load "cheatsheet"
   `(progn
