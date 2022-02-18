@@ -193,7 +193,7 @@ save it in `ffap-file-at-point-line-number' variable."
 (define-key search-map (kbd "M-o") 'moccur-in-same-mode)
 
 
-;; *** grin & ack: better grep replacement for source code project
+;; *** ripgrep/grin/ack: better grep replacement for source code project
 (defun grep-on-dir (dir)
   (interactive "DGrep on dir: ")
   (require 'grep)
@@ -202,7 +202,13 @@ save it in `ffap-file-at-point-line-number' variable."
 
 (global-set-key (kbd "<apps> gg") 'grep-on-dir)
 
+;;-- ripgrep
+(autoload 'ripgrep-regexp "ripgrep"
+  "Run a ripgrep search with ‘REGEXP’ rooted at ‘DIRECTORY’." t)
 
+(global-set-key (kbd "<apps> gr") 'ripgrep-regexp)
+
+;;-- grin
 (autoload 'grin "grin"
   "Use `grin' command for grepping text across files." t)
 (autoload 'grind "grin"
@@ -220,7 +226,7 @@ save it in `ffap-file-at-point-line-number' variable."
 
 (global-set-key (kbd "<apps> gG") 'grin-on-dir)
 
-
+;;-- ack
 (autoload 'ack "ack"
   "ack.el provides a simple compilation mode for the perl grep-a-like ack program." t)
 
