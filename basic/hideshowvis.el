@@ -156,6 +156,13 @@
     hideshowvis-mode-map)
   "Keymap for hideshowvis mode")
 
+(defvar hideshowvis-ov-mode-map
+  (let ((hideshowvis-ov-mode-map (make-sparse-keymap)))
+    (define-key hideshowvis-ov-mode-map (kbd "<tab>")
+      'hideshowvis-click-fringe)
+    hideshowvis-ov-mode-map)
+  "Keymap for hideshowvis fringe")
+
 (defun hideshowvis-update-margin ()
   (if hideshowvis-minor-mode
       (set-window-margins (selected-window) 2)
@@ -247,6 +254,7 @@ the end of the line for hidden regions."
                            (list '(margin left-margin) "+"))
                          marker-string) 
         (overlay-put ov 'before-string marker-string)
+        (overlay-put ov 'keymap hideshowvis-ov-mode-map)
         (put-text-property 0 (length display-string) 'face 'hs-face display-string)
         (overlay-put ov 'display display-string)
         )))
