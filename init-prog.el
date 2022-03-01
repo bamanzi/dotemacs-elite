@@ -436,7 +436,7 @@ found in DIRECTORY or any of its ancestors."
      (define-key projectile-mode-map (kbd "<M-f9> d") 'projectile-dired)     
      (define-key projectile-mode-map (kbd "<M-f9> e") 'projectile-eshell-cd-current)
      (define-key projectile-mode-map (kbd "<M-f9> E") 'projectile-eshell-cd-root)
-     (define-key projectile-mode-map (kbd "<M-f9> G") 'projectile-grin)
+     (define-key projectile-mode-map (kbd "<M-f9> G") 'projectile-ripgrep)
      (define-key projectile-mode-map (kbd "<M-f9> a") 'projectile-ack)
      (define-key projectile-mode-map (kbd "<M-f9> A") 'projectile-ack-find-file)
 
@@ -445,6 +445,9 @@ found in DIRECTORY or any of its ancestors."
      (define-key projectile-mode-map (kbd "<M-f9> F") 'anything-with-projectile-files)
      (define-key projectile-mode-map (kbd "<M-f9> D") 'anything-with-projectile-dirs)     
      ))
+
+(autoload 'projectile-ripgrep "projectile-ripgrep"
+  "Run a Ripgrep search with ‘SEARCH-TERM’ rooted at the current projectile project root." t)
 
 (defun eshell/cdprj ()
   "cd to the project root"
