@@ -112,11 +112,11 @@ If called with C-u prefix, it would archive to file \"%s_archive::\". "
 (idle-require 'ob-tangle)
 (eval-after-load "ob-tangle"
   `(progn
-     (when (version< "8.2" (org-version))
-       (require 'ob-shell)
-       (provide 'ob-sh))
+     ;; org 8.2.x renamed `ob-sh.el' to `ob-shell.el'
+     (when (require 'ob-sh nil t)
+       (provide 'ob-shell))
      (org-babel-do-load-languages 'org-babel-load-languages
-                                  '((sh . t)
+                                  '((shell . t)
                                     (emacs-lisp . t)
                                     (python . t)
                                     (ruby . t)))
