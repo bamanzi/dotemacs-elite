@@ -903,11 +903,11 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
      (define-key emacs-lisp-mode-map (kbd "<f9> SPC") 'eval-region)
      (define-key emacs-lisp-mode-map (kbd "<f9> (")   'eval-last-sexp)
      
-     (define-key emacs-lisp-mode-map (kbd "<M-f7> f") 'find-function-at-point)
-     (define-key emacs-lisp-mode-map (kbd "<M-f7> F") 'find-function)
-     (define-key emacs-lisp-mode-map (kbd "<M-f7> v") 'find-variable-at-point)
-     (define-key emacs-lisp-mode-map (kbd "<M-f7> V") 'find-variable)
-     (define-key emacs-lisp-mode-map (kbd "<M-f7> SPC") 'find-symbol-at-point)
+     (define-key emacs-lisp-mode-map (kbd "<f4> f") 'find-function-at-point)
+     (define-key emacs-lisp-mode-map (kbd "<f4> F") 'find-function)
+     (define-key emacs-lisp-mode-map (kbd "<f4> v") 'find-variable-at-point)
+     (define-key emacs-lisp-mode-map (kbd "<f4> V") 'find-variable)
+     (define-key emacs-lisp-mode-map (kbd "<f4> SPC") 'find-symbol-at-point)
 
      (require 'eldoc)
      (require 'eldoc-extension nil t)
@@ -924,7 +924,7 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
 (eval-after-load "cheatsheet"
   `(progn
      (cheatsheet-add :group 'Emacs-Lisp-Mode
-                     :key "<M-f7> SPC"
+                     :key "<f4> SPC"
                      :description "find-symbol-at-point")
      t))
 

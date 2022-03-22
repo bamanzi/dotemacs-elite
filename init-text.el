@@ -125,14 +125,14 @@ If called with C-u prefix, it would archive to file \"%s_archive::\". "
 
 ;; ** misc
 
-(global-set-key (kbd "<f8> <f8>") #'(lambda ()
+(global-set-key (kbd "<f4> <f4>") #'(lambda ()
                                       (interactive)
                                       (find-file org-default-notes-file)))
 
 (eval-after-load "org"
   `(progn
-    (define-key org-mode-map (kbd "<f7>")   'org-toggle-checkbox)
-    (define-key org-mode-map (kbd "<S-f7>") 'org-toggle-checkbox-presence)
+    (define-key org-mode-map (kbd "<C-f4>") 'org-toggle-checkbox)
+    (define-key org-mode-map (kbd "<S-f4>") 'org-toggle-checkbox-presence)
 
     (define-key org-mode-map (kbd "C-c M-%") 'org-replace-markdown-link)
     ))

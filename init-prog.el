@@ -185,7 +185,7 @@
   (interactive)
   (message "Current function: %s" (which-function)))
   
-(define-key global-map (kbd "<f7> w") 'show-which-function)
+(define-key global-map (kbd "<f9> w") 'show-which-function)
 
 
 ;; ** imenu
@@ -204,8 +204,8 @@
 (autoload 'anything-browse-code "anything-config"
   "Preconfigured anything to browse code. `imenu' + elisp/python improvements." t)
 
-(global-set-key (kbd "<f7> i") 'anything-imenu)
-(global-set-key (kbd "<f7> c") 'anything-browse-code)
+;(global-set-key (kbd "<f5> i") 'anything-imenu)
+;(global-set-key (kbd "<f5> c") 'anything-browse-code)
 
 (defun anything-list-symbols ()
   "Show symbol list (imenu + semantic), using current symbol as input to narrow the choices."
@@ -221,7 +221,7 @@
       ;;         anything-c-source-etags-select
       )))
 
-(define-key global-map (kbd "<f7> l") 'anything-list-symbols)
+(define-key global-map (kbd "<f9> l") 'anything-list-symbols)
 
 ;; *** imenu-anywhere: imenu tags across all buffers
 (autoload 'imenu-anywhere "imenu-anywhere"
@@ -241,12 +241,12 @@
         (call-interactively 'ivy-imenu-anywhere)
       (call-interactively 'ido-imenu-anywhere))))
       
-(global-set-key (kbd "<f7> I") 'imenu-anywhere+)
+(global-set-key (kbd "<f5> I") 'imenu-anywhere+)
 
 (eval-after-load "cheatsheet"
   `(progn
      (cheatsheet-add :group 'Programming/Tags
-                     :key "<f7> I"
+                     :key "<f5> I"
                      :description "{helm,ivy}-imenu-anywhere (Show imenu tags across all buffers.)")
      t))
 
@@ -256,7 +256,7 @@
 ;; **** select tag withing project
 (autoload 'anything-c-etags-select "anything-config"
   "Preconfigured anything for etags." t)
-(global-set-key (kbd "<f7> e") 'anything-c-etags-select)
+(global-set-key (kbd "<f5> e") 'anything-c-etags-select)
 
 (defun anything--etags+imenu ()
   "Show function/symbol list with etags & imenu.
@@ -272,20 +272,17 @@ Current symbol would be used as input to narrow the choices."
          anything-c-source-imenu
          )))
 
-(global-set-key (kbd "<f7> E") 'anything--etags+imenu)
+(global-set-key (kbd "<f5> E") 'anything--etags+imenu)
 
 
 (eval-after-load "cheatsheet"
   `(progn
      (cheatsheet-add :group 'Programming/Tags
-                     :key "<f7> e"
-                     :description "anything-c-etags-select")
-     (cheatsheet-add :group 'Programming/Tags
-                     :key "<f5> a e"
+                     :key "<f5> e"
                      :description "anything-c-etags-select")
      
      (cheatsheet-add :group 'Programming/Tags
-                     :key "<f7> E"
+                     :key "<f5> E"
                      :description "anything--etags+imenu")
      t))
 
@@ -336,12 +333,12 @@ Current symbol would be used as input to narrow the choices."
 ;;          anything-c-source-imenu
 ;;          )))
 
-(global-set-key (kbd "<f7> t") 'anything-ctags-current-file)
+(global-set-key (kbd "<f5> .") 'anything-ctags-current-file)
 
 (eval-after-load "cheatsheet"
   `(progn
      (cheatsheet-add :group 'Programming/Tags
-                     :key "<f7> t"
+                     :key "<f5> "
                      :description "anything-ctags-current-file")
      t))
 
