@@ -813,6 +813,14 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
 
 (define-key global-map (kbd "<f10> i h") 'idle-highlight-mode)
 
+(eval-after-load "cheatsheet"
+  `(progn
+     (cheatsheet-add :group 'Highlighting
+                     :key "<f10> i h"
+                     :description "idle-highlight-mode (auto highlight all occurences of current word)")
+     t))
+
+
 ;; *** iedit
 (autoload 'iedit-mode "iedit"
   "Edit multiple regions in the same way simultaneously." t)

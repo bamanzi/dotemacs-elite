@@ -155,6 +155,7 @@ Otherwise it requires user to input full thing name (value of `thing/name-map`).
   "Copy characters from previous nonblank line, starting just above point." t)
 
 (global-set-key (kbd "<M-insert>") 'copy-from-above-command)
+(global-set-key (kbd "C-c C-l") 'copy-from-above-command) ; in case there's no 'insert' on small keyboard
 
 (defun backward-kill-line ()
   "Kill backward to the beginning of the line."
@@ -380,6 +381,17 @@ vi style of % jumping to matching brace."
   "Toggle fci-mode on and off." t)
 
 (global-set-key (kbd "<f10> |") 'fci-mode)
+
+;;--
+(eval-after-load "cheatsheet"
+  `(progn
+     (cheatsheet-add :group 'Highlighting
+                     :key "<f10> -"
+                     :description "hl-line-mode")
+     (cheatsheet-add :group 'Highlighting
+                     :key "<f10> |"
+                     :description "fci-mode (fill-column-indicator)")
+     t))
 
 
 ;; ** misc
