@@ -94,24 +94,6 @@ On Windows, baskslashes is substituted with slashes."
      (add-to-list 'ac-modes 'shell-mode)
      ))
 
-;;(define-key global-map (kbd "<f4> p") 'ac-complete-pcomplete)
-
-(eval-after-load "cheatsheet"
-  `(progn
-     (cheatsheet-add :group 'Eshell
-                     :key "C-c TAB"
-                     :description "ac-complete-pcomplete: complete shell commands & args with pcomplete + auto-complete.")
-     (cheatsheet-add :group 'Eshell
-                     :key "<f5> TAB"
-                     :description "anything-esh-pcomplete")
-     (cheatsheet-add :group 'Eshell
-                     :key "<f5> M-h"
-                     :description "anything-esh-history")
-     
-     (cheatsheet-add :group 'Shell
-                     :key "M-x ac-complete-pcomplete"
-                     :description "complete shell commands & args with pcomplete + auto-complete.")
-     t))
 
 ;; *** history
 
@@ -168,7 +150,8 @@ On Windows, baskslashes is substituted with slashes."
   (define-key eshell-mode-map (kbd "<f5> M-h") 'anything-eshell-history)
 
   (define-key eshell-mode-map (kbd "<f5> TAB") 'anything-esh-pcomplete)
-  (define-key eshell-mode-map (kbd "C-c TAB")  'ac-complete-pcomplete)
+  (define-key eshell-mode-map (kbd "M-c p")    'anything-esh-pcomplete)  
+  (define-key eshell-mode-map (kbd "M-c M-p")  'ac-complete-pcomplete)
   ;;(define-key eshell-mode-map (kbd "M-TAB")  'complete-symbol)
   
   (define-key eshell-mode-map (kbd "<M-up>")   'eshell-previous-matching-input)
@@ -191,14 +174,25 @@ On Windows, baskslashes is substituted with slashes."
 
 (add-hook 'eshell-mode-hook 'bmz/eshell-mode-init)
 
+
 (eval-after-load "cheatsheet"
   `(progn
      (cheatsheet-add :group 'Eshell
                      :key "<f5> M-h"
                      :description "anything-eshell-history")
+     
      (cheatsheet-add :group 'Eshell
-                     :key "<f5> TAB"
+                     :key "M-c M-p"
+                     :description "ac-complete-pcomplete: complete shell commands & args with pcomplete + auto-complete.")
+
+     (cheatsheet-add :group 'Eshell
+                     :key "M-c p"
                      :description "anything-esh-pcomplete")
+          
+     (cheatsheet-add :group 'Shell
+                     :key "M-x ac-complete-pcomplete"
+                     :description "complete shell commands & args with pcomplete + auto-complete.")
+
      (cheatsheet-add :group 'Eshell
                      :key "M-."
                      :description "kai-eshell-insert-last-word")

@@ -19,6 +19,9 @@
 (global-unset-key (kbd "<f11>"))
 (global-unset-key (kbd "<f12>"))
 (global-unset-key (kbd "M-u"))
+(global-unset-key (kbd "M-c"))
+(global-unset-key (kbd "M-l"))
+
 (define-key key-translation-map (kbd "M-u") (kbd "<apps>"))
 
 ;; *** misc
@@ -602,17 +605,17 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
 										"disabled"))))
 
 (progn
-  (define-key global-map (kbd "<f4> f") 'ac-complete-filename)
-  (define-key global-map (kbd "<f4> i") 'ac-complete-imenu)
-  (define-key global-map (kbd "<f4> a") 'ac-complete-scite-api)
-  (define-key global-map (kbd "<f4> y") 'ac-complete-yasnippet)
+  (define-key global-map (kbd "M-c M-f") 'ac-complete-filename)
+  (define-key global-map (kbd "M-c M-i") 'ac-complete-imenu)
+  (define-key global-map (kbd "M-c M-a") 'ac-complete-scite-api)
+  (define-key global-map (kbd "M-c M-y") 'ac-complete-yasnippet)
 
   (eval-after-load "cheatsheet"
     `(progn
-       (cheatsheet-add :group 'Auto-Complete :key "<f4> f" :description "ac-complete-filename")
-       (cheatsheet-add :group 'Auto-Complete :key "<f4> i" :description "ac-complete-imenu")
-       (cheatsheet-add :group 'Auto-Complete :key "<f4> a" :description "ac-complete-scite-api")
-       (cheatsheet-add :group 'Auto-Complete :key "<f4> y" :description "ac-complete-yasnippet")
+       (cheatsheet-add :group 'Auto-Complete :key "M-c M-f" :description "ac-complete-filename")
+       (cheatsheet-add :group 'Auto-Complete :key "M-c M-i" :description "ac-complete-imenu")
+       (cheatsheet-add :group 'Auto-Complete :key "M-c M-a" :description "ac-complete-scite-api")
+       (cheatsheet-add :group 'Auto-Complete :key "M-c M-y" :description "ac-complete-yasnippet")
        t
        ))
   )

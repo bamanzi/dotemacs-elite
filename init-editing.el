@@ -230,12 +230,12 @@ Otherwise it requires user to input full thing name (value of `thing/name-map`).
 
 ;; ** languages tools
 ;; *** spell
-(define-key global-map (kbd "ESC M-$") 'ispell-complete-word)
+(define-key global-map (kbd "M-c $") 'ispell-complete-word)
 
 (eval-after-load "cheatsheet"
   `(progn
      (cheatsheet-add :group 'Language-Tools
-                     :key "ESC M-$"
+                     :key "M-c $"
                      :description "ispell-complete-word.")
      t))
 
@@ -256,12 +256,12 @@ Otherwise it requires user to input full thing name (value of `thing/name-map`).
          (candidates . ac-ispell-get-candidates)))
      ))
 
-(define-key global-map (kbd "<f4> $") 'ac-complete-ispell-word)
+(define-key global-map (kbd "M-c M-s") 'ac-complete-ispell-word)
 
 (eval-after-load "cheatsheet"
   `(progn
      (cheatsheet-add :group 'Auto-Complete
-                     :key "<f4> $"
+                     :key "M-c M-s"
                      :description "ac-complete-ispell-word")
      t))
 
