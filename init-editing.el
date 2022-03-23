@@ -1,3 +1,103 @@
+;; ** section folding
+;; *** orgstruct-mode: folding by org-mode like section header
+;; better than my 'outline-org-mode' (use TAB for visibility cycling),
+;; but it lacks heading highlighting (use it with `outline-org-headings-mode' to fix this.)
+;;
+;; NOTE: it requires `orgstruct-mode' in org 8
+;; http://www.orgmode.org/manual/Orgstruct-mode.html
+(defun bmz/turn-on-orgstruct-mode-maybe ()
+  (interactive)
+  (require 'org)
+  (if (string< org-version "8")
+      (if (called-interactively-p 'interactive)
+          (message "Only `orgstruct-mode' in org > 8.0 could be used as code folding. But currently install is %s" org-version))
+    (setq orgstruct-heading-prefix-regexp
+          (cond ((eq major-mode 'emacs-lisp-mode)
+                 ";; ")
+                ;;FIXME: other special cases?
+                (t
+                 comment-start)))
+    (if orgstruct-heading-prefix-regexp
+        (turn-on-orgstruct))))
+
+(eval-after-load "org"
+  `(progn
+     (unless (string< org-version "8")
+       (add-hook 'prog-mode-hook 'bmz/turn-on-orgstruct-mode-maybe 'append))))
+
+
+(eval-after-load "cheatsheet"
+  `(progn
+     (cheatsheet-add :group 'Outline/orgstruct
+                     :key "bmz/turn-on-orgstruct-mode"
+                     :description "folding by org-mode like section header (org > 8.0 requried)")
+     t))
+
+
+;; deprecated: highlight header
+;; (defun highlight-outline-header/bmz ()
+;;   (interactive)
+;;   (highlight-lines-matching-regexp "^;;; \\w" 'hi-black-hb)
+;;   ;; highlight headers in this file
+;;   (highlight-lines-matching-regexp "^;; \\* "          'org-level-1)
+;;   (highlight-lines-matching-regexp "^;; \\*\\* "       'org-level-2)
+;;   (highlight-lines-matching-regexp "^;; \\*\\*\\* "    'org-level-3)
+;;   (highlight-lines-matching-regexp "^;; \\*\\*\\*\\* " 'org-level-4))
+
+;; (eval-after-load "lisp-mode"
+;;   `(add-hook 'emacs-lisp-mode-hook 'highlight-outline-header/bmz))
+
+;; *** outline-org-headings-mode (highlight org-like headings)
+(autoload 'outline-org-headings-mode "outline-org-like"
+  "org-mode like heading highlighting." t)
+
+(autoload 'anything-outline-org-headings "outline-org-like"
+  "Preconfigured anything to show org-mode-like headings." t)
+
+(global-set-key (kbd "<f5> C-z") 'anything-outline-org-headings)
+
+(idle-require 'outline-org-like)
+
+(eval-after-load "outline-org-like"
+  `(progn
+     (if (boundp 'prog-mode-hook)
+         (add-hook 'prog-mode-hook 'outline-org-headings-mode)
+       (add-hook 'find-file-hook 'outline-org-headings-mode))
+     
+     (define-key outline-mode-prefix-map (kbd "<f5>") 'outline-org-headings-mode)
+     ))
+
+(global-set-key (kbd "C-z <f5>") 'outline-org-headings-mode)
+
+
+;; *** outline-org-mode
+(autoload 'outline-org-mode  "outline-org-like"
+  "A special `outline-minor-mode' that use org-mode-style headings." t)
+
+(eval-after-load "cheatsheet"
+  `(progn
+     (cheatsheet-add :group 'Outline/org-like
+                     :key "C-z <f5>"
+                     :description "toggle `outline-org-headings-mode'")
+     
+     (cheatsheet-add :group 'Outline/org-like
+                     :key "C-z C-z ..."
+                     :description "outline-org/outline-command-dispatcher")
+     (cheatsheet-add :group 'Outline/org-like
+                     :key "C-z C-z C-a"
+                     :description "outline-hide-body (fold all)")  
+     (cheatsheet-add :group 'Outline/org-like
+                     :key "C-z C-z C-a"
+                     :description "outline-show-all (unfold all)")
+     (cheatsheet-add :group 'Outline/org-like
+                     :key "C-z C-z C-s"
+                     :description "outline-show-entry (unfold current)")
+     (cheatsheet-add :group 'Outline/org-like
+                     :key "C-z C-z C-d"
+                     :description "outline-show-subtree (fold children)")
+     ))
+
+
 ;; ** mark, copy & yank
 ;; *** make/copy something
 

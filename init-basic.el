@@ -746,48 +746,8 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
 (define-key global-map (kbd "<f10> q o") 'qtmstr-outline-mode)
 
 
-;; *** outline-org-like (use org-like headings for outline)
-;; FIXME: switch to orgstruct-mode of org-8.x? (but how to highlighting the headings?)
-(autoload 'outline-org-mode  "outline-org-like"
-  "A special `outline-minor-mode' that use org-mode-style headings." t)
-
-(autoload 'outline-org-headings-mode "outline-org-like"
-  "org-mode like heading highlighting." t)
-
-(autoload 'anything-outline-org-headings "outline-org-like"
-  "Preconfigured anything to show org-mode-like headings." t)
-
-(global-set-key (kbd "<f5> C-z") 'anything-outline-org-headings)
-
-(idle-require 'outline-org-like)
-
-(eval-after-load "outline-org-like"
-  `(progn
-     (if (boundp 'prog-mode-hook)
-         (add-hook 'prog-mode-hook 'outline-org-headings-mode)
-       (add-hook 'find-file-hook 'outline-org-headings-mode))
-     
-     (define-key outline-mode-prefix-map (kbd "<f5>") 'outline-org-headings-mode)
-     ))
-
-(global-set-key (kbd "C-z <f5>") 'outline-org-headings-mode)
-
-;; ;; highlight header
-;; (defun highlight-outline-header/bmz ()
-;;   (interactive)
-;;   (highlight-lines-matching-regexp "^;;; \\w" 'hi-black-hb)
-;;   ;; highlight headers in this file
-;;   (highlight-lines-matching-regexp "^;; \\* "          'org-level-1)
-;;   (highlight-lines-matching-regexp "^;; \\*\\* "       'org-level-2)
-;;   (highlight-lines-matching-regexp "^;; \\*\\*\\* "    'org-level-3)
-;;   (highlight-lines-matching-regexp "^;; \\*\\*\\*\\* " 'org-level-4))
-
-;; (eval-after-load "lisp-mode"
-;;   `(add-hook 'emacs-lisp-mode-hook 'highlight-outline-header/bmz))
-
-
 ;; ** highlighting
-;; ***  highlight-symbol
+;; *** highlight-symbol
 (autoload 'highlight-symbol "highlight-symbol"
   "Toggle highlighting of the symbol at point." t)
 (idle-require 'highlight-symbol)

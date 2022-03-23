@@ -57,32 +57,6 @@
 ;;     (add-hook 'prog-mode-hook 'qtmstr-outline-mode))
 
 
-;; *** folding by org-mode like section header
-;; this requires `orgstruct-mode' in org 8
-;; http://www.orgmode.org/manual/Orgstruct-mode.html
-(defun bmz/turn-on-orgstruct-mode-maybe ()
-  (interactive)
-  (require 'org)
-  (if (string< org-version "8")
-      (if (called-interactively-p 'interactive)
-          (message "Only `orgstruct-mode' in org > 8.0 could be used as code folding. But currently install is %s" org-version))
-    (setq orgstruct-heading-prefix-regexp
-          (cond ((eq major-mode 'emacs-lisp-mode)
-                 ";; ")
-                ;;FIXME: other special cases?
-                (t
-                 comment-start)))
-    (if orgstruct-heading-prefix-regexp
-        (turn-on-orgstruct))))
-
-;;(add-hook 'prog-mode-hook 'bmz/turn-on-orgstruct-mode-maybe)
-(eval-after-load "cheatsheet"
-  `(progn
-     (cheatsheet-add :group 'Programming/Tags
-                     :key "bmz/turn-on-orgstruct-mode"
-                     :description "folding by org-mode like section header")
-     t))
-
 ;; ** automatically highlight current symbol
 (eval-after-load "idle-highlight-mode"
   `(progn
