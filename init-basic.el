@@ -18,6 +18,7 @@
 (global-unset-key (kbd "<f5>"))
 (global-unset-key (kbd "<f11>"))
 (global-unset-key (kbd "<f12>"))
+(global-unset-key (kbd "M-`"))
 (global-unset-key (kbd "M-u"))
 (global-unset-key (kbd "M-c"))
 (global-unset-key (kbd "M-l"))

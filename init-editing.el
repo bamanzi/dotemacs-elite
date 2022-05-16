@@ -101,135 +101,29 @@
 ;; ** mark, copy & yank
 ;; *** make/copy something
 
-;; based on code stolen from https://github.com/m2ym/thingopt-el/blob/master/thingopt.el
-(setq thing/name-map
-  '((?w . word)
-    (?e . sexp)
-    (?s . symbol)
-    (?S . sentence)
-    (?p . paragraph)
-    (?h . defun)
-    (?f . filename)
-    (?l . line)
-    (?\( . list)
-    (?L . list)
-    (?\" . string)
-    (?u . url)
-    (?P . page)
-    (?n . number)))
 
-(defun thing/read-thing (quick &optional prompt)
-  "Ask user to select a THING name.
+(autoload 'thing/mark-one-thing "bmz-thing-op"
+  "Undocumented." t)
 
-When QUICK is true, it read in one char matching key of `thing/name-map'.
-Otherwise it requires user to input full thing name (value of `thing/name-map`)."
-  (if quick
-      (assoc-default (read-key (concat (or prompt "Thing")
-                                       " ["
-                                       (mapconcat #'(lambda (elem)
-                                                      (format "%c:%s" (car elem) (cdr elem)))
-                                                  thing/name-map " ")
-                                       "]: "))
-                     thing/name-map)
-    (let ((thing-name (ido-completing-read (or prompt "Thing: ")
-                                      (mapcar #'(lambda (elem)
-                                                  (format "%s" (cdr elem)))
-                                              thing/name-map)
-                                      nil
-                                      'match)))
-      (if thing-name
-          (intern thing-name)))))
-                  
-
-(defun thing/call-action (thing action &optional prompt)
-  (let ((bounds (bounds-of-thing-at-point thing)))
-    (cond
-     (bounds
-      (funcall action bounds))
-     (thing
-      (message "There is no %s here." thing))
-     (t
-      (message "Nothing here.")))))
-
-(defun thing/mark-one-thing (thing)
-  (interactive (list (thing/read-thing 'quick)))
-  (thing/call-action thing
-                     #'(lambda (bounds)
-                         (goto-char (car bounds))
-                         (push-mark (cdr bounds) nil transient-mark-mode)
-                         (message "Markd %s." thing))))
-
-(global-set-key (kbd "C-`") 'thing/mark-one-thing)
-(global-set-key (kbd "C-c `") 'thing/mark-one-thing) ;;for xterm
+(global-set-key (kbd "M-` SPC") 'thing/mark-one-thing)
 
 (idle-require 'pulse) ;; for `pulse-momentary-highlight-region'
-(defun thing/copy-one-thing (thing)
-  (interactive (list (thing/read-thing 'quick)))
-  (thing/call-action thing
-                     #'(lambda (bounds)
-                         (let ((begin (car bounds))
-                               (end   (cdr bounds)))
-                           (if (require 'pulse nil t)
-                               (pulse-momentary-highlight-region begin end))
-                           (copy-region-as-kill begin end)
-                           (message "Copied %s." thing)))))
 
-(defun thing/kill-one-thing (thing)
-  (interactive (list (thing/read-thing 'quick)))
-  (thing/call-action thing
-                     #'(lambda (bounds)
-                         (let ((begin (car bounds))
-                               (end   (cdr bounds)))
-                           (if (require 'pulse nil t)
-                               (pulse-momentary-highlight-region begin end))
-                           (kill-region begin end)
-                           (message "Killed %s." thing)))))
+(idle-require 'bmz-thing-op)
 
-(global-set-key (kbd "<M-delete>") 'thing/kill-one-thing)
+(eval-after-load "bmz-thing-op"
+  `(progn
+     (global-set-key (kbd "C-c m") 'thing/mark-one-thing)
+     (global-set-key (kbd "C-c c") 'thing/copy-one-thing)
+     (global-set-key (kbd "C-c k") 'thing/kill-one-thing)
 
-(global-set-key (kbd "C-c m") 'thing/mark-one-thing)
-(global-set-key (kbd "C-c c") 'thing/copy-one-thing)
-(global-set-key (kbd "C-c k") 'thing/kill-one-thing)
+     (global-set-key (kbd "M-g <") 'thing/goto-beginning)
+     (global-set-key (kbd "M-g >") 'thing/goto-end)
 
+     (global-set-key (kbd "M-s M-w") 'thing/copy-symbol-or-word)
+     (global-set-key (kbd "M-s C-w") 'thing/kill-symbol-or-word)
+     ))
 
-(defun thing/goto-beginning (thing)
-  (interactive (list (thing/read-thing 'quick)))
-  (thing/call-action thing
-                     #'(lambda (bounds)
-                         (goto-char (car bounds)))
-                     "Go to thing begin "))
-
-(defun thing/goto-end (thing)
-  (interactive (list (thing/read-thing 'quick)))
-  (thing/call-action thing
-                     #'(lambda (bounds)
-                         (goto-char (cdr bounds)))
-                     "Go to thing end "))
-
-(global-set-key (kbd "M-g <") 'thing/goto-beginning)
-(global-set-key (kbd "M-g >") 'thing/goto-end)
-
-
-(defun thing/copy-symbol-or-word ()
-  (interactive)
-  (let ((bounds (or (bounds-of-thing-at-point 'symbol)
-                    (bounds-of-thing-at-point 'word))))
-    (if bounds
-        (let* ((begin (car bounds))
-               (end   (cdr bounds))
-               (content (buffer-substring begin end)))
-          (if (require 'pulse nil t)
-              (pulse-momentary-highlight-region begin end))
-          (copy-region-as-kill begin end)
-          (message "Copied '%s'." content)))))
-
-(global-set-key (kbd "M-s M-w") 'thing/copy-symbol-or-word)
-
-(defun thing/kill-symbol-or-word ()
-  (interactive)
-  (thing/kill-one-thing 'symbol))
-
-(global-set-key (kbd "M-s C-w") 'thing/kill-symbol-or-word)
 
 ;; *** copy/cut current line if nothing selected
 ;; http://ergoemacs.org/emacs/emacs_copy_cut_current_line.html
@@ -411,7 +305,7 @@ Otherwise it requires user to input full thing name (value of `thing/name-map`).
   "Toggle Local-Vim-Region mode in every possible buffer." t)
 
 (define-key global-map (kbd "<f6> v") 'vim-region-mode)
-(define-key global-map (kbd "M-`")    'vim-region-mode)
+(define-key global-map (kbd "M-` V")  'vim-region-mode)
 ;;(define-key global-map (kbd "ESC `")  'vim-region-mode)
 
 ;; *** misc vi(m) commands
