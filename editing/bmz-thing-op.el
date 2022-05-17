@@ -137,4 +137,5 @@ Otherwise it requires user to input full thing name (value of `thing/name-map`).
           (lambda () (goto-char (org-table-end))))
      ))
 
+(provide 'bmz-thing-op)
 ;;; bmz-thing-op.el ends here

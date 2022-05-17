@@ -360,6 +360,7 @@ If the new path's directories does not exist, create them."
 
 (setq cua-enable-cua-keys nil)
 (cua-mode t)
+(define-key cua-global-keymap (kbd "M-`") nil) ; we need to use it as a prefix key
 
 (setq x-select-enable-clipboard t)
 ;;  (setq x-select-enable-primary t)
@@ -551,7 +552,7 @@ If the new path's directories does not exist, create them."
 
 (global-set-key (kbd "M-/") 'hippie-expand)
 
-;; ***  auto-compelte
+;; *** auto-compelte
 (eval-after-load "auto-complete-config"    
   `(progn
      (ac-config-default)
