@@ -8,19 +8,21 @@
 
 (setq thing/name-map
   '((?w . word)
-    (?e . sexp)
     (?s . symbol)
-    (?S . sentence)
-    (?p . paragraph)
-    (?h . defun)
-    (?f . filename)
     (?l . line)
-    (?\( . list)
-    (?L . list)
     (?\" . string)
+    (?h . defun)
     (?u . url)
+    (?c . orgtbl-cell)
+    (?t . org-table)
+    (?E . sexp)
+    (?S . sentence)
+    (?P . paragraph)
+    (?F . filename)
+    (?L . list)
     (?P . page)
-    (?n . number)
+    (?N . number)
+    (?\( . list)
     ))
 
 (defun thing/read-thing (quick &optional prompt)
@@ -121,5 +123,18 @@ Otherwise it requires user to input full thing name (value of `thing/name-map`).
 (defun thing/kill-symbol-or-word ()
   (interactive)
   (thing/kill-one-thing 'symbol))
+
+(eval-after-load "org-table"
+  `(progn
+     (put 'orgtbl-cell 'beginning-op
+          (lambda () (org-table-beginning-of-field 1)))
+     (put 'orgtbl-cell 'end-op
+          (lambda () (org-table-end-of-field 1)))
+
+     (put 'org-table 'beginning-op
+          (lambda () (goto-char (org-table-begin))))
+     (put 'org-table 'end-op
+          (lambda () (goto-char (org-table-end))))
+     ))
 
 ;;; bmz-thing-op.el ends here
