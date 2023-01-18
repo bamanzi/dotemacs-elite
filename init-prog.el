@@ -350,43 +350,6 @@ Current symbol would be used as input to narrow the choices."
 (define-key global-map (kbd "ESC <wheel-down>") 'flymake-goto-next-error)
 (define-key global-map (kbd "ESC <wheel-up>")   'flymake-goto-prev-error)
 
-;; *** flycheck
-(autoload 'flycheck-mode "flycheck"
-  "Flymake reloaded with useful checkers. " t)
-
-;;load flycheck rather than flymake
-(idle-require 'flycheck)
-
-(global-set-key (kbd "<M-f9>") 'flycheck-mode)
-
-(define-key global-map (kbd "<f9> M-n") 'flymake-goto-next-error)
-(define-key global-map (kbd "<f9> M-p") 'flymake-goto-prev-error)
-
-;;fix endless loop bug of `flycheck-find-file-in-tree' on Windows
-(eval-after-load "flycheck"
-  `(progn
-     (defun flycheck-find-file-in-tree (filename directory)
-       "Find FILENAME in DIRECTORY and all of its ancestors.
-
-Start looking for a file named FILENAME in DIRECTORY and traverse
-upwards through all of its ancestors up to the file system root
-until the file is found or the root is reached.
-
-Return the absolute path of the file, or nil if the file was not
-found in DIRECTORY or any of its ancestors."
-       (let ((full-path (expand-file-name filename directory)))
-         (cond ((or (string= directory "/")
-                    (string= ":/" (substring directory 1 3)))
-                (when (file-exists-p full-path) full-path))
-               ((file-exists-p full-path)
-                full-path)
-               (t
-                (let ((parent-directory (file-name-directory
-                                         (directory-file-name
-                                          (file-name-directory full-path)))))
-                  (flycheck-find-file-in-tree filename parent-directory))))))
-     ))
-
 
 ;; ** projectile
 (autoload 'projectile-global-mode "projectile"
