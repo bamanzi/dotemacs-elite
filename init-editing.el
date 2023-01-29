@@ -8,30 +8,33 @@
 (defun bmz/turn-on-orgstruct-mode-maybe ()
   (interactive)
   (require 'org)
-  (if (string< org-version "8")
-      (if (called-interactively-p 'interactive)
-          (message "Only `orgstruct-mode' in org > 8.0 could be used as code folding. But currently install is %s" org-version))
-    (setq orgstruct-heading-prefix-regexp
-          (cond ((eq major-mode 'emacs-lisp-mode)
-                 ";; ")
-                ;;FIXME: other special cases?
-                (t
-                 comment-start)))
-    (if orgstruct-heading-prefix-regexp
-        (turn-on-orgstruct))))
+  (if (fboundp 'orgstruct-mode)
+      (progn
+        (setq orgstruct-heading-prefix-regexp
+              (cond ((eq major-mode 'emacs-lisp-mode)
+                     ";; ")
+                    ;;FIXME: other special cases?
+                    (t
+                     comment-start)))
+        (if orgstruct-heading-prefix-regexp
+            (turn-on-orgstruct)))
+    ;; `orgstruct-mode' removed in Org 9.2 (emacs 27.1)
+    ;; ORG-NEWS recommends using package 'orgalist' for lists, 'outshine' for org-like folding
+    (if (called-interactively-p 'interactive)
+        (message "`orgstruct-mode' is available only in Org 8.x. But currently install is %s" org-version))
+    ))
+
 
 (eval-after-load "org"
   `(progn
      (unless (string< org-version "8")
-       (add-hook 'prog-mode-hook 'bmz/turn-on-orgstruct-mode-maybe 'append))))
+       (add-hook 'prog-mode-hook 'bmz/turn-on-orgstruct-mode-maybe 'append)
 
-
-(eval-after-load "cheatsheet"
-  `(progn
-     (cheatsheet-add :group 'Outline/orgstruct
-                     :key "bmz/turn-on-orgstruct-mode"
-                     :description "folding by org-mode like section header (org > 8.0 requried)")
-     t))
+       (when (fboundp 'cheetsheet-add)
+         (cheatsheet-add :group 'Outline/orgstruct
+                         :key "bmz/turn-on-orgstruct-mode"
+                         :description "folding by org-mode like section header (Org 8.x requried)")))
+     ))
 
 
 ;; deprecated: highlight header
