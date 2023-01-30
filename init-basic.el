@@ -22,6 +22,7 @@
 (global-unset-key (kbd "M-u"))
 (global-unset-key (kbd "M-c"))
 (global-unset-key (kbd "M-l"))
+(global-unset-key (kbd "M-o"))
 
 (define-key key-translation-map (kbd "M-u") (kbd "<apps>"))
 
@@ -503,19 +504,19 @@ If the new path's directories does not exist, create them."
   "Preconfigured `anything' for `recentf'." t)
 
 (progn
-  (global-set-key (kbd "<M-f5>") 'anything-resume)
+  (global-set-key (kbd "M-O") 'anything-resume) ; M-S-o
   
-  (global-set-key (kbd "<f5> f") 'anything-for-files)
-  (global-set-key (kbd "<f5> b") 'anything-buffers+)
+  (global-set-key (kbd "M-o f") 'anything-for-files)
+  (global-set-key (kbd "M-o b") 'anything-buffers+)
   
-  (global-set-key (kbd "<f5> r") 'anything-recentf)
-  (global-set-key (kbd "<f5> B") 'anything-bookmarks)
-  (global-set-key (kbd "<f5> l") 'anything-locate)
-  (global-set-key (kbd "<f5> c") 'anything-browse-code)
-  (global-set-key (kbd "<f5> i") 'anything-imenu)
-  (global-set-key (kbd "<f5> o") 'anything-occur)
-  (global-set-key (kbd "<f5> R") 'anything-register)
-  (global-set-key (kbd "<f5> M-y") 'anything-show-kill-ring)
+  (global-set-key (kbd "M-o r") 'anything-recentf)
+  (global-set-key (kbd "M-o B") 'anything-bookmarks)
+  (global-set-key (kbd "M-o l") 'anything-locate)
+  (global-set-key (kbd "M-o c") 'anything-browse-code)
+  (global-set-key (kbd "M-o i") 'anything-imenu)
+  (global-set-key (kbd "M-o o") 'anything-occur)
+  (global-set-key (kbd "M-o R") 'anything-register)
+  (global-set-key (kbd "M-o M-y") 'anything-show-kill-ring)
   )
 
 (eval-after-load "anything-config"    
@@ -523,13 +524,13 @@ If the new path's directories does not exist, create them."
        ;;enable multiple keyword/regexp match
        (require 'anything-match-plugin nil t)
        
-       (global-set-key (kbd "<f5> a") anything-command-map)
+       (global-set-key (kbd "M-o a") anything-command-map)
 
-       (define-key global-map (kbd "<f5> |") 'anything-toggle-resplit-window)       
+       (define-key global-map (kbd "M-o |") 'anything-toggle-resplit-window)       
        
        ;;(global-set-key (kbd "M-x") 'anything-M-x)
 
-       (define-key minibuffer-local-map (kbd "<f5> M-h") 'anything-minibuffer-history)
+       (define-key minibuffer-local-map (kbd "M-o M-h") 'anything-minibuffer-history)
       ))
 
 

@@ -147,9 +147,9 @@ On Windows, baskslashes is substituted with slashes."
   (eshell-toggle-cursor-keybinding 1)
   (define-key eshell-mode-map (kbd "<Scroll_Lock>") 'eshell-toggle-cursor-keybinding)
   (define-key eshell-mode-map (kbd "<scroll>") 'eshell-toggle-cursor-keybinding)
-  (define-key eshell-mode-map (kbd "<f5> M-h") 'anything-eshell-history)
+  (define-key eshell-mode-map (kbd "M-o M-h") 'anything-eshell-history)
 
-  (define-key eshell-mode-map (kbd "<f5> TAB") 'anything-esh-pcomplete)
+  (define-key eshell-mode-map (kbd "M-o TAB") 'anything-esh-pcomplete)
   (define-key eshell-mode-map (kbd "M-c p")    'anything-esh-pcomplete)  
   (define-key eshell-mode-map (kbd "M-c M-p")  'ac-complete-pcomplete)
   ;;(define-key eshell-mode-map (kbd "M-TAB")  'complete-symbol)
@@ -178,7 +178,7 @@ On Windows, baskslashes is substituted with slashes."
 (eval-after-load "cheatsheet"
   `(progn
      (cheatsheet-add :group 'Eshell
-                     :key "<f5> M-h"
+                     :key "M-o M-h"
                      :description "anything-eshell-history")
      
      (cheatsheet-add :group 'Eshell

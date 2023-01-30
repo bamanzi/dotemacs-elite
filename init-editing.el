@@ -57,7 +57,7 @@
 (autoload 'anything-outline-org-headings "outline-org-like"
   "Preconfigured anything to show org-mode-like headings." t)
 
-(global-set-key (kbd "<f5> C-z") 'anything-outline-org-headings)
+(global-set-key (kbd "M-o C-z") 'anything-outline-org-headings)
 
 (idle-require 'outline-org-like)
 
@@ -67,10 +67,10 @@
          (add-hook 'prog-mode-hook 'outline-org-headings-mode)
        (add-hook 'find-file-hook 'outline-org-headings-mode))
      
-     (define-key outline-mode-prefix-map (kbd "<f5>") 'outline-org-headings-mode)
+     (define-key outline-mode-prefix-map (kbd "M-o") 'outline-org-headings-mode)
      ))
 
-(global-set-key (kbd "C-z <f5>") 'outline-org-headings-mode)
+(global-set-key (kbd "C-z M-o") 'outline-org-headings-mode)
 
 
 ;; *** outline-org-mode
@@ -80,7 +80,7 @@
 (eval-after-load "cheatsheet"
   `(progn
      (cheatsheet-add :group 'Outline/org-like
-                     :key "C-z <f5>"
+                     :key "C-z M-o"
                      :description "toggle `outline-org-headings-mode'")
      
      (cheatsheet-add :group 'Outline/org-like

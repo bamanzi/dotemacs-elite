@@ -178,8 +178,8 @@
 (autoload 'anything-browse-code "anything-config"
   "Preconfigured anything to browse code. `imenu' + elisp/python improvements." t)
 
-;(global-set-key (kbd "<f5> i") 'anything-imenu)
-;(global-set-key (kbd "<f5> c") 'anything-browse-code)
+;(global-set-key (kbd "M-o i") 'anything-imenu)
+;(global-set-key (kbd "M-o c") 'anything-browse-code)
 
 (defun anything-list-symbols ()
   "Show symbol list (imenu + semantic), using current symbol as input to narrow the choices."
@@ -215,12 +215,12 @@
         (call-interactively 'ivy-imenu-anywhere)
       (call-interactively 'ido-imenu-anywhere))))
       
-(global-set-key (kbd "<f5> I") 'imenu-anywhere+)
+(global-set-key (kbd "M-o I") 'imenu-anywhere+)
 
 (eval-after-load "cheatsheet"
   `(progn
      (cheatsheet-add :group 'Programming/Tags
-                     :key "<f5> I"
+                     :key "M-o I"
                      :description "{helm,ivy}-imenu-anywhere (Show imenu tags across all buffers.)")
      t))
 
@@ -230,7 +230,7 @@
 ;; **** select tag withing project
 (autoload 'anything-c-etags-select "anything-config"
   "Preconfigured anything for etags." t)
-(global-set-key (kbd "<f5> e") 'anything-c-etags-select)
+(global-set-key (kbd "M-o e") 'anything-c-etags-select)
 
 (defun anything--etags+imenu ()
   "Show function/symbol list with etags & imenu.
@@ -246,17 +246,17 @@ Current symbol would be used as input to narrow the choices."
          anything-c-source-imenu
          )))
 
-(global-set-key (kbd "<f5> E") 'anything--etags+imenu)
+(global-set-key (kbd "M-o E") 'anything--etags+imenu)
 
 
 (eval-after-load "cheatsheet"
   `(progn
      (cheatsheet-add :group 'Programming/Tags
-                     :key "<f5> e"
+                     :key "M-o e"
                      :description "anything-c-etags-select")
      
      (cheatsheet-add :group 'Programming/Tags
-                     :key "<f5> E"
+                     :key "M-o E"
                      :description "anything--etags+imenu")
      t))
 
@@ -307,12 +307,12 @@ Current symbol would be used as input to narrow the choices."
 ;;          anything-c-source-imenu
 ;;          )))
 
-(global-set-key (kbd "<f5> .") 'anything-ctags-current-file)
+(global-set-key (kbd "M-o .") 'anything-ctags-current-file)
 
 (eval-after-load "cheatsheet"
   `(progn
      (cheatsheet-add :group 'Programming/Tags
-                     :key "<f5> "
+                     :key "M-o "
                      :description "anything-ctags-current-file")
      t))
 
