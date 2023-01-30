@@ -612,6 +612,14 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
   (define-key global-map (kbd "M-c M-i") 'ac-complete-imenu)
   (define-key global-map (kbd "M-c M-a") 'ac-complete-scite-api)
   (define-key global-map (kbd "M-c M-y") 'ac-complete-yasnippet)
+  ;; (define-key global-map (kbd "M-c M-s") 'ac-complete-ispell-word)
+
+  ;; integrate completion-at-point to auto-compete
+  (eval-after-load "auto-complete"
+    `(progn
+       (when (require 'ac-capf nil t)
+         (define-key global-map (kbd "M-c TAB") 'ac-complete-capf)
+         )))
 
   (eval-after-load "cheatsheet"
     `(progn
@@ -619,6 +627,7 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
        (cheatsheet-add :group 'Auto-Complete :key "M-c M-i" :description "ac-complete-imenu")
        (cheatsheet-add :group 'Auto-Complete :key "M-c M-a" :description "ac-complete-scite-api")
        (cheatsheet-add :group 'Auto-Complete :key "M-c M-y" :description "ac-complete-yasnippet")
+       (cheatsheet-add :group 'Auto-Complete :key "M-c TAB" :description "ac-complete-capf (completion-at-point)")
        t
        ))
   )
