@@ -44,9 +44,10 @@
 ;; Advanced usage:
 ;;
 ;;   1. To leave you own `outline-regexp' setting untouched, you use
-;;      `outline-org-headings-mode' to turn on the heading
-;;      highlighting, and use `outline-org/outline-command-dispatcher'
-;;      to navigate/fold the org-mode-style headings.
+;;      `outline-org-headings-mode' (rather than `outline-org-mode')
+;;      to turn on the heading highlighting, and use
+;;      `outline-org/outline-command-dispatcher' to navigate/fold the
+;;      org-mode-style headings.
 ;;
 ;;      for example, if you bind
 ;;      `outline-org/outline-command-dispatcher' to `C-z', then you
@@ -109,7 +110,11 @@
       (font-lock-remove-keywords nil keywords))
       (font-lock-mode -1) ;;FIXME: any better way?
       (font-lock-mode 1)
-      )))
+      )
+    (if outline-org-headings-mode
+        (outline-minor-mode t)
+      (outline-minor-mode -1))
+    ))
 
 ;;** outline commands wrapper without changing user `outline-regexp'
 
@@ -126,8 +131,10 @@ can use `C-S-z C-u' to go to parent heading in org-mode style, but
          (command (lookup-key outline-mode-prefix-map key)) )
     (if comment-start
         (if (or (equal key (kbd "<f1>"))
-                (equal key (kbd "<f1> <f1>")))  
-            (describe-variable 'outline-mode-prefix-map)
+                (equal key (kbd "<f1> <f1>")))
+            (if (fboundp 'describe-keymap) ; help-fns+.el
+                (describe-keymap 'outline-mode-prefix-map)
+              (describe-variable 'outline-mode-prefix-map))
           (if (and command (commandp command))
               (progn
                 (message "%s" command)
@@ -140,8 +147,10 @@ can use `C-S-z C-u' to go to parent heading in org-mode style, but
 (global-set-key (kbd "C-S-z") 'outline-org/outline-command-dispatcher)
 
 ;;*** our new `outline-cycle'
-(defun outline-org/outline-cycle ()
+(defun outline-org/cycle ()
   (interactive)
+  (unless (require 'outline-magic nil t)
+    (user-error "Package 'outline-magic' required for command `outline-org/cycle'"))
   (let ( (outline-regexp (outline-org/get-heading-regexp)) )
     (if (and (not outline-minor-mode) (not (eq major-mode 'outline-mode)))
         (outline-minor-mode t))
