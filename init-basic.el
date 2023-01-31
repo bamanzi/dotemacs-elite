@@ -22,6 +22,7 @@
 (global-unset-key (kbd "M-u"))
 (global-unset-key (kbd "M-c"))
 (global-unset-key (kbd "M-l"))
+;; NOTE: M-O is a xterm control sequence prefix. refer: (find-library "term/xterm")
 (global-unset-key (kbd "M-o"))
 
 (define-key key-translation-map (kbd "M-u") (kbd "<apps>"))
@@ -504,7 +505,7 @@ If the new path's directories does not exist, create them."
   "Preconfigured `anything' for `recentf'." t)
 
 (progn
-  (global-set-key (kbd "M-O") 'anything-resume) ; M-S-o
+  (global-set-key (kbd "M-o M-o") 'anything-resume)
   
   (global-set-key (kbd "M-o f") 'anything-for-files)
   (global-set-key (kbd "M-o b") 'anything-buffers+)
