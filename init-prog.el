@@ -267,16 +267,17 @@ Current symbol would be used as input to narrow the choices."
 (autoload 'tv-view-history "tags-view"
   "Open a buffer listing locations on the tag stack." t)
 
-(global-set-key (kbd "M-h .") 'tv-view-history)
-
-(defalias 'find-tag-history 'tv-view-history)
-
-(eval-after-load "cheatsheet"
+(eval-after-load "etags"
   `(progn
-     (cheatsheet-add :group 'Programming/Tags
-                     :key "M-h ."
-                     :description "tv-view-history (tags-view.el)")
-     t))
+     (global-set-key (kbd "M-h .") 'tv-view-history)
+
+     (defalias 'find-tag-history 'tv-view-history)
+
+     (when (fboundp 'cheatsheet-add)
+       (cheatsheet-add :group 'Programming/Tags
+                       :key "M-h ."
+                       :description "tv-view-history (tags-view.el)"))
+     ))
 
 
 ;; **** misc

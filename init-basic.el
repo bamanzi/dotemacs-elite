@@ -21,6 +21,7 @@
 (global-unset-key (kbd "M-`"))
 (global-unset-key (kbd "M-u"))
 (global-unset-key (kbd "M-c"))
+(global-unset-key (kbd "M-h"))
 (global-unset-key (kbd "M-l"))
 ;; NOTE: M-O is a xterm control sequence prefix. refer: (find-library "term/xterm")
 (global-unset-key (kbd "M-o"))
@@ -33,7 +34,6 @@
 (define-key key-translation-map (kbd "<left-fringe> <C-mouse-4>") (kbd "<left-fringe> <C-wheel-up>"))
 (define-key key-translation-map (kbd "<left-fringe> <C-mouse-5>") (kbd "<left-fringe> <C-wheel-down>"))
 
-(global-unset-key (kbd "M-h"))
 (global-unset-key (kbd "<C-f10>")) ;;to make emacs-25 happy
 
 ;; ** emacs environment
@@ -646,8 +646,14 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
          (ignore-errors
            (hideshowvis-symbols)))
      
-     (define-key hs-minor-mode-map (kbd "M-+")  'hs-toggle-hiding)
-;;     (define-key hs-minor-mode-map (kbd "<C-mouse-1>") 'hs-mouse-toggle-hiding)
+     (define-key hs-minor-mode-map (kbd "M-h TAB")  'hs-toggle-hiding)
+     (define-key hs-minor-mode-map (kbd "M-h M-h")  'hs-toggle-hiding)
+     ;;     (define-key hs-minor-mode-map (kbd "<C-mouse-1>") 'hs-mouse-toggle-hiding)
+
+     (define-key hs-minor-mode-map (kbd "M-h s")  'hs-show-block)
+     (define-key hs-minor-mode-map (kbd "M-h h")  'hs-hide-block)
+     (define-key hs-minor-mode-map (kbd "M-h S")  'hs-show-all)
+     (define-key hs-minor-mode-map (kbd "M-h H")  'hs-hide-all)
      ))
 
 (define-key global-map (kbd "<f10> h s") 'hs-minor-mode)
