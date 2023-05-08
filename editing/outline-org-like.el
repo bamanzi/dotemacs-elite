@@ -66,7 +66,7 @@
 ;;; Code:
 
 (require 'outline)
-(require 'outline-magic nil t) ;; for `outline-cycle'
+;(require 'outline-magic nil t) ;; for `outline-cycle'
 (require 'org)           ;; for face org-level-1..6
 
 ;;** we'll use an internal `outline-regexp' value

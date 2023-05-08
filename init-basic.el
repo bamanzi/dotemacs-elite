@@ -402,7 +402,7 @@ If the new path's directories does not exist, create them."
     (indent-region (line-beginning-position) (line-end-position)))
 
 (global-set-key (kbd "<S-tab>") 'indent-region-or-line)
-(define-key key-translation-map (kbd "<backtab>") (kbd "<S-tab>"))
+;(define-key key-translation-map (kbd "<backtab>") (kbd "<S-tab>"))
   
 
 ;; ***  parens
