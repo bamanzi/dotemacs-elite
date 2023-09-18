@@ -362,7 +362,6 @@ If the new path's directories does not exist, create them."
 
 (setq cua-enable-cua-keys nil)
 (cua-mode t)
-(define-key cua-global-keymap (kbd "M-`") nil) ; we need to use it as a prefix key
 
 (setq x-select-enable-clipboard t)
 ;;  (setq x-select-enable-primary t)
@@ -781,9 +780,15 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
   (global-set-key (kbd "<S-wheel-up>")     'highlight-symbol-prev)
   (global-set-key (kbd "<S-wheel-down>")   'highlight-symbol-next)
   (global-set-key (kbd "<S-mouse-3>")      'highlight-symbol-occur)
+  
   (global-set-key (kbd "<M-f3>")           'highlight-symbol-prev)
   (global-set-key (kbd "<S-f3>")           'highlight-symbol-next)
   (global-set-key (kbd "<C-f3>")           'highlight-symbol-occur)
+
+  (global-set-key (kbd "<f3> j")           'highlight-symbol)
+  (global-set-key (kbd "<f3> p")           'highlight-symbol-prev)
+  (global-set-key (kbd "<f3> n")           'highlight-symbol-next)
+  (global-set-key (kbd "<f3> O")           'highlight-symbol-occur)
 )
 
 ;; *** idle-highlight
@@ -876,9 +881,13 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
 
 ;; ** buffer navigations
 ;; *** mark
-(global-set-key (kbd "M-` M-`")   'set-mark-command)
+;;(global-set-key (kbd "M-`")   'set-mark)
+;;(global-set-key (kbd "M-`") 'exchange-point-and-mark)
+;;(global-set-key (kbd "ESC M-`")   'pop-mark)
 
-(global-set-key (kbd "M-g `")     'pop-to-mark-command)
+(global-set-key (kbd "M-`")   'set-mark-command)
+;;(global-set-key (kbd "M-`")   'cua-exchange-point-and-mark)
+(global-set-key (kbd "M-g `") 'pop-to-mark-command)
 
 
 ;; ** major modes
@@ -957,6 +966,7 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
 
 (setq bookmark-save-flag 1) ;; save every time we make or delete a bookmark
 
-(setq gc-cons-threshold 4000000)
+;; set GC threshold to 80M (default value is 400k)
+(setq gc-cons-threshold (* 80 1000 1000))
 
 (global-set-key (kbd "<header-line> <C-mouse-3>") 'mouse-delete-window)

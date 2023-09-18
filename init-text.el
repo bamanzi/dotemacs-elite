@@ -125,7 +125,7 @@ If called with C-u prefix, it would archive to file \"%s_archive::\". "
 
 ;; ** misc
 
-(global-set-key (kbd "<apps> n") #'(lambda ()
+(global-set-key (kbd "<f4> <f4>") #'(lambda ()
                                       (interactive)
                                       (find-file org-default-notes-file)))
 

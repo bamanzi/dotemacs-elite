@@ -343,8 +343,9 @@ Current symbol would be used as input to narrow the choices."
 (setq flymake-log-level 2)  ;; -1 = NONE, 0 = ERROR, 1 = WARNING, 2 = INFO, 3 = DEBUG
 (setq flymake-start-syntax-check-on-newline nil) ;;only syntax check when open/save
 
-(eval-after-load "flymake"
-  '(require 'flymake-cursor nil t))
+;; no longer needed for recent emacs releases (>=26.0?)
+;(eval-after-load "flymake"
+;  '(require 'flymake-cursor nil t))
 
 (define-key goto-map (kbd "M-n") 'flymake-goto-next-error)
 (define-key goto-map (kbd "M-p") 'flymake-goto-prev-error)
