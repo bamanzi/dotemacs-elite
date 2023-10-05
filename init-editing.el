@@ -108,7 +108,7 @@
 (autoload 'thing/mark-one-thing "bmz-thing-op"
   "Undocumented." t)
 
-(global-set-key (kbd "M-` SPC") 'thing/mark-one-thing)
+(global-set-key (kbd "C-c SPC `") 'thing/mark-one-thing)
 
 (idle-require 'pulse) ;; for `pulse-momentary-highlight-region'
 
@@ -308,7 +308,7 @@
   "Toggle Local-Vim-Region mode in every possible buffer." t)
 
 (define-key global-map (kbd "<f6> v") 'vim-region-mode)
-(define-key global-map (kbd "M-` V")  'vim-region-mode)
+(define-key global-map (kbd "C-c V")  'vim-region-mode)
 ;;(define-key global-map (kbd "ESC `")  'vim-region-mode)
 
 ;; *** misc vi(m) commands

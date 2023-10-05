@@ -66,7 +66,7 @@ Otherwise it requires user to input full thing name (value of `thing/name-map`).
                          (push-mark (cdr bounds) nil transient-mark-mode)
                          (message "Markd %s." thing))))
 
-(global-set-key (kbd "M-` SPC") 'thing/mark-one-thing)
+;(global-set-key (kbd "M-` SPC") 'thing/mark-one-thing)
 
 (idle-require 'pulse) ;; for `pulse-momentary-highlight-region'
 (defun thing/copy-one-thing (thing)

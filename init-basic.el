@@ -18,7 +18,7 @@
 (global-unset-key (kbd "<f5>"))
 (global-unset-key (kbd "<f11>"))
 (global-unset-key (kbd "<f12>"))
-(global-unset-key (kbd "M-`"))
+;(global-unset-key (kbd "M-`"))
 (global-unset-key (kbd "M-u"))
 (global-unset-key (kbd "M-c"))
 (global-unset-key (kbd "M-h"))
@@ -881,12 +881,8 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
 
 ;; ** buffer navigations
 ;; *** mark
-;;(global-set-key (kbd "M-`")   'set-mark)
+;;(global-set-key (kbd "M-`")   'set-mark-command)
 ;;(global-set-key (kbd "M-`") 'exchange-point-and-mark)
-;;(global-set-key (kbd "ESC M-`")   'pop-mark)
-
-(global-set-key (kbd "M-`")   'set-mark-command)
-;;(global-set-key (kbd "M-`")   'cua-exchange-point-and-mark)
 (global-set-key (kbd "M-g `") 'pop-to-mark-command)
 
 
