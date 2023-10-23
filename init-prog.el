@@ -125,7 +125,9 @@
 (defun bmz/mode-line-move-which-func-indicator (&optional frame)
   "Move which-func indicator to the start of mode line."
   (interactive (list (selected-frame)))
-  (set-face-attribute 'which-func nil :inherit 'font-lock-function-name-face
+  (set-face-attribute 'which-func nil
+                      :inherit 'font-lock-function-name-face
+                      :foreground nil
                       :background (face-background 'default))
   (if (boundp 'mode-line-misc-info)
       (setq mode-line-misc-info

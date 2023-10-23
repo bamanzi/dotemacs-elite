@@ -1,6 +1,9 @@
 
 ;; ** x11 mouse
 (progn
+  (define-key key-translation-map (kbd "<mouse-4>") (kbd "<wheel-up>"))
+  (define-key key-translation-map (kbd "<mouse-5>") (kbd "<wheel-down>"))
+  
   (define-key key-translation-map (kbd "<S-mouse-4>") (kbd "<S-wheel-up>"))
   (define-key key-translation-map (kbd "<S-mouse-5>") (kbd "<S-wheel-down>"))
   (define-key key-translation-map (kbd "<M-mouse-4>") (kbd "<M-wheel-up>"))
@@ -13,8 +16,13 @@
 
 ;; ** xterm mouse
 (defun bmz/xterm-init-mouse (&optional frame)
-  (if (not (display-graphic-p))
-      (xterm-mouse-mode 1)))
+  (when (not (display-graphic-p))
+    (xterm-mouse-mode 1)
+    (when (load "mwheel" t)
+      (mwheel-install)
+      (global-set-key (kdb "<wheel-up>") 'mwheel-scroll)
+      (global-set-key (kdb "<wheel-down>") 'mwheel-scroll))
+    ))
 
 (add-hook 'after-make-frame-functions 'bmz/xterm-init-mouse)
 
