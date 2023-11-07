@@ -119,8 +119,14 @@
 
 (define-key global-map (kbd "<f10> w f") 'which-func-mode)
 
-(which-func-mode t)
-;;(add-hook 'prog-mode-hook 'which-func-mode)
+(when (require 'which-func nil t)
+  (if (fboundp 'which-function-mode)
+      (defalias 'which-func-mode 'which-function-mode)
+    )
+
+  (which-func-mode t)  
+  ;;(add-hook 'prog-mode-hook 'which-func-mode)
+  )
 
 (defun bmz/mode-line-move-which-func-indicator (&optional frame)
   "Move which-func indicator to the start of mode line."
@@ -159,6 +165,7 @@
 (defun show-which-function ()
   "Show current function's name in echo area."
   (interactive)
+  (require 'which-func)
   (message "Current function: %s" (which-function)))
   
 (define-key global-map (kbd "<f9> w") 'show-which-function)

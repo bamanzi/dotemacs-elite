@@ -487,6 +487,23 @@ If the new path's directories does not exist, create them."
 ;; - libraries (find-library)
 (icomplete-mode t) ;; obsolete in favor of `ivy-mode'
 
+;; prevent icomplete from `read-file-name'
+;; (`ido' is better (at least it allows you use 'C-f' to fallback to normal mode.
+;;   with `ido-vertical-mode' it is much better)
+(eval-after-load "icomplete"
+  `(when (fboundp 'icomplete-simple-completing-p)
+     
+     (defun icomplete-simple-completing-p ()
+       (unless executing-kbd-macro
+	 (let ((table (icomplete--completion-table)))
+	   (and table
+		(or (not (functionp table))
+		    (if (eq icomplete-with-completion-tables t)
+			(not (eq 'read-file-name-internal table))
+		      (member table icomplete-with-completion-tables)))))))
+     ))
+     
+
 ;; ***  ido
 (require 'ido)
 
