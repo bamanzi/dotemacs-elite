@@ -20,8 +20,8 @@
     (xterm-mouse-mode 1)
     (when (load "mwheel" t)
       (mwheel-install)
-      (global-set-key (kdb "<wheel-up>") 'mwheel-scroll)
-      (global-set-key (kdb "<wheel-down>") 'mwheel-scroll))
+      (global-set-key (kbd "<wheel-up>") 'mwheel-scroll)
+      (global-set-key (kbd "<wheel-down>") 'mwheel-scroll))
     ))
 
 (add-hook 'after-make-frame-functions 'bmz/xterm-init-mouse)

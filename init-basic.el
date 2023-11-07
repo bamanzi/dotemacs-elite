@@ -536,8 +536,10 @@ If the new path's directories does not exist, create them."
   (global-set-key (kbd "M-o M-y") 'anything-show-kill-ring)
   )
 
-(eval-after-load "anything-config"    
+(eval-after-load "anything-config"
     `(progn
+       (setq anything-enable-shortcuts nil)
+     
        ;;enable multiple keyword/regexp match
        (require 'anything-match-plugin nil t)
        
