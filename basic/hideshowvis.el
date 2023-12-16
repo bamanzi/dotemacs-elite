@@ -79,7 +79,9 @@
 ;; - don't show '-' in fringe if the foldable region ends on the same line
 ;;
 
-(define-fringe-bitmap 'hideshowvis-hideable-marker [0 0 0 126 126 0 0 0])
+;; FIXME: at present you need to reload this package after you created the first X frame
+(when (fbound 'define-fringe-bitmap)
+  (define-fringe-bitmap 'hideshowvis-hideable-marker [0 0 0 126 126 0 0 0]))
 
 (defconst hideshowvis-version "v0.5" "Version of hideshowvis minor mode")
 
@@ -218,8 +220,9 @@
 and a yellow marker indicating the number of hidden lines at
 the end of the line for hidden regions."
   (interactive)
-  
-  (define-fringe-bitmap 'hs-marker [0 24 24 126 126 24 24 0])
+
+  (when (fboundp 'define-fringe-bitmap)
+    (define-fringe-bitmap 'hs-marker [0 24 24 126 126 24 24 0])
   
   (defcustom hs-fringe-face 'hs-fringe-face
     "*Specify face used to highlight the fringe on hidden regions."
@@ -260,6 +263,7 @@ the end of the line for hidden regions."
         )))
   
   (setq hs-set-up-overlay 'display-code-line-counts))
+  
 
 (provide 'hideshowvis)
 
