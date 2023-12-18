@@ -101,6 +101,13 @@
      ))
 
 
+;; *** vimish-fold
+
+(autoload 'vimish-fold  "vimish-fold"
+  "Fold active region staring at BEG, ending at END." t)
+(autoload 'vimish-fold-toggle  "vimish-fold"
+  "Toggle fold at point." t)
+
 ;; ** mark, copy & yank
 ;; *** make/copy something
 
@@ -108,7 +115,8 @@
 (autoload 'thing/mark-one-thing "bmz-thing-op"
   "Undocumented." t)
 
-(global-set-key (kbd "C-c SPC `") 'thing/mark-one-thing)
+(global-set-key (kbd "C-c ` `") 'thing/mark-one-thing)
+(global-set-key (kbd "C-c ` SPC") 'thing/mark-one-thing)
 
 (idle-require 'pulse) ;; for `pulse-momentary-highlight-region'
 
@@ -120,8 +128,8 @@
      (global-set-key (kbd "C-c c") 'thing/copy-one-thing)
      (global-set-key (kbd "C-c k") 'thing/kill-one-thing)
 
-     (global-set-key (kbd "M-g <") 'thing/goto-beginning)
-     (global-set-key (kbd "M-g >") 'thing/goto-end)
+     (global-set-key (kbd "C-c ` <") 'thing/goto-beginning)
+     (global-set-key (kbd "C-c ` >") 'thing/goto-end)
 
      (global-set-key (kbd "M-s M-w") 'thing/copy-symbol-or-word)
      (global-set-key (kbd "M-s C-w") 'thing/kill-symbol-or-word)
