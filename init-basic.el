@@ -315,42 +315,6 @@ If the new path's directories does not exist, create them."
 (setq windresize-default-increment 4)
 (global-set-key (kbd "<f11> RET") 'windresize)
 
-;; *** enlarge current window
-;;(I don't use `golden-ratio-enable')
-(autoload 'golden-ratio "golden-ratio"
-  "Resizes current window to the golden-ratio's size specs" t)
-(autoload 'golden-ratio-enable "golden-ratio"
-  "Enables golden-ratio's automatic window resizing" t)
-
-(defun golden-ratio+ ()
-  "Enlarge current window, more than command `golden-ratio'."
-  (interactive)
-  (require 'golden-ratio)
-  (let ((-golden-ratio-value 1.25))
-    (call-interactively 'golden-ratio)))
-
-(global-set-key (kbd "<f11> x") 'golden-ratio)
-(global-set-key (kbd "<f11> X") 'golden-ratio+)
-
-(defun anything-enlarge-window ()
-  (interactive)
-  (require 'golden-ratio)
-  (with-anything-window
-    (call-interactively 'golden-ratio)))
-
-(defun anything-enlarge-window+ ()
-  (interactive)
-  (require 'golden-ratio)
-  (with-anything-window
-    (let ((-golden-ratio-value 1.3))
-      (call-interactively 'golden-ratio))))
-
-(eval-after-load "anything"
-  `(progn
-     (define-key anything-map (kbd "<f11> x") 'anything-enlarge-window)
-     (define-key anything-map (kbd "<f11> X") 'anything-enlarge-window+)
-     ))
-
 
 ;; ** editing
 
