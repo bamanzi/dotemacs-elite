@@ -868,6 +868,33 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
 ;;(global-set-key (kbd "M-`") 'exchange-point-and-mark)
 (global-set-key (kbd "M-g `") 'pop-to-mark-command)
 
+;; *** back-button: Visual navigation through mark rings
+;;https://github.com/rolandwalker/back-button
+
+(autoload 'back-button-mode "back-button"
+  "Turn on back-button-mode." t)
+
+(idle-require 'back-button)
+
+(eval-after-load "back-button"
+  `(progn
+     (back-button-mode 1)
+
+     (when (fbound 'cheatsheet-add)
+       (cheatsheet-add :group 'Jump
+                       :key "C-x <left>"
+                       :description "back-button-local-backward")
+       (cheatsheet-add :group 'Jump
+                       :key "C-x <right>"
+                       :description "back-button-local-forward")
+       (cheatsheet-add :group 'Jump
+                       :key "C-x <C-left>"
+                       :description "back-button-global-backward")
+       (cheatsheet-add :group 'Jump
+                       :key "C-x <C-right>"
+                       :description "back-button-global-forward"))
+     t
+     ))
 
 ;; ** major modes
 ;; *** emacs lisp mode
