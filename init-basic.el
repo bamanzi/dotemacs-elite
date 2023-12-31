@@ -880,7 +880,7 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
   `(progn
      (back-button-mode 1)
 
-     (when (fbound 'cheatsheet-add)
+     (when (fboundp 'cheatsheet-add)
        (cheatsheet-add :group 'Jump
                        :key "C-x <left>"
                        :description "back-button-local-backward")

@@ -93,8 +93,8 @@
 
 (global-set-key (kbd "<f10> hi") 'highlight-indent-guides-mode)
 
-(if (boundp 'prog-mode-hook)
-    (add-hook 'prog-mode-hook 'highlight-indent-guides-mode))
+;(if (boundp 'prog-mode-hook)
+;    (add-hook 'prog-mode-hook 'highlight-indent-guides-mode))
 
 (defun bmz/init-highlight-indent-guides-faces (&optional frame)
   (when (boundp 'highlight-indent-guides-method)

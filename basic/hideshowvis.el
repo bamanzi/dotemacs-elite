@@ -80,7 +80,7 @@
 ;;
 
 ;; FIXME: at present you need to reload this package after you created the first X frame
-(when (fbound 'define-fringe-bitmap)
+(when (fboundp 'define-fringe-bitmap)
   (define-fringe-bitmap 'hideshowvis-hideable-marker [0 0 0 126 126 0 0 0]))
 
 (defconst hideshowvis-version "v0.5" "Version of hideshowvis minor mode")
