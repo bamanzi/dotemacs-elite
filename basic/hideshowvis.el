@@ -222,7 +222,7 @@ the end of the line for hidden regions."
   (interactive)
 
   (when (fboundp 'define-fringe-bitmap)
-    (define-fringe-bitmap 'hs-marker [0 24 24 126 126 24 24 0])
+    (define-fringe-bitmap 'hs-marker [0 24 24 126 126 24 24 0]))
   
   (defcustom hs-fringe-face 'hs-fringe-face
     "*Specify face used to highlight the fringe on hidden regions."
