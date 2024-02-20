@@ -3,11 +3,11 @@
 ;; Copyright (C) 2011-2015 Bozhidar Batsov
 
 ;; Author: Bozhidar Batsov
-;; URL: https://github.com/bbatsov/projectile
+;; URL: https://github.com/bbatsov/helm-projectile
 ;; Created: 2011-31-07
 ;; Keywords: project, convenience
-;; Version: 0.13.0
-;; Package-Requires: ((helm "1.7.7") (projectile "0.13.0") (dash "1.5.0") (cl-lib "0.3"))
+;; Version: 0.14.0
+;; Package-Requires: ((helm "1.7.7") (projectile "0.14.0") (dash "1.5.0") (cl-lib "0.3"))
 
 ;; This file is NOT part of GNU Emacs.
 
@@ -166,7 +166,7 @@ DIR is the project root."
     (projectile-run-project helm-current-prefix-arg)))
 
 (defun helm-projectile-remove-known-project (_ignore)
-  "Delete selected projects.
+  "Remove selected projects from projectile project list.
 _IGNORE means the argument does not matter.
 It is there because Helm requires it."
   (let* ((projects (helm-marked-candidates :with-wildcard t))
@@ -174,14 +174,14 @@ It is there because Helm requires it."
     (with-helm-display-marked-candidates
       helm-marked-buffer-name
       projects
-      (if (not (y-or-n-p (format "Delete *%s projects(s)? " len)))
-          (message "(No deletion performed)")
+      (if (not (y-or-n-p (format "Remove *%s projects(s)? " len)))
+          (message "(No removal performed)")
         (progn
           (mapc (lambda (p)
                   (delete p projectile-known-projects))
                 projects)
           (projectile-save-known-projects))
-        (message "%s projects(s) deleted" len)))))
+        (message "%s projects(s) removed" len)))))
 
 (defvar helm-projectile-projects-map
   (let ((map (make-sparse-keymap)))
@@ -218,7 +218,7 @@ It is there because Helm requires it."
               ("Grep in projects `C-s'" . helm-projectile-grep)
               ("Compile project `M-c'. With C-u, new compile command"
                . helm-projectile-compile-project)
-              ("Remove project(s) `M-D'" . helm-projectile-remove-known-project)))
+              ("Remove project(s) from project list `M-D'" . helm-projectile-remove-known-project)))
   "Helm source for known projectile projects.")
 
 (define-key helm-etags-map (kbd "C-c p f")
@@ -672,10 +672,11 @@ If it is nil, or ack/ack-grep not found then use default grep command."
          (helm-grep-default-command (if use-ack-p
                                         (concat ack-executable " -H --no-group --no-color " ack-ignored-pattern " %p %f")
                                       (if (and projectile-use-git-grep (eq (projectile-project-vcs) 'git))
-                                          "git --no-pager grep --no-color -n -e %p -- %f"
+                                          "git --no-pager grep --no-color -n%c -e %p -- %f"
                                         "grep -a -r %e -n%cH -e %p %f .")))
-         (helm-grep-default-recurse-command helm-grep-default-command)
-         (helm-source-grep
+         (helm-grep-default-recurse-command helm-grep-default-command))
+
+    (setq helm-source-grep
           (helm-build-async-source
               (capitalize (helm-grep-command t))
             :header-name (lambda (name)
@@ -701,7 +702,7 @@ If it is nil, or ack/ack-grep not found then use default grep command."
                      "Find file other window" 'helm-grep-other-window)
             :persistent-action 'helm-grep-persistent-action
             :persistent-help "Jump to line (`C-u' Record in mark ring)"
-            :requires-pattern 2)))
+            :requires-pattern 2))
     (helm
      :sources 'helm-source-grep
      :input (if (region-active-p)
@@ -750,7 +751,7 @@ DIR is the project root, if not set then current directory is used"
                                       (projectile-ignored-directories))
                                 (-map (lambda (path)
                                         (concat "--ignore-file=match:" (shell-quote-argument path)))
-                                      (projectile-ignored-files))) " "))
+                                      (append (projectile-ignored-files) (projectile-patterns-to-ignore)))) " "))
           (helm-ack-grep-executable (cond
                                      ((executable-find "ack") "ack")
                                      ((executable-find "ack-grep") "ack-grep")
@@ -761,7 +762,7 @@ DIR is the project root, if not set then current directory is used"
 ;;;###autoload
 (defun helm-projectile-ag (&optional options)
   "Helm version of projectile-ag."
-  (interactive (if current-prefix-arg (list (read-string "option: " "" 'helm-ag-command-history))))
+  (interactive (if current-prefix-arg (list (read-string "option: " "" 'helm-ag--extra-options-history))))
   (if (require 'helm-ag nil  'noerror)
       (if (projectile-project-p)
           (let* ((grep-find-ignored-files (-union (projectile-ignored-files-rel) grep-find-ignored-files))
@@ -773,7 +774,7 @@ DIR is the project root, if not set then current directory is used"
                  (helm-ag-command-option options)
                  (helm-ag-base-command (concat helm-ag-base-command " " ignored))
                  (current-prefix-arg nil))
-            (helm-do-ag (projectile-project-root)))
+            (helm-do-ag (projectile-project-root) (car (projectile-parse-dirconfig-file))))
         (error "You're not in a project"))
     (error "helm-ag not available")))
 
@@ -810,35 +811,38 @@ DIR is the project root, if not set then current directory is used"
     "Find recently visited file in project."
     (helm-projectile-recentf)))
 
+;;;###autoload
 (defun helm-projectile-toggle (toggle)
   "Toggle Helm version of Projectile commands."
   (if (> toggle 0)
       (progn
-        (setq projectile-switch-project-action #'helm-projectile-find-file)
-        (define-key projectile-command-map (kbd "a") #'helm-projectile-find-other-file)
-        (define-key projectile-command-map (kbd "f") #'helm-projectile-find-file)
-        (define-key projectile-command-map (kbd "F") #'helm-projectile-find-file-in-known-projects)
-        (define-key projectile-command-map (kbd "g") #'helm-projectile-find-file-dwim)
-        (define-key projectile-command-map (kbd "d") #'helm-projectile-find-dir)
-        (define-key projectile-command-map (kbd "p") #'helm-projectile-switch-project)
-        (define-key projectile-command-map (kbd "e") #'helm-projectile-recentf)
-        (define-key projectile-command-map (kbd "b") #'helm-projectile-switch-to-buffer)
-        (define-key projectile-command-map (kbd "s g") #'helm-projectile-grep)
-        (define-key projectile-command-map (kbd "s a") #'helm-projectile-ack)
-        (define-key projectile-command-map (kbd "s s") #'helm-projectile-ag)
+        (when (eq projectile-switch-project-action #'projectile-find-file)
+          (setq projectile-switch-project-action #'helm-projectile-find-file))
+        (define-key projectile-mode-map [remap projectile-find-other-file] #'helm-projectile-find-other-file)
+        (define-key projectile-mode-map [remap projectile-find-file] #'helm-projectile-find-file)
+        (define-key projectile-mode-map [remap projectile-find-file-in-known-projects] #'helm-projectile-find-file-in-known-projects)
+        (define-key projectile-mode-map [remap projectile-find-file-dwim] #'helm-projectile-find-file-dwim)
+        (define-key projectile-mode-map [remap projectile-find-dir] #'helm-projectile-find-dir)
+        (define-key projectile-mode-map [remap projectile-switch-project] #'helm-projectile-switch-project)
+        (define-key projectile-mode-map [remap projectile-recentf] #'helm-projectile-recentf)
+        (define-key projectile-mode-map [remap projectile-switch-to-buffer] #'helm-projectile-switch-to-buffer)
+        (define-key projectile-mode-map [remap projectile-grep] #'helm-projectile-grep)
+        (define-key projectile-mode-map [remap projectile-ack] #'helm-projectile-ack)
+        (define-key projectile-mode-map [remap projectile-ag] #'helm-projectile-ag)
         (helm-projectile-commander-bindings))
     (progn
-      (setq projectile-switch-project-action #'projectile-find-file)
-      (define-key projectile-command-map (kbd "a") #'projectile-find-other-file)
-      (define-key projectile-command-map (kbd "f") #'projectile-find-file)
-      (define-key projectile-command-map (kbd "F") #'projectile-find-file-in-known-projects)
-      (define-key projectile-command-map (kbd "g") #'helm-projectile-find-file-dwim)
-      (define-key projectile-command-map (kbd "d") #'projectile-find-dir)
-      (define-key projectile-command-map (kbd "p") #'projectile-switch-project)
-      (define-key projectile-command-map (kbd "e") #'projectile-recentf)
-      (define-key projectile-command-map (kbd "b") #'projectile-switch-to-buffer)
-      (define-key projectile-command-map (kbd "s g") #'projectile-grep)
-      (define-key projectile-command-map (kbd "s s") #'projectile-ag)
+      (when (eq projectile-switch-project-action #'helm-projectile-find-file)
+        (setq projectile-switch-project-action #'projectile-find-file))
+      (define-key projectile-mode-map [remap projectile-find-other-file] nil)
+      (define-key projectile-mode-map [remap projectile-find-file] nil)
+      (define-key projectile-mode-map [remap projectile-find-file-in-known-projects] nil)
+      (define-key projectile-mode-map [remap projectile-find-file-dwim] nil)
+      (define-key projectile-mode-map [remap projectile-find-dir] nil)
+      (define-key projectile-mode-map [remap projectile-switch-project] nil)
+      (define-key projectile-mode-map [remap projectile-recentf] nil)
+      (define-key projectile-mode-map [remap projectile-switch-to-buffer] nil)
+      (define-key projectile-mode-map [remap projectile-grep] nil)
+      (define-key projectile-mode-map [remap projectile-ag] nil)
       (projectile-commander-bindings))))
 
 ;;;###autoload
