@@ -12,7 +12,54 @@
 ;;    ~/.emacs.d/init_SHELLNAME.sh  (e.g. ~/.emacs.d/init_bash.sh)
 ;; (info "(emacs) Interactive Shell")
 
+;; *** shell history
+
+;; **** anything-c-shell-history.el
+;; cons: it reads only ~/.bash_hisotyr but not 'comint-input-ring' in current *shell* buffer
+;; pros: it can be use in other buffers (to execute a shell command)
+
+(defun anything-shell-history ()
+  (interactive)
+  (require 'anything-c-shell-history)
+  (when (getenv "HISTFILE")             ; FIXME: this only works for bash
+    (setq anything-c-shell-history-file (getenv "HISTFILE")))
+  (anything :source 'anything-c-source-shell-history))
+
+;; **** anything-comint-input-ring
+;; based on `helm-comint-input-ring'
+(defun anything-comint-input-ring ()
+  "Preconfigured `anything' that provide completion of 'comint' history."
+  (interactive)
+  (when (derived-mode-p 'comint-mode)
+    (anything :sources 'anything-source-comint-input-ring
+              :input (buffer-substring-no-properties (comint-line-beginning-position)
+                                                     (point-at-eol))
+              :buffer "*anything comint history")))
+
+(defun anything-comint-input-ring-action (candidate)
+  "Default action for `anything-source-comint-input-ring'."
+  (with-anything-current-buffer
+    (delete-region (comint-line-beginning-position) (point-max))
+    (insert candidate)))
+
+(setq anything-comint-input-min-length 2)
+(defvar anything-source-comint-input-ring
+  '((name . "Comint history")
+    (candidates . (lambda ()
+                    (with-anything-current-buffer
+                      (cl-remove-if-not '(lambda (elem)
+                                           (>= (length elem) anything-comint-input-min-length))
+                                        (ring-elements comint-input-ring)))))
+    (action . anything-comint-input-ring-action))
+  "Anything source that provide completion from comint-input-ring.")
+
+(eval-after-load "shell"
+  `(progn
+     (define-key shell-mode-map (kbd "M-o M-h") 'anything-comint-input-ring)
+     ))
+
 ;; ** eshell
+;; NOTE: eshell buffer is NOT a comint buffer
 ;; *** shell toggle
 
 ;;(idle-require 'esh-toggle)
