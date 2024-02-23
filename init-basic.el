@@ -880,6 +880,8 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
   `(progn
      (back-button-mode 1)
 
+     (define-key back-button-mode-map (kbd "C-x <up>") 'back-button-push-mark)
+
      (when (fboundp 'cheatsheet-add)
        (cheatsheet-add :group 'Jump
                        :key "C-x <left>"
@@ -887,6 +889,10 @@ remove (if DESIRE <= 0). If DESIRE not given, it would be toggled."
        (cheatsheet-add :group 'Jump
                        :key "C-x <right>"
                        :description "back-button-local-forward")
+       (cheatsheet-add :group 'Jump
+                       :key "C-x <up>"
+                       :description "back-button-push-mark")
+
        (cheatsheet-add :group 'Jump
                        :key "C-x <C-left>"
                        :description "back-button-global-backward")

@@ -259,6 +259,26 @@ save it in `ffap-file-at-point-line-number' variable."
 
 
 ;; ** misc
+(defvar goldendict-prog-path "goldendict"
+  "Path to GoldenDict program.")
+
+(defun goldendict-current-word (arg)
+  (interactive "P")
+  (unless (or (display-graphic-p)
+              (getenv "DISPLAY"))
+    (user-error "`Graphic window system needed to run `goldendict'."))
+  (let* ((sel (if mark-active
+                  (buffer-substring (region-beginning) (region-end))
+                (buffer-substring (car (bounds-of-thing-at-point 'word))
+                                  (cdr (bounds-of-thing-at-point 'word)))))
+         (word (if arg
+                   (read-string "word: " sel)
+                 sel)))
+    ;; NOTE: It is advised to start GoldenDict before calling this command.
+    ;;       otherwise `shell-command' would start it, and would NOT return until we manually quit it.
+    (shell-command (concat goldendict-prog-path " " sel))))
+
+(global-set-key (kbd "M-s D") 'goldendict-current-word)
 
 ;;--
 (add-hook 'emacs-lisp-mode-hook #'(lambda ()
