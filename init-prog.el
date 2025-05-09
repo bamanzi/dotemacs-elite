@@ -1,6 +1,8 @@
 ;; * programming
 
 ;; ** prog-mode
+(require 'prog-mode nil t)
+
 (unless (fboundp 'prog-mode)
   (defvar prog-mode-map
     (let ((map (make-sparse-keymap)))
@@ -93,8 +95,9 @@
 
 (global-set-key (kbd "<f10> hi") 'highlight-indent-guides-mode)
 
-;(if (boundp 'prog-mode-hook)
-;    (add-hook 'prog-mode-hook 'highlight-indent-guides-mode))
+;; disabled for performance consideration
+;;(if (boundp 'prog-mode-hook)
+;;    (add-hook 'prog-mode-hook 'highlight-indent-guides-mode))
 
 (defun bmz/init-highlight-indent-guides-faces (&optional frame)
   (when (boundp 'highlight-indent-guides-method)
@@ -116,6 +119,9 @@
 
 
 ;; ** which-func-mode
+
+;; renamed to `which-function-mode' in emacs 24.1
+(defalias 'which-func-mode 'which-function-mode)
 
 (define-key global-map (kbd "<f10> w f") 'which-func-mode)
 
@@ -473,4 +479,8 @@ Current symbol would be used as input to narrow the choices."
                      :key "M-x isend-associate"
                      :description "Set the buffer to which commands will be sent using `isend-send'.")
      t))
+
+
+;; ** misc
+(define-key prog-mode-map (kbd "<S-tab>") 'indent-region-or-line)
 
