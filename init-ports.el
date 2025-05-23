@@ -235,6 +235,13 @@ ALT_R/META_R. Refer [[file:/usr/share/X11/xkb/symbols/altwin]] for detail info."
 ;;    and release it, then press `o')
 ; (define-key key-translation-map (kbd "<menu>") 'event-apply-super-modifier)
 
+;; *** macOS
+(when (eq window-system 'ns)
+  ;; swap command & control
+  (setq ns-control-modifier 'command
+        ns-command-modifier 'control)
+  )
+
 ;; ** win32 programs
 (when (memq system-type '(windows-nt ms-dos))
   ;;http://sourceforge.net/projects/ezwinports/files/
@@ -268,4 +275,12 @@ ALT_R/META_R. Refer [[file:/usr/share/X11/xkb/symbols/altwin]] for detail info."
     ))
   
   )
-   
+
+
+;; ** macOS
+(when (eq window-system 'ns)
+  
+  (global-set-key (kbd "<home>") 'move-beginning-of-line)
+  (global-set-key (kbd "<end>")  'move-end-of-line)
+  )
+  
